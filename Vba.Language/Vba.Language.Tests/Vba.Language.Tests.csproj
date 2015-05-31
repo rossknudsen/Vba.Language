@@ -38,7 +38,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>Vba.Language.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\Vba.Language.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -57,9 +57,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Vba.Language.snk" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vba.Language\Vba.Language.csproj">
