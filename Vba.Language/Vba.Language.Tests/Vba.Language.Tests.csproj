@@ -61,6 +61,12 @@
   <ItemGroup>
     <None Include="Vba.Language.snk" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Vba.Language\Vba.Language.csproj">
+      <Project>{85ef650b-7c9e-4b44-9ec1-e32d19c3953f}</Project>
+      <Name>Vba.Language</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

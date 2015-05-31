@@ -34,3 +34,10 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+
+[assembly: InternalsVisibleTo("Vba.Language.Tests, PublicKey=" + 
+"0024000004800000940000000602000000240000525341310004000001000100ebb49c6a341108" +
+"05c20e8fce6471d5b6573c9d548157d0ab8838313de7822d0ade9c4e964db859acc002b4077db1" +
+"40e9ce6a10f5be981bcbbfbc93ff491bc671f3eacfb9ae0ee14f9bb18ede7364c2f2d0a508a594" +
+"d72b0aab6e9413b3313c55d9a7aa55ced75b2573b4c8ede77adc379f8782c1182eabea4b06b8ee" +
+"dc9a2ba3")]
