@@ -1,4 +1,4 @@
-﻿namespace Vba.Language.Preprocessor
+﻿namespace Vba.Grammars
 {
     partial class PreprocessorParser
     {
