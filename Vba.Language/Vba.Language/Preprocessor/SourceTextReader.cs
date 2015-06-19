@@ -31,6 +31,7 @@ namespace Vba.Language.Preprocessor
 
                 line = reader.ReadLine();
             }
+            return null;
         }
 
         /// <summary>
@@ -51,6 +52,15 @@ namespace Vba.Language.Preprocessor
                              select c).FirstOrDefault();
 
             return firstChar == '#';
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                reader.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }
