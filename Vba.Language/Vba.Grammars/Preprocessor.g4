@@ -2,8 +2,7 @@ grammar Preprocessor;
 
 // Parser Rules
 preprocessorStatement
-    :	moduleAttribute
-    |	constantDeclaration
+    :	constantDeclaration
     |	ifStatement
     |	elseIfStatement
     |	elseStatement

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Antlr4.Runtime;
 
@@ -12,8 +13,8 @@ namespace Vba.Language.Preprocessor
         private IList<ConditionalBlock> conditionalBlocks; 
         private ConstantsDictionary compilerConstants;
         private ExpressionEvaluator evaluator;
-        PreprocessorLexer lexer;
-        PreprocessorParser parser; 
+        private PreprocessorLexer lexer;
+        private PreprocessorParser parser; 
 
         public PreprocessorStateManager()
         {
@@ -42,12 +43,6 @@ namespace Vba.Language.Preprocessor
             if (tree.constantDeclaration() != null)
             {
                 compilerConstants.Add(tree.constantDeclaration());
-                // TODO handle syntax errors.
-            }
-            else if (tree.moduleAttribute() != null)
-            {
-                // TODO check if we are still parsing the header.
-                // TODO add attribute to the collection.
                 // TODO handle syntax errors.
             }
             else
@@ -92,6 +87,26 @@ namespace Vba.Language.Preprocessor
                 var current = conditionalBlocks.CurrentBlock();
                 return current.IsActive();
             }
+        }
+
+        /// <summary>
+        /// Checks if the given statement is a preprocessor statement.
+        /// </summary>
+        /// <param name="line">A string representing a line of source code.</param>
+        /// <returns>True if the given statement is a preprocessor statement, false otherwise.</returns>
+        /// <exception cref="ArgumentException">Thrown if the input contains line break characters.</exception>
+        internal static bool IsPreprocessorStatement(string line)
+        {
+            if (line.Contains("\r") || line.Contains("\n"))
+            {
+                throw new ArgumentException("Parameter 'line' cannot contain line break characters.");
+            }
+
+            var firstChar = (from c in line
+                             where c != '\t' && c != ' '
+                             select c).FirstOrDefault();
+
+            return firstChar == '#';
         }
     }
 }

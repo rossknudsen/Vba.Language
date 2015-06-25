@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 
 namespace Vba.Language.Preprocessor
 {
@@ -8,19 +6,38 @@ namespace Vba.Language.Preprocessor
     {
         private TextReader reader;
         private PreprocessorStateManager manager;
+        private VbaHeader header;
 
         public SourceTextReader(string source)
         {
             manager = new PreprocessorStateManager();
             reader = new StringReader(source);
+            header = new VbaHeader();
         }
 
         public override string ReadLine()
         {
-            string line = reader.ReadLine();
-            while (line != null) // null indicates we have reached the end of the source.
+            // when ReadLine returns null we are at the end of the file.
+            var line = reader.ReadLine();
+
+            // first parse the header.
+            while (line != null)
             {
-                if (IsPreprocessorStatement(line))
+                if (VbaHeader.IsHeaderStatement(line))
+                {
+                    header.ExecuteHeaderStatement(line);
+                    line = reader.ReadLine();
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            // after we exit the top loop, line will be the first non-header line.
+            while (line != null) 
+            {
+                if (PreprocessorStateManager.IsPreprocessorStatement(line))
                 {
                     manager.ExecutePreprocessorStatement(line);
                 }
@@ -32,26 +49,6 @@ namespace Vba.Language.Preprocessor
                 line = reader.ReadLine();
             }
             return null;
-        }
-
-        /// <summary>
-        /// Checks if the given statement is a preprocessor statement.
-        /// </summary>
-        /// <param name="line">A string representing a line of source code.</param>
-        /// <returns>True if the given statement is a preprocessor statement, false otherwise.</returns>
-        /// <exception cref="ArgumentException">Thrown if the input contains line break characters.</exception>
-        private bool IsPreprocessorStatement(string line)
-        {
-            if (line.Contains("\r") || line.Contains("\n"))
-            {
-                throw new ArgumentException("Parameter 'line' cannot contain line break characters.");
-            }
-
-            var firstChar = (from c in line
-                             where c != '\t' && c != ' '
-                             select c).FirstOrDefault();
-
-            return firstChar == '#';
         }
 
         protected override void Dispose(bool disposing)
