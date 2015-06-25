@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Antlr4.Runtime;
 
@@ -86,53 +85,13 @@ namespace Vba.Language.Preprocessor
             }
         }
 
-        public bool IsActiveRegion { get { throw new NotImplementedException(); } }
-    }
-
-    internal static class ConditionalExtensions
-    {
-        internal static ConditionalBlock CurrentBlock(this IList<ConditionalBlock> list)
+        public bool IsActiveRegion
         {
-            var current = list.LastOrDefault();
-            if (current == null || current.IsComplete)
+            get
             {
-                return null;
+                var current = conditionalBlocks.CurrentBlock();
+                return current.IsActive();
             }
-            return current.CurrentBlock();
-        }
-
-        internal static ConditionalBlock CurrentBlock(this ConditionalBlock block)
-        {
-            if (block.IsComplete)
-            {
-                return null;
-            }
-            if (block.Else != null 
-                && block.Else.HasIncompleteChildren())
-            {
-                return ((IList<ConditionalBlock>)block.Else.ChildBlocks).CurrentBlock();
-            }
-            if (block.ElseIfs.Count > 0)
-            {
-                var lastElseIf = block.ElseIfs.Last();
-                if (lastElseIf.HasIncompleteChildren())
-                {
-                    return ((IList<ConditionalBlock>)lastElseIf.ChildBlocks).CurrentBlock();
-                }
-            }
-            if (block.If != null
-                && block.If.HasIncompleteChildren())
-            {
-                return ((IList<ConditionalBlock>)block.If.ChildBlocks).CurrentBlock();
-            }
-            // If we get to here then there are no child blocks and this must be the current one.
-            return block;
-        }
-
-        internal static bool HasIncompleteChildren<T>(this IConditionalNode<T> node) where T : ParserRuleContext
-        {
-            var lastChild = node.ChildBlocks.LastOrDefault();
-            return lastChild != null && !lastChild.IsComplete;
         }
     }
 }

@@ -54,6 +54,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConditionalExtensions.cs" />
     <Compile Include="ConstantsDictionary.cs" />
     <Compile Include="ExpressionEvaluator.cs" />
     <Compile Include="IConditionalBlock.cs" />
