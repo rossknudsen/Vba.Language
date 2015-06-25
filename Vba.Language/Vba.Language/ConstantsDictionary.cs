@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using Vba.Grammars;
 
@@ -8,6 +7,7 @@ namespace Vba.Language
     internal class ConstantsDictionary
     {
         private IDictionary<string, Data> catalog = new Dictionary<string, Data>();
+        private ExpressionEvaluator evaluator = new ExpressionEvaluator();
  
         internal bool Contains(string key)
         {
@@ -17,9 +17,7 @@ namespace Vba.Language
         internal void Add(PreprocessorParser.ConstantDeclarationContext statement)
         {
             var key = statement.ID().GetText();
-            var value = statement.expression();  
-            // need an expression evaluator here to determine the correct value of the expression.
-            throw new NotImplementedException();
+            var value = evaluator.VisitExpression(statement.expression());
             Add(key, value);
         }
 

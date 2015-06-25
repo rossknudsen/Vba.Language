@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConstantsDictionary.cs" />
+    <Compile Include="ExpressionEvaluator.cs" />
     <Compile Include="IConditionalBlock.cs" />
     <Compile Include="IConditionalNode.cs" />
     <Compile Include="ConditionalBlock.cs" />
