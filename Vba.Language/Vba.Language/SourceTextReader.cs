@@ -21,17 +21,9 @@ namespace Vba.Language.Preprocessor
             var line = reader.ReadLine();
 
             // first parse the header.
-            while (line != null)
+            while (line != null && header.ProcessHeaderStatement(line))
             {
-                if (VbaHeader.IsHeaderStatement(line))
-                {
-                    header.ExecuteHeaderStatement(line);
-                    line = reader.ReadLine();
-                }
-                else
-                {
-                    break;
-                }
+                line = reader.ReadLine();
             }
 
             // after we exit the top loop, line will be the first non-header line.

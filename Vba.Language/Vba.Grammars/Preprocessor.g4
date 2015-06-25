@@ -1,38 +1,37 @@
 grammar Preprocessor;
 
 // Parser Rules
+headerLine
+    :   classHeaderLine
+    |   moduleAttribute
+    ;
+
+classHeaderLine
+    :   WS* Version WS+ FloatLiteral WS+ Class WS*
+    |   WS* Begin WS*
+    |   WS* MultiUse WS* '=' WS* IntegerLiteral WS* COMMENT?
+    |   WS* End WS*
+    ;
+
+moduleAttribute
+    :	Attribute WS+ VbName WS* '=' WS* ModuleName WS*
+    |   Attribute WS+ optionalAttributes WS* '=' WS* boolLiteral WS*
+    ;
+
+optionalAttributes
+    :	VbExposed
+    |   VbGlobalNamespace
+    |   VbCreatable 
+    |   VbPredeclaredId 
+    |   VbCustomizable
+    ;
+
 preprocessorStatement
     :	constantDeclaration
     |	ifStatement
     |	elseIfStatement
     |	elseStatement
     |	endIfStatement
-    ;
-
-classHeader  // TODO consider making this case insensitive.
-    :   WS* 'VERSION' WS+ '1.0' WS+ 'CLASS' WS* NL
-        WS* 'BEGIN' WS* NL
-        WS* 'MultiUse' WS* '=' WS* '-1' WS* '\'' WS* 'True' WS* NL
-        WS* 'END' WS* NL
-    ;
-
-moduleAttribute
-    :	Attribute WS+ moduleAttributeOption WS* '=' WS* moduleAttributeValue WS*
-    ;
-
-moduleAttributeValue
-    :   ModuleName
-    |   True
-    |   False
-    ;
-
-moduleAttributeOption
-    :	VbName 
-    |   VbExposed
-    |   VbGlobalNamespace
-    |   VbCreatable 
-    |   VbPredeclaredId 
-    |   VbCustomizable
     ;
 
 constantDeclaration
@@ -107,7 +106,11 @@ boolExpression
     |   boolExpression WS+ And WS+ boolExpression 
     |   boolExpression WS+ Or WS+ boolExpression 
     |   boolExpression WS+ Xor WS+ boolExpression 
-    |   True
+    |   boolLiteral
+    ;
+
+boolLiteral
+    :   True
     |   False
     ;
 
@@ -192,6 +195,8 @@ VbCustomizable      :   'VB_Customizable';
 
 // Keywords
 And         :   'And';
+Begin       :   'BEGIN';
+Class       :   'CLASS';
 Const       :   'Const';
 Else        :   'Else';
 End         :   'End';
@@ -202,12 +207,14 @@ If          :   'If';
 Imp         :   'Imp';
 Like        :   'Like';
 Mod         :   'Mod';
+MultiUse    :   'MultiUse';
 Not         :   'Not';
 Nothing     :   'Nothing';
 Null        :   'Null';
 Or          :   'Or';
 True        :   'True';
 Then        :   'Then';
+Version     :   'VERSION';
 Xor         :   'Xor';
 
 ID  :	[A-Za-z] [A-Za-z0-9_]*;
