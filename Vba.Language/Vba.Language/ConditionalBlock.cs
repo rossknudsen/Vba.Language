@@ -27,39 +27,36 @@ namespace Vba.Language.Preprocessor
 
         public bool IsComplete { get { return EndIf != null; } }
 
-        internal void AddNode<T>(T statement) where T : ParserRuleContext
+        internal void AddNode(IfStatement statement, object result)
+        {
+            CheckStatementSyntax(statement);
+            If = new ConditionalNode<IfStatement>(statement, result);
+        }
+
+        internal void AddNode(ElseIfStatement statement, object result)
+        {
+            CheckStatementSyntax(statement);
+            ElseIfs.Add(new ConditionalNode<ElseIfStatement>(statement, result));
+        }
+
+        internal void AddNode(ElseStatement statement, object result)
+        {
+            CheckStatementSyntax(statement);
+            Else = new ConditionalNode<ElseStatement>(statement, result);
+        }
+
+        internal void AddNode(EndIfStatement statement, object result)
+        {
+            CheckStatementSyntax(statement);
+            EndIf = new ConditionalNode<EndIfStatement>(statement, result);
+        }
+
+        private void CheckStatementSyntax<T>(T statement) where T : class
         {
             if (statement == null)
             {
                 throw new ArgumentNullException("statement");
             }
-            dynamic dStat = statement;
-            CheckStatementSyntax(dStat);
-            AddNode(dStat);
-        }
-
-        private void AddNode(IfStatement statement)
-        {
-            If = new ConditionalNode<IfStatement>(statement);
-        }
-
-        private void AddNode(ElseIfStatement statement)
-        {
-            ElseIfs.Add(new ConditionalNode<ElseIfStatement>(statement));
-        }
-
-        private void AddNode(ElseStatement statement)
-        {
-            Else = new ConditionalNode<ElseStatement>(statement);
-        }
-
-        private void AddNode(EndIfStatement statement)
-        {
-            EndIf = new ConditionalNode<EndIfStatement>(statement);
-        }
-
-        private void CheckStatementSyntax<T>(T statement) where T : class
-        {
             var statementType = statement.GetType();
             if (statementType == typeof(IfStatement))
             {

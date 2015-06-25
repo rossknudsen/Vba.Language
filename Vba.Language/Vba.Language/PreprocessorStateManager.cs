@@ -12,6 +12,7 @@ namespace Vba.Language.Preprocessor
     {
         private IList<ConditionalBlock> conditionalBlocks; 
         private ConstantsDictionary compilerConstants;
+        private ExpressionEvaluator evaluator;
         PreprocessorLexer lexer;
         PreprocessorParser parser; 
 
@@ -19,6 +20,7 @@ namespace Vba.Language.Preprocessor
         {
             conditionalBlocks = new List<ConditionalBlock>();
             compilerConstants = new ConstantsDictionary();
+            evaluator = new ExpressionEvaluator(compilerConstants);
             lexer = new PreprocessorLexer(new AntlrInputStream(""));
             var tokens = new CommonTokenStream(lexer);
             parser = new PreprocessorParser(tokens);
@@ -51,17 +53,86 @@ namespace Vba.Language.Preprocessor
             }
             else
             {
-                var current = conditionalBlocks.LastOrDefault();
-                if (current == null || current.IsComplete)
+                var result = evaluator.Visit(tree);
+
+                var current = conditionalBlocks.CurrentBlock();
+                if (current == null)
                 {
                     current = new ConditionalBlock();
                     conditionalBlocks.Add(current);
                 }
-                current.AddNode(tree);  // this may not be correct, may need a subtree.
+
+                if (tree.ifStatement() != null)
+                {
+                    current.AddNode(tree.ifStatement(), result);
+                }
+                else if (tree.elseIfStatement() != null)
+                {
+                    current.AddNode(tree.elseIfStatement(), result);
+                }
+                else if (tree.elseStatement() != null)
+                {
+                    current.AddNode(tree.elseStatement(), result);
+                }
+                else if (tree.endIfStatement() != null)
+                {
+                    current.AddNode(tree.endIfStatement(), result);
+                }
+                else
+                {
+                    throw new Exception("Unknown node type.");
+                }
                 // TODO handle syntax errors.
             }
         }
 
-        public bool IsActiveRegion { get; private set; }
+        public bool IsActiveRegion { get { throw new NotImplementedException(); } }
+    }
+
+    internal static class ConditionalExtensions
+    {
+        internal static ConditionalBlock CurrentBlock(this IList<ConditionalBlock> list)
+        {
+            var current = list.LastOrDefault();
+            if (current == null || current.IsComplete)
+            {
+                return null;
+            }
+            return current.CurrentBlock();
+        }
+
+        internal static ConditionalBlock CurrentBlock(this ConditionalBlock block)
+        {
+            if (block.IsComplete)
+            {
+                return null;
+            }
+            if (block.Else != null 
+                && block.Else.HasIncompleteChildren())
+            {
+                return ((IList<ConditionalBlock>)block.Else.ChildBlocks).CurrentBlock();
+            }
+            if (block.ElseIfs.Count > 0)
+            {
+                var lastElseIf = block.ElseIfs.Last();
+                if (lastElseIf.HasIncompleteChildren())
+                {
+                    return ((IList<ConditionalBlock>)lastElseIf.ChildBlocks).CurrentBlock();
+                }
+            }
+            if (block.If != null
+                && block.If.HasIncompleteChildren())
+            {
+                return ((IList<ConditionalBlock>)block.If.ChildBlocks).CurrentBlock();
+            }
+            // If we get to here then there are no child blocks and this must be the current one.
+            return block;
+        }
+
+        internal static bool HasIncompleteChildren<T>(this IConditionalNode<T> node) where T : ParserRuleContext
+        {
+            var lastChild = node.ChildBlocks.LastOrDefault();
+            return lastChild != null && !lastChild.IsComplete;
+        }
     }
 }

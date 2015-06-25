@@ -6,8 +6,14 @@ namespace Vba.Language
 {
     internal class ConstantsDictionary
     {
-        private IDictionary<string, Data> catalog = new Dictionary<string, Data>();
-        private ExpressionEvaluator evaluator = new ExpressionEvaluator();
+        private IDictionary<string, Data> catalog;
+        private ExpressionEvaluator evaluator;
+
+        public ConstantsDictionary()
+        {
+            catalog = new Dictionary<string, Data>();
+            evaluator = new ExpressionEvaluator(this);
+        }
  
         internal bool Contains(string key)
         {
