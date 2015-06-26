@@ -57,6 +57,8 @@
     <Compile Include="ConditionalExtensions.cs" />
     <Compile Include="ConstantsDictionary.cs" />
     <Compile Include="ExpressionEvaluator.cs" />
+    <Compile Include="HeaderErrorListener.cs" />
+    <Compile Include="SyntaxError.cs" />
     <Compile Include="VbaHeader.cs" />
     <Compile Include="IConditionalBlock.cs" />
     <Compile Include="IConditionalNode.cs" />
