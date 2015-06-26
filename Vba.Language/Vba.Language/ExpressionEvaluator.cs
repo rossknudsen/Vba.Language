@@ -8,6 +8,7 @@ namespace Vba.Language
     internal class ExpressionEvaluator : PreprocessorBaseVisitor<object>
     {
         private readonly ConstantsDictionary constants;
+        private StringComparison stringComparison;
 
         public ExpressionEvaluator(ConstantsDictionary constants)
         {
@@ -16,6 +17,13 @@ namespace Vba.Language
 
         public override object VisitExpression(PreprocessorParser.ExpressionContext context)
         {
+            if (context.comparisonOperator() != null
+                && context.expression().Count == 2)
+            {
+                dynamic left = VisitExpression(context.expression(0));   // could be any expression, bool, string...
+                dynamic right = VisitExpression(context.expression(1));  // could be any expression, bool, string...
+                return CompareValues(left, right, context.comparisonOperator().GetText());  // This could fail if we don't have a matching overload.
+            }
             if (context.boolExpression() != null)
             {
                 return VisitBoolExpression(context.boolExpression());
@@ -117,6 +125,77 @@ namespace Vba.Language
             throw new NotImplementedException("VisitStringExpression: " + context.GetText());
         }
 
+        #endregion
+
+        #region Comparison Expressions
+
+        private object CompareValues(string left, string right, string op)
+        {
+            var areEqual = AreStringsEqual(left, right);
+            var leftIsLessThan = IsLeftStringLessThan(left, right);
+
+            switch (op)
+            {
+                case "=":
+                    return areEqual;
+                case "<":
+                    return !areEqual && leftIsLessThan;
+                case ">":
+                    return !areEqual && !leftIsLessThan;
+                case "<=":
+                    return areEqual || leftIsLessThan;
+                case ">=":
+                    return areEqual || !leftIsLessThan;
+                case "><":
+                case "<>":
+                    return !areEqual;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        private bool AreStringsEqual(string left, string right)
+        {
+            return String.Equals(left, right, stringComparison);
+        }
+
+        private bool IsLeftStringLessThan(string left, string right)
+        {
+            // TODO this may not be correct.  Also need to check against VBA implementation vs .Net Framework implementation.
+            return string.Compare(left, right, stringComparison) < 0;
+        }
+
+        private object CompareValues(bool left, bool right, string op)
+        {
+            switch (op)
+            {
+                case "=":
+                    return left == right;
+                case "<":
+                    return ConvertBoolToInt(left) < ConvertBoolToInt(right);
+                case ">":
+                    return ConvertBoolToInt(left) > ConvertBoolToInt(right);
+                case "<=":
+                    return ConvertBoolToInt(left) <= ConvertBoolToInt(right);
+                case ">=":
+                    return ConvertBoolToInt(left) >= ConvertBoolToInt(right);
+                case "><":
+                case "<>":
+                    return left != right;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        private int ConvertBoolToInt(bool value)
+        {
+            // VBAL p148: True is considered less than False
+            if (value)
+            {
+                return -1;  // true
+            }
+            return 0;       // false
+        }
         #endregion
     }
 }

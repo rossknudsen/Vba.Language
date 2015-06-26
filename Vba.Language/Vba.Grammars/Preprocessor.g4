@@ -72,6 +72,7 @@ comparisonOperator
     |   '<='
     |   '>='
     |   '<>'
+    |   '><'
     ;
 
 impExpression
@@ -83,7 +84,7 @@ eqvExpression
     ;
 
 stringExpression
-    :   stringExpression WS* ('&' | '+') WS* stringExpression
+    :   stringExpression WS* (AMP | PLUS) WS* stringExpression
     |   stringExpression WS* Like WS* stringExpression
     |   StringLiteral
     ;
@@ -222,6 +223,11 @@ ID  :	[A-Za-z] [A-Za-z0-9_]*;
 WS          :   [ \t];
 NL          :   '\r'? '\n';
 COMMENT     :	'\'' ~('\r' | '\n')*;
+
+// Symbols
+AMP         :   '&';
+MINUS       :   '-';
+PLUS        :   '+';
 
 fragment A:('a'|'A');
 fragment B:('b'|'B');
