@@ -24,6 +24,10 @@ namespace Vba.Language
                 dynamic right = VisitExpression(context.expression(1));  // could be any expression, bool, string...
                 return CompareValues(left, right, context.comparisonOperator().GetText());  // This could fail if we don't have a matching overload.
             }
+            if (context.arithmeticExpression() != null)
+            {
+                return VisitArithmeticExpression(context.arithmeticExpression());
+            }
             if (context.boolExpression() != null)
             {
                 return VisitBoolExpression(context.boolExpression());
@@ -32,7 +36,6 @@ namespace Vba.Language
             {
                 return VisitStringExpression(context.stringExpression());
             }
-            // TODO need to implement this method and all other expression methods
             throw new NotImplementedException("VisitExpression");
         }
 
@@ -123,6 +126,73 @@ namespace Vba.Language
                 return text.Substring(1, text.Length - 2);
             }
             throw new NotImplementedException("VisitStringExpression: " + context.GetText());
+        }
+
+        #endregion
+
+        #region Arithmetic Expressions
+
+        public override object VisitArithmeticExpression(PreprocessorParser.ArithmeticExpressionContext context)
+        {
+            if (context.MINUS() != null
+                && context.arithmeticExpression().Count == 1)
+            {
+                return -1 * (int)VisitArithmeticExpression(context.arithmeticExpression(0));
+            }
+            if (context.IntegerLiteral() != null)
+            {
+                return ParseInteger(context.IntegerLiteral().GetText());
+            }
+            if (context.FloatLiteral() != null)
+            {
+                return ParseFloat(context.FloatLiteral().GetText());
+            }
+
+            Debug.Assert(context.arithmeticExpression().Count == 2);  // only operations left are binary.
+            
+            var left = (int)VisitArithmeticExpression(context.arithmeticExpression(0));
+            var right = (int)VisitArithmeticExpression(context.arithmeticExpression(1));
+            if (context.CARET() != null)
+            {
+                return (int)Math.Pow(left, right);
+            }
+            if (context.FS() != null)
+            {
+                return left / right;
+            }
+            if (context.BS() != null)
+            {
+                return left / right;
+            }
+            if (context.Mod() != null)
+            {
+                return left % right;
+            }
+            if (context.STAR() != null)
+            {
+                return left * right;
+            }
+            if (context.PLUS() != null)
+            {
+                return left + right;
+            }
+            if (context.MINUS() != null)
+            {
+                return left - right;
+            }
+            throw new NotImplementedException("VisitArithmeticExpression");
+        }
+
+        private static int ParseInteger(string text)
+        {
+            // TODO need to handle VBA integer definitions (hex/octal/decimal/suffixes).
+            return int.Parse(text);
+        }
+
+        private static float ParseFloat(string text)
+        {
+            // TODO need to handle VBA float definitions (exponents/suffixes).
+            return float.Parse(text);
         }
 
         #endregion
