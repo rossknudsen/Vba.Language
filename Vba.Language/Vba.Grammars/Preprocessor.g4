@@ -35,23 +35,23 @@ preprocessorStatement
     ;
 
 constantDeclaration
-    :	'#' Const WS+ ID WS* '=' WS* expression WS*
+    :	WS* '#' Const WS+ ID WS* '=' WS* expression WS*
     ;
 
 ifStatement
-    :	'#' If WS+ expression WS+ Then WS*
+    :	WS* '#' If WS+ expression WS+ Then WS*
     ;
 
 elseIfStatement
-    :   '#' Else WS+ If WS+ expression WS+ Then WS*
+    :   WS* '#' ElseIf WS+ expression WS+ Then WS*
     ;
 
 elseStatement
-    :	'#' Else WS*
+    :	WS* '#' Else WS*
     ;
 
 endIfStatement
-    :	'#' End WS+ If WS*
+    :	WS* '#' End WS+ If WS*
     ;
 
 expression
@@ -200,6 +200,7 @@ Begin       :   'BEGIN';
 Class       :   'CLASS';
 Const       :   'Const';
 Else        :   'Else';
+ElseIf      :   'ElseIf';
 End         :   'End';
 Eqv         :   'Eqv';
 Empty       :   'Empty';
