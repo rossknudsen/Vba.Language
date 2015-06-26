@@ -167,24 +167,17 @@ namespace Vba.Language
 
         private object CompareValues(bool left, bool right, string op)
         {
-            switch (op)
-            {
-                case "=":
-                    return left == right;
-                case "<":
-                    return ConvertBoolToInt(left) < ConvertBoolToInt(right);
-                case ">":
-                    return ConvertBoolToInt(left) > ConvertBoolToInt(right);
-                case "<=":
-                    return ConvertBoolToInt(left) <= ConvertBoolToInt(right);
-                case ">=":
-                    return ConvertBoolToInt(left) >= ConvertBoolToInt(right);
-                case "><":
-                case "<>":
-                    return left != right;
-                default:
-                    throw new NotImplementedException();
-            }
+            return CompareValues(ConvertBoolToInt(left), ConvertBoolToInt(right), op);
+        }
+
+        private object CompareValues(bool left, int right, string op)
+        {
+            return CompareValues(ConvertBoolToInt(left), right, op);
+        }
+
+        private object CompareValues(int left, bool right, string op)
+        {
+            return CompareValues(left, ConvertBoolToInt(right), op);
         }
 
         private int ConvertBoolToInt(bool value)
@@ -196,6 +189,57 @@ namespace Vba.Language
             }
             return 0;       // false
         }
+
+        private object CompareValues(int left, int right, string op)
+        {
+            switch (op)
+            {
+                case "=":
+                    return left == right;
+                case "<":
+                    return left < right;
+                case ">":
+                    return left > right;
+                case "<=":
+                    return left <= right;
+                case ">=":
+                    return left >= right;
+                case "><":
+                case "<>":
+                    return left != right;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        private object CompareValues(string left, bool right, string op)
+        {
+            // TODO consider creating a specific class to represent errors
+            // A Type Mismatch error occurs.
+            throw new NotImplementedException();
+        }
+
+        private object CompareValues(bool left, string right, string op)
+        {
+            // TODO consider creating a specific class to represent errors
+            // A Type Mismatch error occurs.
+            throw new NotImplementedException();
+        }
+
+        private object CompareValues(int left, string right, string op)
+        {
+            // TODO consider creating a specific class to represent errors
+            // A Type Mismatch error occurs.
+            throw new NotImplementedException();
+        }
+
+        private object CompareValues(string left, int right, string op)
+        {
+            // TODO consider creating a specific class to represent errors
+            // A Type Mismatch error occurs.
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 }
