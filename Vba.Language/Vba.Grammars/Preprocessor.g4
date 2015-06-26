@@ -228,6 +228,10 @@ COMMENT     :	'\'' ~('\r' | '\n')*;
 AMP         :   '&';
 MINUS       :   '-';
 PLUS        :   '+';
+FS          :   '/';
+BS          :   '\\';
+CARET       :   '^';
+STAR        :   '*';
 
 fragment A:('a'|'A');
 fragment B:('b'|'B');
