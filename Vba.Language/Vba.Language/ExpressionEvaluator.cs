@@ -7,8 +7,8 @@ namespace Vba.Language
 {
     internal class ExpressionEvaluator : PreprocessorBaseVisitor<object>
     {
-        private readonly ConstantsDictionary constants;
-        private StringComparison stringComparison;
+        protected readonly ConstantsDictionary constants;
+        protected StringComparison stringComparison = StringComparison.InvariantCultureIgnoreCase;
 
         public ExpressionEvaluator(ConstantsDictionary constants)
         {
