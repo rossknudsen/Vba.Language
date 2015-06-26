@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vba.Grammars", "Vba.Grammars\Vba.Grammars.csproj", "{3F285CD0-9AC5-4863-8F26-803F645D47DD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vba.Grammars.Tests", "Vba.Grammars.Tests\Vba.Grammars.Tests.csproj", "{70DD02CD-D5E6-4D44-B058-18B45D92F147}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{3F285CD0-9AC5-4863-8F26-803F645D47DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F285CD0-9AC5-4863-8F26-803F645D47DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F285CD0-9AC5-4863-8F26-803F645D47DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70DD02CD-D5E6-4D44-B058-18B45D92F147}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70DD02CD-D5E6-4D44-B058-18B45D92F147}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70DD02CD-D5E6-4D44-B058-18B45D92F147}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70DD02CD-D5E6-4D44-B058-18B45D92F147}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
