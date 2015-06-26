@@ -90,14 +90,14 @@ stringExpression
     ;
 
 arithmeticExpression
-    :   '-' arithmeticExpression
-    |   arithmeticExpression WS* '^'<assoc=right> WS* arithmeticExpression
-    |   arithmeticExpression WS* '/' WS* arithmeticExpression
-    |   arithmeticExpression WS* '\\' WS* arithmeticExpression
+    :   MINUS arithmeticExpression
+    |   arithmeticExpression WS* CARET<assoc=right> WS* arithmeticExpression
+    |   arithmeticExpression WS* FS WS* arithmeticExpression
+    |   arithmeticExpression WS* BS WS* arithmeticExpression
     |   arithmeticExpression WS* Mod WS* arithmeticExpression
-    |   arithmeticExpression WS* '*' WS* arithmeticExpression
-    |   arithmeticExpression WS* '+' WS* arithmeticExpression
-    |   arithmeticExpression WS* '-' WS* arithmeticExpression
+    |   arithmeticExpression WS* STAR WS* arithmeticExpression
+    |   arithmeticExpression WS* PLUS WS* arithmeticExpression
+    |   arithmeticExpression WS* MINUS WS* arithmeticExpression
     |   FloatLiteral
     |   IntegerLiteral
     ;
