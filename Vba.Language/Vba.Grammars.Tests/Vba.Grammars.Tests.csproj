@@ -59,6 +59,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Preprocessor\ConditionalTests.cs" />
     <Compile Include="Preprocessor\ConstantTests.cs" />
     <Compile Include="Preprocessor\PreprocessorHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
