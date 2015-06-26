@@ -15,8 +15,77 @@ namespace Vba.Language
 
         public override object VisitExpression(PreprocessorParser.ExpressionContext context)
         {
+            if (context.boolExpression() != null)
+            {
+                return VisitBoolExpression(context.boolExpression());
+            }
             // TODO need to implement this method and all other expression methods
-            throw new NotImplementedException();
+            throw new NotImplementedException("VisitExpression");
         }
+
+        #region Boolean Expressions
+
+        public override object VisitBoolExpression(PreprocessorParser.BoolExpressionContext context)
+        {
+            // check for Not unary operator.
+            if (context.Not() != null 
+                && context.boolExpression() != null
+                && context.boolExpression(0) != null)
+            {
+                return !(bool)VisitBoolExpression(context.boolExpression(0));
+            }
+
+            // check for And binary operator.
+            if (context.And() != null 
+                && context.boolExpression() != null 
+                && context.boolExpression().Count == 2)
+            {
+                var left = (bool)VisitBoolExpression(context.boolExpression(0));
+                var right = (bool)VisitBoolExpression(context.boolExpression(1));
+                return left && right;
+            }
+
+            // check for Or binary operator.
+            if (context.Or() != null
+                && context.boolExpression() != null
+                && context.boolExpression().Count == 2)
+            {
+                var left = (bool)VisitBoolExpression(context.boolExpression(0));
+                var right = (bool)VisitBoolExpression(context.boolExpression(1));
+                return left || right;
+            }
+
+            // check for Xor binary operator.
+            if (context.Xor() != null
+                && context.boolExpression() != null
+                && context.boolExpression().Count == 2)
+            {
+                var left = (bool)VisitBoolExpression(context.boolExpression(0));
+                var right = (bool)VisitBoolExpression(context.boolExpression(1));
+                return left ^ right;
+            }
+
+            // check for boolean literal.
+            if (context.boolLiteral() != null)
+            {
+                return VisitBoolLiteral(context.boolLiteral());
+            }
+            throw new NotImplementedException("VisitBoolExpression");
+        }
+
+        public override object VisitBoolLiteral(PreprocessorParser.BoolLiteralContext context)
+        {
+            if (context.True() != null)
+            {
+                return true;
+            }
+            if (context.False() != null)
+            {
+                return false;
+            }
+            throw new Exception("VisitBoolLiteral");
+        }
+
+        #endregion
     }
 }
