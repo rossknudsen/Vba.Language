@@ -1,17 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="SourceTextReader implements TextReader which is a constructor parameter for Antlr's Lexer.&#xD;&#xA;&#xD;&#xA;The SourceTextReader processes any module header information and all preprocessor statements in it's input.  As its output it passes the module body excluding any conditionally compiled blocks which are not active.&#xD;&#xA;&#xD;&#xA;This allows the VBA compiler to focus on true VBA code.">
+    <Position X="0.51" Y="6.021" Height="2.073" Width="2.825" />
+  </Comment>
   <Class Name="Vba.Language.Preprocessor.ConditionalNode&lt;T&gt;">
-    <Position X="4" Y="3.25" Width="1.5" />
+    <Position X="12.5" Y="9.5" Width="1.5" />
     <AssociationLine Name="ChildBlocks" Type="Vba.Language.IConditionalBlock" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="4.75" Y="3.25" />
-        <Point X="4.75" Y="1.688" />
-        <Point X="2" Y="1.688" />
+        <Point X="13.25" Y="9.5" />
+        <Point X="13.25" Y="9.188" />
+        <Point X="11.25" Y="9.188" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Preprocessor\ConditionalNode.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAABAAAQCAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ConditionalNode.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
       <Property Name="ChildBlocks" />
@@ -19,22 +22,127 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Vba.Language.Preprocessor.ConditionalBlock">
-    <Position X="0.5" Y="2.75" Width="1.5" />
+    <Position X="9.75" Y="10.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAACBAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAQAA=</HashCode>
-      <FileName>Preprocessor\ConditionalBlock.cs</FileName>
+      <HashCode>AQAAACBAAAAAAEAAAAAAAAAEAAAAAAAAAAAAAAAIQAA=</HashCode>
+      <FileName>ConditionalBlock.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Vba.Language.Preprocessor.SourceTextReader">
+    <Position X="3.5" Y="6" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AABAAAQAACAAAAAAAAAAAAAEAAAAAAAAAAAAAAAQAAA=</HashCode>
+      <FileName>SourceTextReader.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="manager" />
+      <Field Name="header" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Vba.Language.Preprocessor.PreprocessorStateManager">
+    <Position X="6" Y="6" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AEIAAAAAAAAIAAAAAAAAAAAAAACAAAAA4AAAAAAAIAA=</HashCode>
+      <FileName>PreprocessorStateManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="evaluator" />
+      <Field Name="compilerConstants" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Field Name="conditionalBlocks" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Vba.Language.ExpressionEvaluator">
+    <Position X="9.75" Y="6" Width="2" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <AssociationLine Name="constants" Type="Vba.Language.ConstantsDictionary" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="11" Y="6" />
+        <Point X="11" Y="3.114" />
+        <Point X="9.75" Y="3.114" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAiAAAAAAAAAAAAAAgAQAAAACQAEQAAAAYAAgAAAA=</HashCode>
+      <FileName>ExpressionEvaluator.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="constants" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Vba.Language.ConstantsDictionary">
+    <Position X="8" Y="2.5" Width="1.75" />
+    <NestedTypes>
+      <Class Name="Vba.Language.ConstantsDictionary.Data" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>ConstantsDictionary.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <AssociationLine Name="evaluator" Type="Vba.Language.ExpressionEvaluator" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="9.75" Y="4.034" />
+        <Point X="10.5" Y="4.034" />
+        <Point X="10.5" Y="6" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAIAAAAAAAAAEAAAAAAAAAAAAAIAAAAAAQAAA=</HashCode>
+      <FileName>ConstantsDictionary.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="evaluator" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Vba.Language.VbaHeader">
+    <Position X="3.75" Y="2" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <AssociationLine Name="errorHandler" Type="Vba.Language.HeaderErrorListener" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="4.5" Y="2" />
+        <Point X="4.5" Y="1.25" />
+        <Point X="6" Y="1.25" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAEAAAAAAAAAAAAEAABQAAEAAAAIAI=</HashCode>
+      <FileName>VbaHeader.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="errorHandler" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Vba.Language.HeaderErrorListener">
+    <Position X="6" Y="0.5" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>HeaderErrorListener.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Interface Name="Vba.Language.IConditionalBlock">
-    <Position X="0.5" Y="0.5" Width="1.5" />
+    <Position X="9.75" Y="8" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAACBAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAQAA=</HashCode>
+      <HashCode>AQAAACBAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAQAA=</HashCode>
       <FileName>IConditionalBlock.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="Vba.Language.IConditionalNode&lt;T&gt;">
-    <Position X="3.75" Y="0.5" Width="1.75" />
+    <Position X="12.25" Y="8" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>IConditionalNode.cs</FileName>
