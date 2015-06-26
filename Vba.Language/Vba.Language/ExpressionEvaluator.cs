@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 
 using Vba.Grammars;
 
@@ -18,6 +19,10 @@ namespace Vba.Language
             if (context.boolExpression() != null)
             {
                 return VisitBoolExpression(context.boolExpression());
+            }
+            if (context.stringExpression() != null)
+            {
+                return VisitStringExpression(context.stringExpression());
             }
             // TODO need to implement this method and all other expression methods
             throw new NotImplementedException("VisitExpression");
@@ -84,6 +89,32 @@ namespace Vba.Language
                 return false;
             }
             throw new Exception("VisitBoolLiteral");
+        }
+
+        #endregion
+
+        #region String Expressions
+
+        public override object VisitStringExpression(PreprocessorParser.StringExpressionContext context)
+        {
+            if ((context.AMP() != null || context.PLUS() != null) 
+                && context.stringExpression().Count == 2)
+            {
+                var left = (string)VisitStringExpression(context.stringExpression(0));
+                var right = (string)VisitStringExpression(context.stringExpression(1));
+                return left + right;
+            }
+            if (context.Like() != null)
+            {
+                throw new NotImplementedException("Need to implement like comparison");
+            }
+            if (context.StringLiteral() != null)
+            {
+                var text = context.StringLiteral().GetText();
+                Debug.Assert(text.Length > 2);
+                return text.Substring(1, text.Length - 2);
+            }
+            throw new NotImplementedException("VisitStringExpression: " + context.GetText());
         }
 
         #endregion
