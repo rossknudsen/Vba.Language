@@ -9,13 +9,13 @@ headerLine
 classHeaderLine
     :   WS* Version WS+ FloatLiteral WS+ Class WS*
     |   WS* Begin WS*
-    |   WS* MultiUse WS* '=' WS* IntegerLiteral WS* COMMENT?
+    |   WS* MultiUse WS* EQ WS* IntegerLiteral WS* COMMENT?
     |   WS* End WS*
     ;
 
 moduleAttribute
-    :	Attribute WS+ VbName WS* '=' WS* ModuleName WS*
-    |   Attribute WS+ optionalAttributes WS* '=' WS* boolLiteral WS*
+    :	Attribute WS+ VbName WS* EQ WS* ModuleName WS*
+    |   Attribute WS+ optionalAttributes WS* EQ WS* boolLiteral WS*
     ;
 
 optionalAttributes
@@ -35,7 +35,7 @@ preprocessorStatement
     ;
 
 constantDeclaration
-    :	WS* '#' Const WS+ ID WS* '=' WS* expression WS*
+    :	WS* '#' Const WS+ ID WS* EQ WS* expression WS*
     ;
 
 ifStatement
@@ -66,7 +66,7 @@ expression
     ;
 
 comparisonOperator
-    :   '='
+    :   EQ
     |   '<'
     |   '>'
     |   '<='
@@ -233,6 +233,7 @@ FS          :   '/';
 BS          :   '\\';
 CARET       :   '^';
 STAR        :   '*';
+EQ          :   '=';
 
 fragment A:('a'|'A');
 fragment B:('b'|'B');
