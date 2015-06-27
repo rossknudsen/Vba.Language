@@ -50,6 +50,10 @@
       <HintPath>..\packages\Antlr4.Runtime.4.3.0\lib\net45\Antlr4.Runtime.net45.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="Vba.Grammars, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d19dca21624faf72, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Vba.Grammars\bin\Debug\Vba.Grammars.dll</HintPath>
+    </Reference>
     <Reference Include="xunit.abstractions">
       <HintPath>..\packages\xunit.abstractions.2.0.0\lib\net35\xunit.abstractions.dll</HintPath>
     </Reference>
@@ -69,7 +73,13 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="ExpressionEvaluatorTests.cs" />
+    <Compile Include="Preprocessor\ConditionalTests.cs" />
+    <Compile Include="Preprocessor\ConstantTests.cs" />
+    <Compile Include="Preprocessor\ParseTreeHelper.cs" />
+    <Compile Include="Preprocessor\PreprocessorHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestErrorListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vba.Language\Vba.Language.csproj">

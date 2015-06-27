@@ -2,7 +2,7 @@
 
 using Antlr4.Runtime;
 
-namespace Vba.Grammars.Tests
+namespace Vba.Language.Tests
 {
     internal class TestErrorListener : IAntlrErrorListener<IToken>, IAntlrErrorListener<int>
     {

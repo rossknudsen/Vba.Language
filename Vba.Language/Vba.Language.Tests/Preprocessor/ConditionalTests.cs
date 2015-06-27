@@ -1,6 +1,8 @@
-﻿using Xunit;
+﻿using Vba.Grammars.Tests.Preprocessor;
 
-namespace Vba.Grammars.Tests.Preprocessor
+using Xunit;
+
+namespace Vba.Language.Tests.Preprocessor
 {
     public class ConditionalTests
     {

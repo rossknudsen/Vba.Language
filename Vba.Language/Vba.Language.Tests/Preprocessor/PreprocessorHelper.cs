@@ -1,6 +1,8 @@
 ﻿using Antlr4.Runtime;
 
-namespace Vba.Grammars.Tests.Preprocessor
+using Vba.Grammars;
+
+namespace Vba.Language.Tests.Preprocessor
 {
     internal static class PreprocessorHelper
     {
