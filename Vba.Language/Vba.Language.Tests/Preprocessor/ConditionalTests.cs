@@ -1,6 +1,4 @@
-﻿using Vba.Grammars.Tests.Preprocessor;
-
-using Xunit;
+﻿using Xunit;
 
 namespace Vba.Language.Tests.Preprocessor
 {
