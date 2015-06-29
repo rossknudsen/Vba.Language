@@ -2,7 +2,7 @@
 
 using Antlr4.Runtime;
 
-namespace Vba.Language
+namespace Vba.Language.Preprocessor
 {
     public interface IConditionalNode<T> where T : ParserRuleContext
     {

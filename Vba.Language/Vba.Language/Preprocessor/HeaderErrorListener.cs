@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 using Antlr4.Runtime;
 
-namespace Vba.Language
+namespace Vba.Language.Preprocessor
 {
     internal class HeaderErrorListener : IAntlrErrorListener<int>, IAntlrErrorListener<IToken>
     {

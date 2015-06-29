@@ -2,7 +2,7 @@
 
 using Xunit;
 
-namespace Vba.Language.Tests
+namespace Vba.Language.Tests.Preprocessor
 {
     public class PreprocessorIntegrationTests
     {

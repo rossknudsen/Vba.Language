@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 using Vba.Grammars;
 
-namespace Vba.Language
+namespace Vba.Language.Preprocessor
 {
     public interface IConditionalBlock
     {

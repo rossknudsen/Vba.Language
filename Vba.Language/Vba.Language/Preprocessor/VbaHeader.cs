@@ -4,7 +4,7 @@ using Antlr4.Runtime;
 
 using Vba.Grammars;
 
-namespace Vba.Language
+namespace Vba.Language.Preprocessor
 {
     internal class VbaHeader
     {

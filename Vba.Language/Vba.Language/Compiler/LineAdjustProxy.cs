@@ -2,7 +2,7 @@
 
 using Antlr4.Runtime;
 
-namespace Vba.Language
+namespace Vba.Language.Compiler
 {
     /// <summary>
     /// This class is a proxy for a true ITokenSource and changes the behaviour of the Line method.  It is used
