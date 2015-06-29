@@ -8,10 +8,12 @@ namespace Vba.Language.Preprocessor
         private PreprocessorStateManager manager;
         private VbaHeader header;
 
-        public SourceTextReader(string source)
+        public SourceTextReader(string source) : this(new StringReader(source)) { }
+
+        public SourceTextReader(TextReader reader)
         {
+            this.reader = reader;
             manager = new PreprocessorStateManager();
-            reader = new StringReader(source);
             header = new VbaHeader();
         }
 
@@ -47,7 +49,11 @@ namespace Vba.Language.Preprocessor
         {
             if (disposing)
             {
-                reader.Dispose();
+                if (reader != null)
+                {
+                    reader.Dispose();
+                    reader = null;
+                }
             }
             base.Dispose(disposing);
         }
