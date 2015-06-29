@@ -15,6 +15,52 @@ namespace Vba.Language
             this.constants = constants;
         }
 
+        #region Preprocessor Overrides
+
+        public override object VisitPreprocessorStatement(PreprocessorParser.PreprocessorStatementContext context)
+        {
+            if (context.ifStatement() != null)
+            {
+                return VisitIfStatement(context.ifStatement());
+            }
+            if (context.elseIfStatement() != null)
+            {
+                return VisitElseIfStatement(context.elseIfStatement());
+            }
+            if (context.elseStatement() != null)
+            {
+                return VisitElseStatement(context.elseStatement());
+            }
+            if (context.endIfStatement() != null)
+            {
+                return VisitEndIfStatement(context.endIfStatement());
+            }
+            throw new NotImplementedException("VisitPreprocessorStatement");
+        }
+
+        public override object VisitIfStatement(PreprocessorParser.IfStatementContext context)
+        {
+            return VisitExpression(context.expression());
+        }
+
+        public override object VisitElseIfStatement(PreprocessorParser.ElseIfStatementContext context)
+        {
+            return VisitExpression(context.expression());
+        }
+
+        public override object VisitElseStatement(PreprocessorParser.ElseStatementContext context)
+        {
+            throw new Exception("Cannot evaluate Else Statement");
+        }
+
+        public override object VisitEndIfStatement(PreprocessorParser.EndIfStatementContext context)
+        {
+            // This statement can't really be evaluated.  Not sure what we should return.
+            return false;
+        }
+
+        #endregion
+
         public override object VisitExpression(PreprocessorParser.ExpressionContext context)
         {
             if (context.comparisonOperator() != null

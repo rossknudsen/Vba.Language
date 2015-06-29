@@ -11,6 +11,7 @@ namespace Vba.Language.Tests
         [Theory]
         [InlineData("", "")]
         [InlineData("#If True Then\r\n#End If", "")]
+        [InlineData("#If True Then\r\ntest\r\n#End If", "test\r\n")]
         public void CanPreprocessModule(string source, string expected)
         {
             var preprocessor = new SourceTextReader(ModuleHeader + source);
