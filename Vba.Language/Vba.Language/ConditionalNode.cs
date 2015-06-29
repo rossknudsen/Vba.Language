@@ -15,8 +15,8 @@ namespace Vba.Language.Preprocessor
 
         public IList<IConditionalBlock> ChildBlocks { get; private set; }
 
-        internal T Statement { get; private set; }
+        public object Result { get; private set; }
 
-        internal object Result { get; private set; }
+        internal T Statement { get; private set; }
     }
 }

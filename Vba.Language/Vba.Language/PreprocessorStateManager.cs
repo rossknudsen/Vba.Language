@@ -43,8 +43,6 @@ namespace Vba.Language.Preprocessor
             }
             else
             {
-                var result = evaluator.Visit(tree);
-
                 var current = conditionalBlocks.CurrentBlock();
                 if (current == null)
                 {
@@ -54,19 +52,22 @@ namespace Vba.Language.Preprocessor
 
                 if (tree.ifStatement() != null)
                 {
+                    var result = evaluator.Visit(tree);
                     current.AddNode(tree.ifStatement(), result);
                 }
                 else if (tree.elseIfStatement() != null)
                 {
+                    var result = evaluator.Visit(tree);
                     current.AddNode(tree.elseIfStatement(), result);
                 }
                 else if (tree.elseStatement() != null)
                 {
+                    var result = current.IsElseStatementActive();
                     current.AddNode(tree.elseStatement(), result);
                 }
                 else if (tree.endIfStatement() != null)
                 {
-                    current.AddNode(tree.endIfStatement(), result);
+                    current.AddNode(tree.endIfStatement(), null);
                 }
                 else
                 {

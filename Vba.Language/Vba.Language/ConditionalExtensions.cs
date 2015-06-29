@@ -88,5 +88,32 @@ namespace Vba.Language.Preprocessor
             // TODO need to add additional type checks etc.
             throw new NotImplementedException();
         }
+
+        internal static bool IsElseStatementActive(this ConditionalBlock block)
+        {
+            if (IsConditionalNodeActive(block.If))
+            {
+                return false;
+            }
+            if (block.ElseIfs.Any(s => IsConditionalNodeActive(s)))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private static bool IsConditionalNodeActive<T>(IConditionalNode<T> node) where T : ParserRuleContext
+        {
+            if (node == null || (node.Result == null))
+            {
+                throw new NotImplementedException("IsConditionalNodeActive");
+            }
+            if (node.Result is bool)
+            {
+                return (bool)node.Result;
+            }
+            // TODO handle other data types.
+            throw new NotImplementedException("IsConditionalNodeActive");
+        }
     }
 }
