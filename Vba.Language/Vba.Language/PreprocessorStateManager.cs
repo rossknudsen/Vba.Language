@@ -21,9 +21,6 @@ namespace Vba.Language.Preprocessor
             conditionalBlocks = new List<ConditionalBlock>();
             compilerConstants = new ConstantsDictionary();
             evaluator = new ExpressionEvaluator(compilerConstants);
-            lexer = new PreprocessorLexer(new AntlrInputStream(""));
-            var tokens = new CommonTokenStream(lexer);
-            parser = new PreprocessorParser(tokens);
         }
 
         internal void ExecutePreprocessorStatement(string line)
@@ -33,8 +30,7 @@ namespace Vba.Language.Preprocessor
                 throw new ArgumentException("Parameter line cannot contain line break characters.");
             }
 
-            var input = new AntlrInputStream(line);
-            lexer.SetInputStream(input);
+            SetupParser(line);
             var tree = parser.preprocessorStatement();
 
             // TODO handle syntax errors.
@@ -80,12 +76,19 @@ namespace Vba.Language.Preprocessor
             }
         }
 
+        private void SetupParser(string line)
+        {
+            lexer = new PreprocessorLexer(new AntlrInputStream(line));
+            var tokens = new CommonTokenStream(lexer);
+            parser = new PreprocessorParser(tokens);
+        }
+
         public bool IsActiveRegion
         {
             get
             {
                 var current = conditionalBlocks.CurrentBlock();
-                return current.IsActive();
+                return current == null || current.IsActive();
             }
         }
 
