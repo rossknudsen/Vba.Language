@@ -52,6 +52,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common.g4.lexer.cs">
+      <DependentUpon>Common.g4</DependentUpon>
+    </Compile>
+    <Compile Include="Common.g4.parser.cs">
+      <DependentUpon>Common.g4</DependentUpon>
+    </Compile>
     <Compile Include="Preprocessor.g4.lexer.cs">
       <DependentUpon>Preprocessor.g4</DependentUpon>
     </Compile>
@@ -59,10 +65,24 @@
       <DependentUpon>Preprocessor.g4</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Vba.g4.lexer.cs">
+      <DependentUpon>Vba.g4</DependentUpon>
+    </Compile>
+    <Compile Include="Vba.g4.parser.cs">
+      <DependentUpon>Vba.g4</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Antlr4 Include="Common.g4">
+      <Generator>MSBuild:Compile</Generator>
+      <CustomToolNamespace>Vba.Grammars</CustomToolNamespace>
+    </Antlr4>
     <None Include="packages.config" />
     <Antlr4 Include="Preprocessor.g4">
+      <Generator>MSBuild:Compile</Generator>
+      <CustomToolNamespace>Vba.Grammars</CustomToolNamespace>
+    </Antlr4>
+    <Antlr4 Include="Vba.g4">
       <Generator>MSBuild:Compile</Generator>
       <CustomToolNamespace>Vba.Grammars</CustomToolNamespace>
     </Antlr4>
