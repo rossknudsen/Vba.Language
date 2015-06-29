@@ -54,6 +54,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="VbaCompiler.cs" />
     <Compile Include="Preprocessor\ConditionalExtensions.cs" />
     <Compile Include="ConstantsDictionary.cs" />
     <Compile Include="ExpressionEvaluator.cs" />
@@ -72,7 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="PreprocessorTree.cd" />
+    <None Include="Compiler Toolchain.cd" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

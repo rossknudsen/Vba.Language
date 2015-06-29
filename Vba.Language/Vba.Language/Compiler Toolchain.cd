@@ -1,31 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Comment CommentText="SourceTextReader implements TextReader which is a constructor parameter for Antlr's Lexer.&#xD;&#xA;&#xD;&#xA;The SourceTextReader processes any module header information and all preprocessor statements in it's input.  As its output it passes the module body excluding any conditionally compiled blocks which are not active.&#xD;&#xA;&#xD;&#xA;This allows the VBA compiler to focus on true VBA code.">
-    <Position X="0.51" Y="6.021" Height="2.073" Width="2.825" />
+    <Position X="0.51" Y="6.021" Height="2.385" Width="2.825" />
   </Comment>
   <Class Name="Vba.Language.Preprocessor.ConditionalNode&lt;T&gt;">
     <Position X="12.5" Y="9.5" Width="1.5" />
-    <AssociationLine Name="ChildBlocks" Type="Vba.Language.IConditionalBlock" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="13.25" Y="9.5" />
-        <Point X="13.25" Y="9.188" />
-        <Point X="11.25" Y="9.188" />
-      </Path>
-    </AssociationLine>
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAABAAAQCAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>ConditionalNode.cs</FileName>
+      <FileName>Preprocessor\ConditionalNode.cs</FileName>
     </TypeIdentifier>
-    <ShowAsCollectionAssociation>
-      <Property Name="ChildBlocks" />
-    </ShowAsCollectionAssociation>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Vba.Language.Preprocessor.ConditionalBlock">
     <Position X="9.75" Y="10.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
       <HashCode>AQAAACBAAAAAAEAAAAAAAAAEAAAAAAAAAAAAAAAIQAA=</HashCode>
-      <FileName>ConditionalBlock.cs</FileName>
+      <FileName>Preprocessor\ConditionalBlock.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
@@ -35,8 +31,8 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AABAAAQAACAAAAAAAAAAAAAEAAAAAAAAAAAAAAAQAAA=</HashCode>
-      <FileName>SourceTextReader.cs</FileName>
+      <HashCode>AABAAAQAACAAAAAAAAAAAAAEAAAAAAAAAAAAAAARAAA=</HashCode>
+      <FileName>Preprocessor\SourceTextReader.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Field Name="manager" />
@@ -46,12 +42,12 @@
   <Class Name="Vba.Language.Preprocessor.PreprocessorStateManager">
     <Position X="6" Y="6" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AEIAAAAAAAAIAAAAAAAAAAAAAACAAAAA4AAAAAAAIAA=</HashCode>
-      <FileName>PreprocessorStateManager.cs</FileName>
+      <HashCode>AEKAAAAAAAAIAAAAAAAAAAAAAACAAAAA4AAAAAAAIAA=</HashCode>
+      <FileName>Preprocessor\PreprocessorStateManager.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Field Name="evaluator" />
       <Field Name="compilerConstants" />
+      <Field Name="evaluator" />
     </ShowAsAssociation>
     <ShowAsCollectionAssociation>
       <Field Name="conditionalBlocks" />
@@ -71,7 +67,7 @@
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAAAiAAAAAAAAAAAAAAgAQAAAACQAEQAAAAYAAgAAAA=</HashCode>
+      <HashCode>AAAAiEAAAAAAAAAAAAAgAQAAAACQAEQAAQIYBQgAAAA=</HashCode>
       <FileName>ExpressionEvaluator.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -102,54 +98,63 @@
       <Field Name="evaluator" />
     </ShowAsAssociation>
   </Class>
-  <Class Name="Vba.Language.VbaHeader">
-    <Position X="3.75" Y="2" Width="1.5" />
-    <Compartments>
-      <Compartment Name="Methods" Collapsed="true" />
-    </Compartments>
-    <AssociationLine Name="errorHandler" Type="Vba.Language.HeaderErrorListener" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="4.5" Y="2" />
-        <Point X="4.5" Y="1.25" />
-        <Point X="6" Y="1.25" />
-      </Path>
-    </AssociationLine>
-    <TypeIdentifier>
-      <HashCode>AAAAAgAAAAAAAAAEAAAAAAAAAAAAEAABQAAEAAAAIAI=</HashCode>
-      <FileName>VbaHeader.cs</FileName>
-    </TypeIdentifier>
-    <ShowAsAssociation>
-      <Field Name="errorHandler" />
-    </ShowAsAssociation>
-  </Class>
-  <Class Name="Vba.Language.HeaderErrorListener">
-    <Position X="6" Y="0.5" Width="1.75" />
+  <Class Name="Vba.Language.Preprocessor.HeaderErrorListener">
+    <Position X="9.5" Y="0.5" Width="2.25" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
       <HashCode>AAAAAgAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI=</HashCode>
-      <FileName>HeaderErrorListener.cs</FileName>
+      <FileName>Preprocessor\HeaderErrorListener.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Interface Name="Vba.Language.IConditionalBlock">
-    <Position X="9.75" Y="8" Width="1.5" />
+  <Class Name="Vba.Language.Preprocessor.VbaHeader">
+    <Position X="6.75" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
-      <HashCode>AQAAACBAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAQAA=</HashCode>
-      <FileName>IConditionalBlock.cs</FileName>
+      <HashCode>AAAAAgAAAAAAAAAEAAAAAAAAAAAAEAABQAAEAAAAIAI=</HashCode>
+      <FileName>Preprocessor\VbaHeader.cs</FileName>
     </TypeIdentifier>
-  </Interface>
-  <Interface Name="Vba.Language.IConditionalNode&lt;T&gt;">
-    <Position X="12.25" Y="8" Width="1.75" />
+    <ShowAsAssociation>
+      <Field Name="errorHandler" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Vba.Language.VbaCompiler">
+    <Position X="0.5" Y="10.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>IConditionalNode.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAA=</HashCode>
+      <FileName>VbaCompiler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Vba.Language.Compiler.LineAdjustProxy" Collapsed="true">
+    <Position X="3.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAMAAAAAAAAAAgAgAgBAAAAAAAAAAAAAAAAAAAABEAA=</HashCode>
+      <FileName>Compiler\LineAdjustProxy.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="Vba.Language.Preprocessor.IConditionalNode&lt;T&gt;">
+    <Position X="12.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAABAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Preprocessor\IConditionalNode.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
       <Property Name="ChildBlocks" />
     </ShowAsCollectionAssociation>
+  </Interface>
+  <Interface Name="Vba.Language.Preprocessor.IConditionalBlock">
+    <Position X="9.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAACBAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAQAA=</HashCode>
+      <FileName>Preprocessor\IConditionalBlock.cs</FileName>
+    </TypeIdentifier>
   </Interface>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

@@ -2,7 +2,7 @@
 
 namespace Vba.Language.Preprocessor
 {
-    public class SourceTextReader : ReadLineTextReader
+    internal sealed class SourceTextReader : ReadLineTextReader
     {
         private TextReader reader;
         private PreprocessorStateManager manager;
@@ -15,17 +15,20 @@ namespace Vba.Language.Preprocessor
             this.reader = reader;
             manager = new PreprocessorStateManager();
             header = new VbaHeader();
+            Line = 0;
         }
+
+        public int Line { get; private set; }
 
         public override string ReadLine()
         {
             // when ReadLine returns null we are at the end of the file.
-            var line = reader.ReadLine();
+            var line = NextLine();
 
             // first parse the header.
             while (line != null && header.ProcessHeaderStatement(line))
             {
-                line = reader.ReadLine();
+                line = NextLine();
             }
 
             // after we exit the top loop, line will be the first non-header line.
@@ -40,9 +43,16 @@ namespace Vba.Language.Preprocessor
                     return line;
                 }
 
-                line = reader.ReadLine();
+                line = NextLine();
             }
             return null;
+        }
+
+        private string NextLine()
+        {
+            var line = reader.ReadLine();
+            Line++;
+            return line;
         }
 
         protected override void Dispose(bool disposing)
