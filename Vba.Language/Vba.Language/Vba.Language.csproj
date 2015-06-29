@@ -58,6 +58,7 @@
     <Compile Include="ConstantsDictionary.cs" />
     <Compile Include="ExpressionEvaluator.cs" />
     <Compile Include="HeaderErrorListener.cs" />
+    <Compile Include="LineAdjustProxy.cs" />
     <Compile Include="SyntaxError.cs" />
     <Compile Include="VbaHeader.cs" />
     <Compile Include="IConditionalBlock.cs" />
