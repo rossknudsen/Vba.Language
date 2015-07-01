@@ -3,7 +3,7 @@ using System.Linq;
 
 using Xunit;
 
-namespace Vba.Language.Tests.Preprocessor
+namespace Vba.Language.Tests
 {
     internal static class ParseTreeHelper
     {

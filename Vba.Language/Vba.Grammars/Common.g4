@@ -107,7 +107,7 @@ FloatLiteral
 
 fragment
 DecimalDigits
-    :   [1-9] [0-9]*
+    :   [0-9]+
     ;
 
 fragment 
