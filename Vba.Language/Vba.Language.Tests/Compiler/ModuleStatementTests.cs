@@ -17,7 +17,7 @@ namespace Vba.Language.Tests.Compiler
         [InlineData("DefStr A-Q", "(directiveElement (defDirective (defType DefStr) (letterSpec A - Q)))")]
         public void CanParseDirectiveElement(string source, string expectedTree)
         {
-            var parser = VbaCompilerHelper.BuildPreprocessorParser(source);
+            var parser = VbaCompilerHelper.BuildVbaParser(source);
 
             var result = parser.directiveElement();
 

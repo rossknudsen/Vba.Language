@@ -6,7 +6,7 @@ namespace Vba.Language.Tests.Compiler
 {
     public class VbaCompilerHelper
     {
-        internal static VbaParser BuildPreprocessorParser(string source)
+        internal static VbaParser BuildVbaParser(string source)
         {
             var errorHandler = new TestErrorListener();
 
