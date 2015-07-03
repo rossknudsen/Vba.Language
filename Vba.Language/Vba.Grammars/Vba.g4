@@ -5,6 +5,28 @@ import Common;
 // Specification: [MS-VBAL] VBA Language Specification
 
 // 3.3.5.2 Reserved Identifiers and IDENTIFIER
+identifier      
+    :   Alias
+    |   Base
+    |   Binary
+    |   ClassInit
+    |   ClassTerm
+    |   CLngLng
+    |   Compare
+    |   Database
+    |   DefLngLng
+    |   Explicit
+    |   Lib
+    |   LongLong
+    |   Module
+    |   Object
+    |   Property
+    |   Text
+    |   VB_Invoke_PropertyPutRefVB_MemberFlags
+    |   PtrSafe
+    |   ID
+    ;
+
 reservedIdentifier
     :   statementKeyword
     |   markerKeyword
@@ -221,7 +243,15 @@ variableDeclaration :   (Global | Public | Private | Dim) Shared? variableDclLis
 variableDclList     :   variableDcl (',' variableDcl)*; 
 
 // 5.2.3.1.1 Variable Declarations
-variableDcl         :   (WithEvents)? ID arrayDim? asClause?;// TODO add option for type suffix.
+variableDcl         :   typedVariableDcl | untypedVariableDcl;
+typedVariableDcl    :   typedName arrayDim?;
+untypedVariableDcl  :   identifier (arrayClause | asClause)?;
+arrayClause         :   arrayDim asClause?;
+asClause            :   asAutoObject | asType;
+
+// 5.2.3.1.2 WithEvents Variable Declarations
+witheventsVariableDcl : WithEvents ID As classTypeName;
+classTypeName       :   definedTypeExpression;
 
 constDeclaration    :   (Global | Public | Private)? Const constItemList;
 constItemList       :   constItem (',' constItem)*;
@@ -248,8 +278,12 @@ boundsList          :   dimSpec (',' dimSpec)*;
 dimSpec             :   constantExpression (To constantExpression)?;
 
 // 5.2.3.1.4 Variable Type Declarations
-
-asClause            :   As (New )? ID;
+asAutoObject        :   As New classTypeName;
+asType              :   As typeSpec;
+typeSpec            :   fixedLengthStringSpec | typeExpression;
+fixedLengthStringSpec : String '*' stringLength;
+stringLength        :   constantName | IntegerLiteral;
+constantName        :   simpleNameExpression;
 
 moduleCodeSection
     :   subroutineDeclaration
@@ -372,10 +406,10 @@ operatorExpression
     |   isOperator
     |   logicalOperator
     ;
-
+*/
 // 5.6.10 Simple Name Expressions
 simpleNameExpression        :   name;
-
+/*
 // 5.6.12 Member Access Expressions
 // TODO no line continuation or whitespace before period.
 memberAccessExpression      :   lExpression '.' unrestrictedName; 
@@ -418,6 +452,7 @@ typeExpression
     //|   simpleNameExpression
     //|   memberAccessExpression
     ;
+definedTypeExpression : simpleNameExpression ;//| memberAccessExpression;
 
 // 5.6.16.8 AddressOf Expressions
 //addressOfExpression         :   AddressOf (simpleNameExpression | memberAccessExpression);

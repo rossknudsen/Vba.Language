@@ -15,7 +15,7 @@ namespace Vba.Language.Tests
             }
             var filteredExpected = RemoveWhiteSpace(expected);
             var filteredActual = RemoveWhiteSpace(actual);
-            Assert.True(filteredExpected.SequenceEqual(filteredActual), "Expected: " + expected + "\r\nActual: " + actual);
+            Assert.Equal(filteredExpected, filteredActual);
         }
 
         private static string RemoveWhiteSpace(string input)
