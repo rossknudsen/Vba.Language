@@ -295,19 +295,19 @@ moduleCodeSection
 
 // 5.3.1 Procedure Declarations
 subroutineDeclaration
-    :   procedureScope Static? Sub ID procedureParameters? Static? EOS
+    :   procedureScope? Static? Sub identifier procedureParameters? Static? EOS
         End Sub EOS;
 
 functionDeclaration
-    :   procedureScope Static? Function ID procedureParameters? functionType? Static? EOS
+    :   procedureScope? Static? Function ID procedureParameters? functionType? Static? EOS
         End Function EOS;
 
 propGetDeclaration
-    :   procedureScope Static? Property Get ID procedureParameters? functionType? Static? EOS
+    :   procedureScope? Static? Property Get ID procedureParameters? functionType? Static? EOS
         End Property;
 
 propLhsDeclaration
-    :   procedureScope Static? Property (Set | Let) ID procedureParameters? functionType? Static? EOS
+    :   procedureScope? Static? Property (Set | Let) ID procedureParameters? functionType? Static? EOS
         End Property;
 
 // 5.3.1.1 Procedure Scope
