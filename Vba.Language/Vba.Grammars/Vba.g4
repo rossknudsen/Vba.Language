@@ -255,7 +255,7 @@ classTypeName       :   definedTypeExpression;
 
 constDeclaration    :   (Global | Public | Private)? Const constItemList;
 constItemList       :   constItem (',' constItem)*;
-constItem           :   ID asClause? '=' constantExpression;
+constItem           :   identifier asClause? '=' constantExpression;
 
 typeDeclaration     :   (Global | Public | Private)? Type ID EOS
                         End Type;
