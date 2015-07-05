@@ -240,7 +240,7 @@ implementsDirective
 
 // 5.2.3.1 Module Variable Declaration Lists
 variableDeclaration :   (Global | Public | Private | Dim) Shared? variableDclList;
-variableDclList     :   variableDcl (',' variableDcl)*; 
+variableDclList     :   (variableDcl | witheventsVariableDcl) (',' (variableDcl | witheventsVariableDcl))*; 
 
 // 5.2.3.1.1 Variable Declarations
 variableDcl         :   typedVariableDcl | untypedVariableDcl;
@@ -250,7 +250,7 @@ arrayClause         :   arrayDim asClause?;
 asClause            :   asAutoObject | asType;
 
 // 5.2.3.1.2 WithEvents Variable Declarations
-witheventsVariableDcl : WithEvents ID As classTypeName;
+witheventsVariableDcl : WithEvents identifier As classTypeName;
 classTypeName       :   definedTypeExpression;
 
 constDeclaration    :   (Global | Public | Private)? Const constItemList;
