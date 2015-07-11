@@ -198,21 +198,11 @@ directiveElement
     |   extProcDeclaration
     ;
 
-// 5.2.1.1 Option Compare Directive
-optionCompareDirective
-    :   Option Compare (Binary | Text | Database);
-
-// 5.2.1.2 Option Base Directive
-optionBaseDirective
-    :   Option Base IntegerLiteral;
-
-// 5.2.1.3 Option Explicit Directive
-optionExplicitDirective
-    :   Option Explicit;
-
-// 5.2.1.4 Option Private Directive
-optionPrivateDirective
-    :   Option Private Module;
+// 5.2.1.1-4 Option Directives
+optionCompareDirective      :   Option Compare (Binary | Text | Database);
+optionBaseDirective         :   Option Base IntegerLiteral;
+optionExplicitDirective     :   Option Explicit;
+optionPrivateDirective      :   Option Private Module;
 
 // 5.2.2 Implicit Definition Directives
 // TODO
@@ -235,8 +225,7 @@ defType
     ;
 
 // 5.2.4.2 Implements Directive
-implementsDirective
-    :   Implements ID;
+implementsDirective         :   Implements ID;
 
 // 5.2.3.1 Module Variable Declaration Lists
 variableDeclaration :   (Global | Public | Private | Dim) Shared? variableDclList;
@@ -252,25 +241,6 @@ asClause            :   asAutoObject | asType;
 // 5.2.3.1.2 WithEvents Variable Declarations
 witheventsVariableDcl : WithEvents identifier As classTypeName;
 classTypeName       :   definedTypeExpression;
-
-constDeclaration    :   (Global | Public | Private)? Const constItemList;
-constItemList       :   constItem (',' constItem)*;
-constItem           :   identifier asClause? '=' constantExpression;
-
-typeDeclaration     :   (Global | Public | Private)? Type ID EOS
-                        End Type;
-//udtMemberList       :   udtElement (EOS udtElement)*;
-//udtElement          :   ID arrayDim asClause;
-
-enumDeclaration     :   (Global | Public | Private)? Enum ID EOS
-                        End Enum;
-//memberList          :   enumElement (',' enumElement)*;
-//enumElement         :   ID '=' constantExpression;
-
-extProcDeclaration  :   (Public | Private)? Declare PtrSafe? (Sub | Function) ID 
-                        Lib StringLiteral (Alias StringLiteral)? procedureParameters;
-
-eventDeclaration    :   (Public )? Event ID ('(' ( positionalParameters )? ')')?;
 
 // 5.2.3.1.3 Array Dimensions and Bounds
 arrayDim            :   '(' boundsList ')';
@@ -292,6 +262,30 @@ moduleCodeSection
     |   propLhsDeclaration
     |   implementsDirective
     ;
+
+// 5.2.3.2 Const Declarations
+constDeclaration    :   (Global | Public | Private)? Const constItemList;
+constItemList       :   constItem (',' constItem)*;
+constItem           :   identifier asClause? '=' constantExpression;
+
+// 5.2.3.3 User Defined Type Declarations
+typeDeclaration     :   (Global | Public | Private)? Type ID EOS
+                        End Type;
+//udtMemberList       :   udtElement (EOS udtElement)*;
+//udtElement          :   ID arrayDim asClause;
+
+// 5.2.3.4 Enum Declarations
+enumDeclaration     :   (Global | Public | Private)? Enum ID EOS
+                        End Enum;
+//memberList          :   enumElement (',' enumElement)*;
+//enumElement         :   ID '=' constantExpression;
+
+// 5.2.4.3 Event Declaration
+eventDeclaration    :   (Public )? Event ID ('(' ( positionalParameters )? ')')?;
+
+// 5.2.3.5 External Procedure Declaration
+extProcDeclaration  :   (Public | Private)? Declare PtrSafe? (Sub | Function) ID 
+                        Lib StringLiteral (Alias StringLiteral)? procedureParameters;
 
 // 5.3.1 Procedure Declarations
 subroutineDeclaration
