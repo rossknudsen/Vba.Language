@@ -269,23 +269,44 @@ constItemList       :   constItem (',' constItem)*;
 constItem           :   identifier asClause? '=' constantExpression;
 
 // 5.2.3.3 User Defined Type Declarations
-typeDeclaration     :   (Global | Public | Private)? Type ID EOS
-                        End Type;
-//udtMemberList       :   udtElement (EOS udtElement)*;
-//udtElement          :   ID arrayDim asClause;
+typeDeclaration         :   (Global | Public | Private)? udtDeclaration;
+udtDeclaration          :   Type untypedName EOS
+                            udtMemberList EOS
+                            End Type;
+udtMemberList           :   udtElement (EOS udtElement)*;
+udtElement              :   udtMember;  //| remStatement;
+udtMember               :   reservedNameMemberDcl | untypedNameMemberDcl;
+untypedNameMemberDcl    :   identifier optionalArrayClause;
+reservedNameMemberDcl   :   reservedMemberName asClause;
+optionalArrayClause     :   arrayDim? asClause;
+reservedMemberName
+    :   statementKeyword
+    |   markerKeyword
+    |   operatorIdentifier
+    |   specialForm
+    |   reservedName
+    |   literalIdentifier
+    |   reservedForImplementationUse
+    |   futureReserved
+    ;
 
 // 5.2.3.4 Enum Declarations
-enumDeclaration     :   (Global | Public | Private)? Enum ID EOS
-                        End Enum;
-//memberList          :   enumElement (',' enumElement)*;
-//enumElement         :   ID '=' constantExpression;
+enumDeclaration         :   (Global | Public | Private)? Enum untypedName EOS
+                            memberList EOS
+                            End Enum;
+memberList              :   enumElement (EOS enumElement)*;  
+enumElement             :   untypedName ('=' constantExpression)?; // TODO remStatement.
+
+// 5.2.3.5 External Procedure Declaration
+extProcDeclaration      :   (Public | Private)? Declare PtrSafe? (Sub | Function) ID 
+                            Lib StringLiteral (Alias StringLiteral)? procedureParameters;
+externalProcDcl         :   Declare PtrSafe? (externalSub | externalFunction);
+externalSub             :   Sub subroutineName libInfo procedureParameters?;
+externalFunction        :   Function functionName libInfo procedureParameters? functionType?;
+libInfo                 :   Lib StringLiteral (Alias StringLiteral)?;
 
 // 5.2.4.3 Event Declaration
 eventDeclaration    :   (Public )? Event ID ('(' ( positionalParameters )? ')')?;
-
-// 5.2.3.5 External Procedure Declaration
-extProcDeclaration  :   (Public | Private)? Declare PtrSafe? (Sub | Function) ID 
-                        Lib StringLiteral (Alias StringLiteral)? procedureParameters;
 
 // 5.3.1 Procedure Declarations
 subroutineDeclaration
