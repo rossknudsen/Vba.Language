@@ -224,9 +224,6 @@ defType
     |   DefVar
     ;
 
-// 5.2.4.2 Implements Directive
-implementsDirective         :   Implements ID;
-
 // 5.2.3.1 Module Variable Declaration Lists
 variableDeclaration :   (Global | Public | Private | Dim) Shared? variableDclList;
 variableDclList     :   (variableDcl | witheventsVariableDcl) (',' (variableDcl | witheventsVariableDcl))*; 
@@ -254,14 +251,6 @@ typeSpec            :   fixedLengthStringSpec | typeExpression;
 fixedLengthStringSpec : String '*' stringLength;
 stringLength        :   constantName | IntegerLiteral;
 constantName        :   simpleNameExpression;
-
-moduleCodeSection
-    :   subroutineDeclaration
-    |   functionDeclaration
-    |   propGetDeclaration
-    |   propLhsDeclaration
-    |   implementsDirective
-    ;
 
 // 5.2.3.2 Const Declarations
 constDeclaration    :   (Global | Public | Private)? Const constItemList;
@@ -305,25 +294,46 @@ externalSub             :   Sub subroutineName libInfo procedureParameters?;
 externalFunction        :   Function functionName libInfo procedureParameters? functionType?;
 libInfo                 :   Lib StringLiteral (Alias StringLiteral)?;
 
+// 5.2.4.2 Implements Directive
+implementsDirective     :   Implements classTypeName;
+
 // 5.2.4.3 Event Declaration
-eventDeclaration    :   (Public )? Event ID ('(' ( positionalParameters )? ')')?;
+eventDeclaration        :   Public? Event identifier eventParameterList?;
+eventParameterList      :   '(' positionalParameters? ')';
+
+// 5.3 Module Code Section Structure
+// TODO implement LINE-START / LINE-END
+moduleCodeSection
+    :   subroutineDeclaration
+    |   functionDeclaration
+    |   propGetDeclaration
+    |   propLhsDeclaration
+    |   implementsDirective
+    ;
 
 // 5.3.1 Procedure Declarations
 subroutineDeclaration
-    :   procedureScope? Static? Sub identifier procedureParameters? Static? EOS
-        End Sub EOS;
+    :   procedureScope? Static? Sub subroutineName procedureParameters? Static? EOS
+        procedureBody?
+        endLabel? End Sub EOS;
 
 functionDeclaration
-    :   procedureScope? Static? Function ID procedureParameters? functionType? Static? EOS
-        End Function EOS;
+    :   procedureScope? Static? Function functionName procedureParameters? functionType? Static? EOS
+        procedureBody?
+        endLabel? End Function EOS;
 
 propGetDeclaration
-    :   procedureScope? Static? Property Get ID procedureParameters? functionType? Static? EOS
-        End Property;
+    :   procedureScope? Static? Property Get functionName procedureParameters? functionType? Static? EOS
+        procedureBody?
+        endLabel? End Property;
 
 propLhsDeclaration
-    :   procedureScope? Static? Property (Set | Let) ID procedureParameters? functionType? Static? EOS
-        End Property;
+    :   procedureScope? Static? Property (Set | Let) subroutineName procedureParameters? functionType? Static? EOS
+        procedureBody?
+        endLabel? End Property;
+
+endLabel            :   statementLabelDefinition;
+//procedureTail       :   TODO
 
 // 5.3.1.1 Procedure Scope
 procedureScope
@@ -334,12 +344,12 @@ procedureScope
     ;
 
 // 5.3.1.3 Procedure Names
-subroutineName  :   ID | prefixedName;
-functionName    :   typedName | ID | prefixedName;
+subroutineName  :   identifier | prefixedName;
+functionName    :   typedName | identifier | prefixedName;
 prefixedName    :   eventHandlerName | implementedName | lifecycleHandlerName;
 
 // 5.3.1.4 Function Type Declarations
-functionType    :   As ID arrayDesignator?;
+functionType    :   As typeExpression arrayDesignator?;
 arrayDesignator :   '(' ')';
 
 // 5.3.1.5 Parameter Lists
@@ -357,24 +367,45 @@ optionalParameters      :   optionalParam (',' optionalParam)*;
 valueParam              :   positionalParam;
 positionalParam         :   parameterMechanism? paramDcl;
 optionalParam           :   optionalPrefix paramDcl defaultValue?;
-paramArray              :   ParamArray ID '(' ')' (As (Variant | '[' Variant ']'))?;
-paramDcl                :   ID arrayDesignator?;
+paramArray              :   ParamArray identifier '(' ')' (As (Variant | '[' Variant ']'))?;
+paramDcl                :   untypedNameParamDcl | typedNameDcl;
+untypedNameParamDcl     :   identifier parameterType?;
+typedNameDcl            :   typedName arrayDesignator?;
 optionalPrefix          :   Optional parameterMechanism? | parameterMechanism? Optional;
 parameterMechanism      :   ByRef | ByVal;
 parameterType           :   arrayDesignator? As (typeExpression | Any);
 defaultValue            :   '=' constantExpression;
 
 // 5.3.1.8 Event Handler Declarations
-eventHandlerName        :   ID;
+eventHandlerName        :   identifier;
 
 // 5.3.1.9 Implemented Name Declarations
-implementedName         :   ID;
+implementedName         :   identifier;
 
 // 5.3.1.10 Lifecycle Handler Declarations
 lifecycleHandlerName    :   ClassInit | ClassTerm;
 
 // 5.4 Procedure Bodies and Statements
-//procedureBody           :   statementBlock;
+procedureBody           :   statementBlock;
+
+// 5.4.1 Statement Blocks
+statementBlock          :   (blockStatement EOS)*;
+blockStatement          
+    :   statementLabelDefinition; 
+    //|   statement;  //|   remStatement 
+//statement               
+//    :   controlStatement
+//    |   dataManipulationStatement
+//    |   errorHandlingStatement
+//    |   fileStatement
+//    ;
+
+// 5.4.1.1 Statement Labels
+statementLabelDefinition    :   identifier ':' | lineNumberLabel ':'?;
+statementLabel              :   identifier | lineNumberLabel;
+statementLabelList          :   statementLabel (',' statementLabel);
+//identifierStatementlabel    :   identifier;
+lineNumberLabel             :   Integerliteral;  // actually can only be a decimal literal.
 
 /*
 // 5.6 Expressions
