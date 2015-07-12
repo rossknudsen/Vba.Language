@@ -966,6 +966,8 @@ LETTER                  :    [A-Za-z];
 ForeignName             :    '[' (~('\u000D' | '\u000A' | '\u2028' | '\u2029'))+ ']';
 
 // End of statement.
-EOS                     :   (NL | ':')*;
+EOS                     :   (NL | ':')+;
 
-WS                      :   [ \t] -> channel(HIDDEN);
+LC                      :   WS+ '_' WS* NL              -> channel(HIDDEN);
+WS                      :   [ \t]                       -> channel(HIDDEN);
+COMMENT                 :	'\'' (LC | ~('\r' | '\n')*) -> channel(HIDDEN);
