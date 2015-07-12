@@ -303,7 +303,8 @@ eventParameterList      :   '(' positionalParameters? ')';
 
 // 5.3 Module Code Section Structure
 // TODO implement LINE-START / LINE-END
-moduleCodeSection
+moduleCodeSection       :   moduleCodeElement*;
+moduleCodeElement
     :   subroutineDeclaration
     |   functionDeclaration
     |   propGetDeclaration
