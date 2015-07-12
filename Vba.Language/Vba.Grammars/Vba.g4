@@ -227,6 +227,7 @@ defType
 // 5.2.3.1 Module Variable Declaration Lists
 variableDeclaration :   (Global | Public | Private | Dim) Shared? variableDclList;
 variableDclList     :   (variableDcl | witheventsVariableDcl) (',' (variableDcl | witheventsVariableDcl))*; 
+variableDeclarationList     :   variableDcl (',' variableDcl)*;
 
 // 5.2.3.1.1 Variable Declarations
 variableDcl         :   typedVariableDcl | untypedVariableDcl;
@@ -314,22 +315,22 @@ moduleCodeSection
 // 5.3.1 Procedure Declarations
 subroutineDeclaration
     :   procedureScope? Static? Sub subroutineName procedureParameters? Static? EOS
-        procedureBody?
+        procedureBody
         endLabel? End Sub EOS;
 
 functionDeclaration
     :   procedureScope? Static? Function functionName procedureParameters? functionType? Static? EOS
-        procedureBody?
+        procedureBody
         endLabel? End Function EOS;
 
 propGetDeclaration
     :   procedureScope? Static? Property Get functionName procedureParameters? functionType? Static? EOS
-        procedureBody?
+        procedureBody
         endLabel? End Property;
 
 propLhsDeclaration
     :   procedureScope? Static? Property (Set | Let) subroutineName procedureParameters? functionType? Static? EOS
-        procedureBody?
+        procedureBody
         endLabel? End Property;
 
 endLabel            :   statementLabelDefinition;
@@ -404,18 +405,288 @@ blockStatement
 statementLabelDefinition    :   identifier ':' | lineNumberLabel ':'?;
 statementLabel              :   identifier | lineNumberLabel;
 statementLabelList          :   statementLabel (',' statementLabel);
-//identifierStatementlabel    :   identifier;
-lineNumberLabel             :   Integerliteral;  // actually can only be a decimal literal.
+lineNumberLabel             :   IntegerLiteral;  // actually can only be a decimal literal.
 
-/*
+// 5.4.2 Control Statements
+controlStatement            
+    :   ifStatement 
+    |   controlStatementExceptMultilineIf
+    ;
+controlStatementExceptMultilineIf
+    :   callStatement
+    |   whileStatement
+    |   forStatement
+    |   exitForStatement
+    |   doStatement
+    |   exitDoStatement
+    |   singleLineIfStatement
+    |   selectCaseStatement
+    |   stopStatement
+    |   gotoStatement
+    |   onGotoStatement
+    |   gosubStatement
+    |   returnStatement
+    |   onGosubStatement
+    |   forEachStatement
+    |   exitSubStatement
+    |   exitFunctionStatement
+    |   exitPropertyStatement
+    |   raiseEventStatement
+    |   withStatement
+    ;
+
+// 5.4.2.1 Call Statement
+callStatement               
+    :   Call? (simpleNameExpression | memberAccessExpression | indexExpression | withExpression);
+
+// 5.4.2.2 While Statement
+whileStatement              :   While boolExpression EOS
+                                statementBlock Wend;
+
+// 5.4.2.3 For Statement
+forStatement                :   simpleForStatement | explicitForStatement;
+simpleForStatement          :   forClause EOS statementBlock Next;
+explicitForStatement        :   forClause EOS
+                                statementBlock
+                                (Next | (nestedForStatement ',')) boundVariableExpression;
+nestedForStatement          :   explicitForStatement | explicitForEachStatement;
+forClause                   :   For boundVariableExpression '=' expression To expression stepClause?;
+stepClause                  :   Step expression;
+
+// 5.4.2.4 For Each Statement
+forEachStatement            :   simpleForEachStatement | explicitForEachStatement;
+simpleForEachStatement      :   forEachClause EOS statementBlock Next;
+explicitForEachStatement    :   forEachClause EOS 
+                                statementBlock
+                                (Next | (nestedForStatement ',')) boundVariableExpression;
+forEachClause               :   For Each boundVariableExpression In expression;
+
+// 5.4.2.5 Exit For Statement
+exitForStatement            :   Exit For;
+
+// 5.4.2.6 Do Statement
+doStatement                 :   Do conditionClause? EOS 
+                                statementBlock
+                                Loop conditionClause?;
+conditionClause             :   (While | Until) boolExpression;
+
+// 5.4.2.7 Exit Do Statement
+exitDoStatement             :   Exit Do;
+
+// 5.4.2.8 If Statement
+ifStatement                 :   If boolExpression Then EOS
+                                statementBlock
+                                elseIfBlock*
+                                elseBlock?
+                                End If;
+elseIfBlock                 :   ElseIf boolExpression Then EOS
+                                statementBlock;
+elseBlock                   :   Else
+                                statementBlock;
+
+// 5.4.2.9 Single-line If Statement
+singleLineIfStatement       :   ifWithNonEmptyThen | ifWithEmptyThen;
+ifWithNonEmptyThen          :   If boolExpression Then listOrLabel singleLineElseClause?;
+ifWithEmptyThen             :   If boolExpression Then singleLineElseClause;
+singleLineElseClause        :   Else listOrLabel?;
+listOrLabel                 :   statementLabel (':' sameLineStatement?)?
+                            |   ':'? sameLineStatement (':' sameLineStatement?)*;
+sameLineStatement           
+    :   fileStatement 
+    |   errorHandlingStatement
+    |   dataManipulationStatmeent
+    |   controlStatementExceptMultilineIf
+    ;
+
+// 5.4.2.10 Select Case Statement
+selectCaseStatement         :   Select Case expression EOS
+                                caseClause*
+                                caseElseClause?
+                                End Select;
+caseClause                  :   Case rangeClause (',' rangeClause)? EOS 
+                                statementBlock;
+caseElseClause              :   Case Else EOS 
+                                statementBlock;
+rangeClause                
+    :   expression (To expression)?
+    |   Is? comparisonOperator expression
+    ;
+comparisonOperator 
+    :   '=' 
+    |   '<>'
+    |   '<' 
+    |   '>' 
+    |   '>=' 
+    |   '<='
+    ;
+
+// 5.4.2.11 Stop Statement
+stopStatement               :   Stop;
+
+// 5.4.2.12 GoTo Statement
+gotoStatement               :   GoTo statementLabel;
+
+// 5.4.2.13 On GoTo Statement
+onGotoStatement             :   On expression GoTo statementLabelList;
+
+// 5.4.2.14 GoSub Statement
+gosubStatement              :   GoSub statementLabel;
+
+// 5.4.2.15 Return Statement
+returnStatement             :   Return;
+
+// 5.4.2.16 On GoSub Statement
+onGosubStatement            :   On expression GoSub statementLabelList;
+
+// 5.4.2.17 Exit Sub Statement
+exitSubStatement            :   Exit Sub;
+
+// 5.4.2.18 Exit Function Statement
+exitFunctionStatement       :   Exit Function;
+
+// 5.4.2.19 Exit Property Statement
+exitPropertyStatement       :   Exit Property;
+
+// 5.4.2.20 RaiseEvent Statement
+raiseEventStatement         :   RaiseEvent identifier ('(' eventArgumentList? ')')?;
+eventArgumentList           :   expression (',' expression)*;
+
+// 5.4.2.21 With Statement
+withStatement               :   With expression EOS 
+                                statementBlock 
+                                End With;
+
+// 5.4.3 Data Manipulation Statements
+dataManipulationStatmeent
+    :   localVariableDeclaration
+    |   staticVariableDeclaration
+    |   localConstDeclaration
+    |   redimStatement
+    |   midStatement
+    |   rsetStatement
+    |   lsetStatement
+    |   letStatement
+    |   setStatement
+    ;
+
+localVariableDeclaration    :   Dim Shared? variableDeclarationList;
+staticVariableDeclaration   :   Static variableDeclarationList;
+localConstDeclaration       :   constDeclaration;
+
+redimStatement              :   ReDim Preserve? redimDeclarationList;
+redimDeclarationList        :   redimVariableDcl (',' redimVariableDcl)*;
+redimVariableDcl            :   redimTypedVariableDcl | redimUntypedDcl;
+redimTypedVariableDcl       :   typedName dynamicArrayDim;
+redimUntypedDcl             :   untypedName dynamicArrayClause;
+dynamicArrayDim             :   '(' dynamicBoundsList ')';
+dynamicBoundsList           :   dynamicDimSpec (',' dynamicDimSpec)*;
+dynamicDimSpec              :   (integerExpression To)? integerExpression;
+dynamicArrayClause          :   dynamicArrayDim asClause?;
+
+eraseStatement              :   Erase eraseList;
+eraseList                   :   lExpression (',' lExpression)*;
+
+midStatement                
+    :   modeSpecifier '(' stringArgument ',' integerExpression (',' integerExpression)? ')' '=' expression;
+modeSpecifier               :   Mid '$'? | MidB '$'?;
+stringArgument              :   boundVariableExpression;
+
+lsetStatement               :   LSet boundVariableExpression '=' expression;
+rsetStatement               :   RSet boundVariableExpression '=' expression;
+
+letStatement                :   Let? lExpression '=' expression;
+
+setStatement                :   Set lExpression '=' expression;
+                                
+// 5.4.4 Error Handling Statements
+errorHandlingStatement      
+    :   onErrorStatement
+    |   resumeStatement
+    |   errorStatement
+    ;
+onErrorStatement            :   On Error errorbehavior;
+errorbehavior               :   (Resume Next) | (GoTo statementLabel);
+
+resumeStatement             :   Resume (Next | statementLabel)?;
+
+errorStatement              :   Error integerExpression;
+
+// 5.4.5 File Statements
+fileStatement
+    :   openStatement
+    |   closeStatement
+    |   seekStatement
+    |   lockStatement
+    |   unlockStatement
+    |   lineInputStatement
+    |   widthStatement
+    |   writeStatement
+    |   inputStatement
+    |   putStatement
+    |   getStatement
+    ;
+
+openStatement               
+    :   Open pathName modeClause? accessClause? lock As fileNumber lenClause?;
+pathName                    :   expression;
+modeClause                  :   For (Append | Binary | Input | Output | Random);
+accessClause                :   Access (Read Write | Read | Write);
+lock                        
+    :   Shared 
+    |   Lock Read 
+    |   Lock Write 
+    |   Lock Read Write
+    ;
+lenClause                   :   Len '=' expression;
+
+fileNumber                  :   markedFileNumber | expression;
+markedFileNumber            :   '#' expression;
+
+closeStatement              :   Reset | (Close fileNumberList?);
+fileNumberList              :   fileNumber (',' fileNumber)*;
+seekStatement               :   Seek fileNumber ',' expression;
+
+lockStatement               :   Lock fileNumber (',' recordRange)?;
+recordRange                 :   expression (To expression)?;
+
+unlockStatement             :   Unlock fileNumber (',' recordRange)?;
+
+lineInputStatement          :   Line Input markedFileNumber ',' variableExpression;
+
+widthStatement              :   Width markedFileNumber ',' expression;
+
+printStatement              :   Print markedFileNumber ',' outputList?;
+
+outputList                  :   outputClause (charPosition? outputClause)*;
+outputClause                
+    :   spcClause 
+    |   tabClause 
+    |   expression
+    ;
+charPosition                :   ';' | ',';
+spcClause                   :   Spc '(' expression ')';
+tabClause                   :   Tab ('(' expression ')')?;
+
+writeStatement              :   Write markedFileNumber ',' outputList?;
+
+inputStatement              :   Input markedFileNumber ',' inputList;
+inputList                   :   boundVariableExpression (',' boundVariableExpression)*;
+
+putStatement                :   Put fileNumber ',' expression? ',' expression;
+
+getStatement                :   Get fileNumber ',' expression? ',' variableExpression;
+
 // 5.6 Expressions
-expression              :   valueExpression | lExpression;
-valueExpression         
-    :   literalExpression 
+expression                  
+    :   lExpression       
+    |   literalExpression 
     |   parenthesizedExpression
     |   typeOfIsExpression
     |   newExpression
-    |   operatorExpression
+    |   arithmeticExpression
+    |   expression comparisonOperator expression
+    |   eqvExpression
+    |   impExpression
     ;
 lExpression
     :   simpleNameExpression
@@ -437,25 +708,15 @@ literalExpression
 // 5.6.6 Parenthesized Expressions
 parenthesizedExpression     :   '(' expression ')';
 
-// 5.6.7 TypeOf…Is Expressions
-typeOfIsExpression          : TypeOf expression Is typeExpression;
+// 5.6.7 TypeOf Is Expressions
+typeOfIsExpression          :   TypeOf expression Is typeExpression;
 
 // 5.6.8 New Expressions
 newExpression               :   New typeExpression;
 
-// 5.6.9 Operator Expressions
-operatorExpression
-    :   arithmeticOperator
-    |   concatenationOperator
-    |   relationalOperator
-    |   likeOperator
-    |   isOperator
-    |   logicalOperator
-    ;
-*/
 // 5.6.10 Simple Name Expressions
 simpleNameExpression        :   name;
-/*
+
 // 5.6.12 Member Access Expressions
 // TODO no line continuation or whitespace before period.
 memberAccessExpression      :   lExpression '.' unrestrictedName; 
@@ -480,34 +741,38 @@ dictionaryAccessExpression  :   lExpression '!' unrestrictedName;
 withExpression
     :   ('.' | '!') unrestrictedName
     ;
-*/
 
 // 5.6.16.1 Constant Expressions
 // TODO enforce semantics on this.
 constantExpression          :   expression;
 
+// 5.6.16.4 Integer Expressions
+integerExpression           :   expression;
+
 // 5.6.16.5 Variable Expressions
-//variableExpression          :   lExpression;
+variableExpression          :   lExpression;
 
 // 5.6.16.6 Bound Variable Expressions
-//boundVariableExpression     :   lExpression;
+boundVariableExpression     :   lExpression;
 
 // 5.6.16.7 Type Expressions
 typeExpression              
     :   builtInType
-    //|   simpleNameExpression
-    //|   memberAccessExpression
+    |   simpleNameExpression
+    |   memberAccessExpression
     ;
-definedTypeExpression : simpleNameExpression ;//| memberAccessExpression;
+definedTypeExpression       : simpleNameExpression | memberAccessExpression;
 
 // 5.6.16.8 AddressOf Expressions
-//addressOfExpression         :   AddressOf (simpleNameExpression | memberAccessExpression);
+addressOfExpression         :   AddressOf (simpleNameExpression | memberAccessExpression);
                                 
 Abs                     :    'Abs';
+Access                  :    'Access';  // TODO add unit tests
 AddressOf               :    'AddressOf';
 Alias                   :    'Alias';
 And                     :    'And';
 Any                     :    'Any';
+Append                  :    'Append';    // TODO add unit tests
 Array                   :    'Array';
 As                      :    'As';
 Attribute               :    'Attribute';
@@ -573,6 +838,7 @@ EndIf                   :    'EndIf';
 Enum                    :    'Enum';
 Eqv                     :    'Eqv';
 Erase                   :    'Erase';
+Error                   :    'Error';    // TODO Add unit tests
 Event                   :    'Event';
 Exit                    :    'Exit';
 Explicit                :    'Explicit';
@@ -599,6 +865,7 @@ LenB                    :    'LenB';
 Let                     :    'Let';
 Lib                     :    'Lib';
 Like                    :    'Like';
+Line                    :    'Line';   // TODO add unit tests
 LINEINPUT               :    'LINEINPUT';
 Lock                    :    'Lock';
 Long                    :    'Long';
@@ -607,6 +874,8 @@ LongPtr                 :    'LongPtr';
 Loop                    :    'Loop';
 LSet                    :    'LSet';
 Me                      :    'Me';
+Mid                     :    'Mid';   // TODO Add unit tests
+MidB                    :    'MidB';  // TODO Add unit tests
 Mod                     :    'Mod';
 Module                  :    'Module';
 New                     :    'New';
@@ -620,6 +889,7 @@ Open                    :    'Open';
 Option                  :    'Option';
 Optional                :    'Optional';
 Or                      :    'Or';
+Output                  :    'Output';   // TODO add unit tests
 ParamArray              :    'ParamArray';
 Preserve                :    'Preserve';
 Print                   :    'Print';
@@ -630,8 +900,11 @@ PtrSafe                 :    'PtrSafe';
 Public                  :    'Public';
 Put                     :    'Put';
 RaiseEvent              :    'RaiseEvent';
+Random                  :    'Random';   // TODO add unit tests
+Read                    :    'Read';     // TODO add unit tests
 ReDim                   :    'ReDim';
 Rem                     :    'Rem';
+Reset                   :    'Reset';    // TODO add unit tests
 Resume                  :    'Resume';
 Return                  :    'Return';
 RSet                    :    'RSet';
@@ -645,6 +918,7 @@ Single                  :    'Single';
 Spc                     :    'Spc';
 Static                  :    'Static';
 Stop                    :    'Stop';
+Step                    :    'Step';   // TODO add unit tests
 String                  :    'String';
 Sub                     :    'Sub';
 Tab                     :    'Tab';
@@ -682,6 +956,7 @@ VB_VarProcData          :    'VB_VarProcData';
 VB_VarUserMemId         :    'VB_VarUserMemId';
 Wend                    :    'Wend';
 While                   :    'While';
+Width                   :    'Width';   // TODO add unit tests
 With                    :    'With';
 WithEvents              :    'WithEvents';
 Write                   :    'Write';
