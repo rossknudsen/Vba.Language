@@ -26,7 +26,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -34,7 +34,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -50,9 +50,10 @@
       <HintPath>..\packages\Antlr4.Runtime.4.3.0\lib\net45\Antlr4.Runtime.net45.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="Vba.Grammars, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d19dca21624faf72, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Vba.Grammars\bin\Debug\Vba.Grammars.dll</HintPath>
+    <Reference Include="Vba.Grammars">
+      <HintPath Condition="'$(Configuration)' == 'Debug'">..\bin\Debug\Vba.Grammars.dll</HintPath>
+      <HintPath Condition="'$(Configuration)' == 'Release'">..\bin\Release\Vba.Grammars.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="xunit.abstractions">
       <HintPath>..\packages\xunit.abstractions.2.0.0\lib\net35\xunit.abstractions.dll</HintPath>
@@ -80,6 +81,7 @@
     <ProjectReference Include="..\Vba.Language\Vba.Language.csproj">
       <Project>{85ef650b-7c9e-4b44-9ec1-e32d19c3953f}</Project>
       <Name>Vba.Language</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
