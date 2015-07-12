@@ -173,7 +173,7 @@ typeSuffix
 // We use a single definition for a class and standard module.  Distinction will be made
 // during semantic analysis.
 module
-    :   declarationSection NL moduleCodeSection
+    :   declarationSection moduleCodeSection
     ;
 
 unrestrictedName            :   name | reservedIdentifier;
@@ -966,6 +966,6 @@ LETTER                  :    [A-Za-z];
 ForeignName             :    '[' (~('\u000D' | '\u000A' | '\u2028' | '\u2029'))+ ']';
 
 // End of statement.
-EOS                     :   NL | ':';
+EOS                     :   (NL | ':')*;
 
 WS                      :   [ \t] -> channel(HIDDEN);
