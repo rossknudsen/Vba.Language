@@ -690,9 +690,9 @@ expression
 lExpression
     :   simpleNameExpression
     |   Me //instanceExpression 5.6.11
-    |   memberAccessExpression
-    |   indexExpression
-    |   dictionaryAccessExpression
+    |   lExpression '.' unrestrictedName  //memberAccessExpression
+    |   lExpression '(' argumentList ')'  //indexExpression
+    |   lExpression '!' unrestrictedName  //dictionaryAccessExpression
     |   withExpression
     ;
 
