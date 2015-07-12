@@ -9,8 +9,8 @@ identifier
     :   Alias
     |   Base
     |   Binary
-    |   ClassInit
-    |   ClassTerm
+    |   Class_Initialize
+    |   Class_Terminate
     |   CLngLng
     |   Compare
     |   Database
@@ -384,7 +384,7 @@ eventHandlerName        :   identifier;
 implementedName         :   identifier;
 
 // 5.3.1.10 Lifecycle Handler Declarations
-lifecycleHandlerName    :   ClassInit | ClassTerm;
+lifecycleHandlerName    :   Class_Initialize | Class_Terminate;
 
 // 5.4 Procedure Bodies and Statements
 procedureBody           :   statementBlock;
@@ -796,8 +796,8 @@ Circle                  :    'Circle';
 CLng                    :    'CLng';
 CLngLng                 :    'CLngLng';
 CLngPtr                 :    'CLngPtr';
-ClassInit               :    'Class_Initialize';
-ClassTerm               :    'Class_Terminate';
+Class_Initialize        :    'Class_Initialize';
+Class_Terminate         :    'Class_Terminate';
 Close                   :    'Close';
 Compare                 :    'Compare';
 Const                   :    'Const';
