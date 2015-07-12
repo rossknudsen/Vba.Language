@@ -158,7 +158,7 @@ builtInType
     |   Object
     |   '[' Object ']'
     ;
-typedName                   :   ID typeSuffix;
+typedName                   :   identifier typeSuffix;
 typeSuffix                  
     :   '%'  // Integer 16 bit signed (default)
     |   '&'  // Long 32 bit signed
@@ -178,7 +178,7 @@ module
 
 unrestrictedName            :   name | reservedIdentifier;
 name                        :   untypedName | typedName;
-untypedName                 :   ID; //| foreignName;
+untypedName                 :   identifier | ForeignName;
 
 // 5.2 Module Declaration Section Structure
 declarationSection
@@ -288,8 +288,7 @@ memberList              :   enumElement (EOS enumElement)*;
 enumElement             :   untypedName ('=' constantExpression)?; // TODO remStatement.
 
 // 5.2.3.5 External Procedure Declaration
-extProcDeclaration      :   (Public | Private)? Declare PtrSafe? (Sub | Function) ID 
-                            Lib StringLiteral (Alias StringLiteral)? procedureParameters;
+extProcDeclaration      :   (Public | Private)? externalProcDcl;
 externalProcDcl         :   Declare PtrSafe? (externalSub | externalFunction);
 externalSub             :   Sub subroutineName libInfo procedureParameters?;
 externalFunction        :   Function functionName libInfo procedureParameters? functionType?;
@@ -392,14 +391,14 @@ procedureBody           :   statementBlock;
 // 5.4.1 Statement Blocks
 statementBlock          :   (blockStatement EOS)*;
 blockStatement          
-    :   statementLabelDefinition; 
-    //|   statement;  //|   remStatement 
-//statement               
-//    :   controlStatement
-//    |   dataManipulationStatement
-//    |   errorHandlingStatement
-//    |   fileStatement
-//    ;
+    :   statementLabelDefinition 
+    |   statement;  //|   remStatement 
+statement               
+    :   controlStatement
+    |   dataManipulationStatement
+    |   errorHandlingStatement
+    |   fileStatement
+    ;
 
 // 5.4.1.1 Statement Labels
 statementLabelDefinition    :   identifier ':' | lineNumberLabel ':'?;
@@ -494,7 +493,7 @@ listOrLabel                 :   statementLabel (':' sameLineStatement?)?
 sameLineStatement           
     :   fileStatement 
     |   errorHandlingStatement
-    |   dataManipulationStatmeent
+    |   dataManipulationStatement
     |   controlStatementExceptMultilineIf
     ;
 
@@ -557,7 +556,7 @@ withStatement               :   With expression EOS
                                 End With;
 
 // 5.4.3 Data Manipulation Statements
-dataManipulationStatmeent
+dataManipulationStatement
     :   localVariableDeclaration
     |   staticVariableDeclaration
     |   localConstDeclaration
@@ -963,6 +962,8 @@ Write                   :    'Write';
 Xor                     :    'Xor';
 
 LETTER                  :    [A-Za-z];
+
+ForeignName             :    '[' (~('\u000D' | '\u000A' | '\u2028' | '\u2029'))+ ']';
 
 // End of statement.
 EOS                     :   NL | ':';
