@@ -4,8 +4,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vba.Language", "Vba.Language\Vba.Language.csproj", "{85EF650B-7C9E-4B44-9EC1-E32D19C3953F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3F285CD0-9AC5-4863-8F26-803F645D47DD} = {3F285CD0-9AC5-4863-8F26-803F645D47DD}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vba.Language.Tests", "Vba.Language.Tests\Vba.Language.Tests.csproj", "{D4AC66D9-2DBC-41CB-8092-48127D8427B9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3F285CD0-9AC5-4863-8F26-803F645D47DD} = {3F285CD0-9AC5-4863-8F26-803F645D47DD}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{25640963-EAF6-482E-9546-57E6F48D3F4E}"
 	ProjectSection(SolutionItems) = preProject
