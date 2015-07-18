@@ -253,9 +253,9 @@ namespace Vba.Language.Tests.Compiler
         [Fact]
         public void CannotParseInvalidIdentifierInWithEventsVariableDeclaration()
         {
-            const string variableDeclarationTemplate = "Dim {0} As String";
+            const string withEventsTemplate = "Private WithEvents {0} As Application";
             
-            CannotParseAnyTrueKeywords(variableDeclarationTemplate, p => p.variableDeclaration());
+            CannotParseAnyTrueKeywords(withEventsTemplate, p => p.variableDeclaration());
         }
 
         [Fact]
