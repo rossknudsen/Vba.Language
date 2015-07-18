@@ -303,6 +303,24 @@ namespace Vba.Language.Tests.Compiler
             CannotParseAnyTrueKeywords(constDeclarationTemplate, p => p.constDeclaration());
         }
 
+        [Fact]
+        public void CanParseIdentifierInEventDeclaration()
+        {
+            const string eventDeclarationTemplate = "Event {0}()";
+            const string expectedOutputEventDeclarationTemplate = "(eventDeclaration Event (identifier {0}) (eventParameterList ( )))";
+
+            CanParseAllAmbiguousIdentifiers(eventDeclarationTemplate, expectedOutputEventDeclarationTemplate, p => p.eventDeclaration());
+        }
+
+        // TODO Events cannot use underscores in their names.
+        [Fact]
+        public void CannotParseInvalidIdentifierInEventDeclaration()
+        {
+            const string eventDeclarationTemplate = "Event {0}()";
+
+            CannotParseAnyTrueKeywords(eventDeclarationTemplate, p => p.eventDeclaration());
+        }
+
         private void CannotParseAnyTrueKeywords(string sourceTemplate, Func<VbaParser, ParserRuleContext> rule)
         {
             foreach (var id in trueKeywords)
