@@ -39,7 +39,6 @@ namespace Vba.Language.Tests.Compiler
             "Reset",
             "Step",
             "Text",
-            "VB_Invoke_PropertyPutRefVB_MemberFlags",
             "Width"
         };
 
@@ -194,6 +193,8 @@ namespace Vba.Language.Tests.Compiler
             "VB_Invoke_Func",
             "VB_Invoke_Property",
             "VB_Invoke_PropertyPut",
+            "VB_Invoke_PropertyPutRef",
+            "VB_MemberFlags",
             "VB_Name",
             "VB_PredeclaredId",
             "VB_ProcData",

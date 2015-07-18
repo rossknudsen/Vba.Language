@@ -33,7 +33,6 @@ identifier
     |   Reset
     |   Step
     |   Text
-    |   VB_Invoke_PropertyPutRefVB_MemberFlags
     |   PtrSafe
     |   Width
     |   ID
@@ -149,7 +148,8 @@ reservedForImplementationUse
     |    VB_Invoke_Func
     |    VB_Invoke_Property
     |    VB_Invoke_PropertyPut
-    |    VB_Invoke_PropertyPutRefVB_MemberFlags
+    |    VB_Invoke_PropertyPutRef
+    |    VB_MemberFlags
     |    VB_Name
     |    VB_PredeclaredId
     |    VB_ProcData
@@ -955,7 +955,8 @@ VB_HelpID               :    'VB_HelpID';
 VB_Invoke_Func          :    'VB_Invoke_Func';
 VB_Invoke_Property      :    'VB_Invoke_Property';
 VB_Invoke_PropertyPut   :    'VB_Invoke_PropertyPut';
-VB_Invoke_PropertyPutRefVB_MemberFlags  :    'VB_Invoke_PropertyPutRefVB_MemberFlags';
+VB_Invoke_PropertyPutRef:    'VB_Invoke_PropertyPutRef';
+VB_MemberFlags          :    'VB_MemberFlags';
 VB_Name                 :    'VB_Name';
 VB_PredeclaredId        :    'VB_PredeclaredId';
 VB_ProcData             :    'VB_ProcData';
