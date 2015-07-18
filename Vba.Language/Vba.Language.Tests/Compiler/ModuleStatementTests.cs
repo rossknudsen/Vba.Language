@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Remoting.Messaging;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
-using Antlr4.Runtime.Tree;
 using Vba.Grammars;
 using Xunit;
 
@@ -13,7 +11,9 @@ namespace Vba.Language.Tests.Compiler
     {
         private readonly List<string> ambiguousIdentifiers = new List<string>()
         {
+            "Access",
             "Alias",
+            "Append",
             "Base",
             "Binary",
             "ClassInit",
@@ -22,15 +22,25 @@ namespace Vba.Language.Tests.Compiler
             "Compare",
             "Database",
             "DefLngLng",
+            "Error",
             "Explicit",
             "Lib",
+            "Line",
             "LongLong",
+            "Mid",
+            "MidB",
             "Module",
             "Object",
+            "Output",
             "Property",
+            "PtrSafe",
+            "Random",
+            "Read",
+            "Reset",
+            "Step",
             "Text",
             "VB_Invoke_PropertyPutRefVB_MemberFlags",
-            "PtrSafe",
+            "Width"
         };
 
         private readonly List<string> trueKeywords = new List<string>()

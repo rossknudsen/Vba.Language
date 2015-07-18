@@ -6,7 +6,9 @@ import Common;
 
 // 3.3.5.2 Reserved Identifiers and IDENTIFIER
 identifier      
-    :   Alias
+    :   Access
+    |   Alias
+    |   Append
     |   Base
     |   Binary
     |   Class_Initialize
@@ -15,15 +17,25 @@ identifier
     |   Compare
     |   Database
     |   DefLngLng
+    |   Error
     |   Explicit
     |   Lib
+    |   Line
     |   LongLong
+    |   Mid
+    |   MidB
     |   Module
     |   Object
+    |   Output
     |   Property
+    |   Random
+    |   Read
+    |   Reset
+    |   Step
     |   Text
     |   VB_Invoke_PropertyPutRefVB_MemberFlags
     |   PtrSafe
+    |   Width
     |   ID
     ;
 
@@ -767,12 +779,12 @@ definedTypeExpression       : simpleNameExpression | memberAccessExpression;
 addressOfExpression         :   AddressOf (simpleNameExpression | memberAccessExpression);
                                 
 Abs                     :    'Abs';
-Access                  :    'Access';  // TODO add unit tests
+Access                  :    'Access';
 AddressOf               :    'AddressOf';
 Alias                   :    'Alias';
 And                     :    'And';
 Any                     :    'Any';
-Append                  :    'Append';    // TODO add unit tests
+Append                  :    'Append';
 Array                   :    'Array';
 As                      :    'As';
 Attribute               :    'Attribute';
@@ -838,7 +850,7 @@ EndIf                   :    'EndIf';
 Enum                    :    'Enum';
 Eqv                     :    'Eqv';
 Erase                   :    'Erase';
-Error                   :    'Error';    // TODO Add unit tests
+Error                   :    'Error';
 Event                   :    'Event';
 Exit                    :    'Exit';
 Explicit                :    'Explicit';
@@ -865,7 +877,7 @@ LenB                    :    'LenB';
 Let                     :    'Let';
 Lib                     :    'Lib';
 Like                    :    'Like';
-Line                    :    'Line';   // TODO add unit tests
+Line                    :    'Line';
 LINEINPUT               :    'LINEINPUT';
 Lock                    :    'Lock';
 Long                    :    'Long';
@@ -874,8 +886,8 @@ LongPtr                 :    'LongPtr';
 Loop                    :    'Loop';
 LSet                    :    'LSet';
 Me                      :    'Me';
-Mid                     :    'Mid';   // TODO Add unit tests
-MidB                    :    'MidB';  // TODO Add unit tests
+Mid                     :    'Mid';
+MidB                    :    'MidB';
 Mod                     :    'Mod';
 Module                  :    'Module';
 New                     :    'New';
@@ -889,7 +901,7 @@ Open                    :    'Open';
 Option                  :    'Option';
 Optional                :    'Optional';
 Or                      :    'Or';
-Output                  :    'Output';   // TODO add unit tests
+Output                  :    'Output';
 ParamArray              :    'ParamArray';
 Preserve                :    'Preserve';
 Print                   :    'Print';
@@ -900,11 +912,11 @@ PtrSafe                 :    'PtrSafe';
 Public                  :    'Public';
 Put                     :    'Put';
 RaiseEvent              :    'RaiseEvent';
-Random                  :    'Random';   // TODO add unit tests
-Read                    :    'Read';     // TODO add unit tests
+Random                  :    'Random';
+Read                    :    'Read';
 ReDim                   :    'ReDim';
 Rem                     :    'Rem';
-Reset                   :    'Reset';    // TODO add unit tests
+Reset                   :    'Reset';
 Resume                  :    'Resume';
 Return                  :    'Return';
 RSet                    :    'RSet';
@@ -918,7 +930,7 @@ Single                  :    'Single';
 Spc                     :    'Spc';
 Static                  :    'Static';
 Stop                    :    'Stop';
-Step                    :    'Step';   // TODO add unit tests
+Step                    :    'Step';
 String                  :    'String';
 Sub                     :    'Sub';
 Tab                     :    'Tab';
@@ -956,7 +968,7 @@ VB_VarProcData          :    'VB_VarProcData';
 VB_VarUserMemId         :    'VB_VarUserMemId';
 Wend                    :    'Wend';
 While                   :    'While';
-Width                   :    'Width';   // TODO add unit tests
+Width                   :    'Width';
 With                    :    'With';
 WithEvents              :    'WithEvents';
 Write                   :    'Write';
