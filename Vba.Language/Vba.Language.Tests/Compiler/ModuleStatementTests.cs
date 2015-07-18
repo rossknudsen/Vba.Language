@@ -33,6 +33,175 @@ namespace Vba.Language.Tests.Compiler
             "PtrSafe",
         };
 
+        private readonly List<string> trueKeywords = new List<string>()
+        {
+            "Abs",
+            "AddressOf",
+            "And",
+            "Any",
+            "Array",
+            "As",
+            "Attribute",
+            "Boolean",
+            "ByRef",
+            "Byte",
+            "ByVal",
+            "Call",
+            "Case",
+            "CBool",
+            "CByte",
+            "CCur",
+            "CDate",
+            "CDbl",
+            "CDec",
+            "CDecl",
+            "CInt",
+            "Circle",
+            "CLng",
+            "CLngPtr",
+            "Close",
+            "Const",
+            "CSng",
+            "CStr",
+            "Currency",
+            "CVar",
+            "CVErr",
+            "Date",
+            "Debug",
+            "Decimal",
+            "Declare",
+            "DefBool",
+            "DefByte",
+            "DefCur",
+            "DefDate",
+            "DefDbl",
+            "DefDec",
+            "DefInt",
+            "DefLng",
+            "DefLngPtr",
+            "DefObj",
+            "DefSng",
+            "DefStr",
+            "DefVar",
+            "Dim",
+            "Do",
+            "DoEvents",
+            "Double",
+            "Each",
+            "Else",
+            "ElseIf",
+            "Empty",
+            "End",
+            "EndIf",
+            "Enum",
+            "Eqv",
+            "Erase",
+            "Event",
+            "Exit",
+            "Fix",
+            "For",
+            "Friend",
+            "Function",
+            "Get",
+            "Global",
+            "GoSub",
+            "GoTo",
+            "If",
+            "Imp",
+            "Implements",
+            "In",
+            "Input",
+            "InputB",
+            "Int",
+            "Integer",
+            "Is",
+            "LBound",
+            "Len",
+            "LenB",
+            "Let",
+            "Like",
+            "LINEINPUT",
+            "Lock",
+            "Long",
+            "LongPtr",
+            "Loop",
+            "LSet",
+            "Me",
+            "Mod",
+            "New",
+            "Next",
+            "Not",
+            "Nothing",
+            "Null",
+            "On",
+            "Open",
+            "Option",
+            "Optional",
+            "Or",
+            "ParamArray",
+            "Preserve",
+            "Print",
+            "Private",
+            "PSet",
+            "Public",
+            "Put",
+            "RaiseEvent",
+            "ReDim",
+            "Rem",
+            "Resume",
+            "Return",
+            "RSet",
+            "Scale",
+            "Seek",
+            "Select",
+            "Set",
+            "Sgn",
+            "Shared",
+            "Single",
+            "Spc",
+            "Static",
+            "Stop",
+            "String",
+            "Sub",
+            "Tab",
+            "Then",
+            "To",
+            "Type",
+            "TypeOf",
+            "UBound",
+            "Unlock",
+            "Until",
+            "Variant",
+            "VB_Base",
+            "VB_Control",
+            "VB_Creatable",
+            "VB_Customizable",
+            "VB_Description",
+            "VB_Exposed",
+            "VB_Ext_KEY",
+            "VB_GlobalNameSpace",
+            "VB_HelpID",
+            "VB_Invoke_Func",
+            "VB_Invoke_Property",
+            "VB_Invoke_PropertyPut",
+            "VB_Name",
+            "VB_PredeclaredId",
+            "VB_ProcData",
+            "VB_TemplateDerived",
+            "VB_UserMemId",
+            "VB_VarDescription",
+            "VB_VarHelpID",
+            "VB_VarMemberFlags",
+            "VB_VarProcData",
+            "VB_VarUserMemId",
+            "Wend",
+            "While",
+            "With",
+            "WithEvents",
+            "Write",
+            "Xor"
+        };
+            
         [Theory]
         [InlineData("Option Compare Text", "(directiveElement (optionCompareDirective Option Compare Text))")]
         [InlineData("Option Compare Binary", "(directiveElement (optionCompareDirective Option Compare Binary))")]
@@ -73,342 +242,20 @@ namespace Vba.Language.Tests.Compiler
             CanParseAllAmbiguousIdentifiers(withEventsTemplate, expectedWithEventsTemplate, p => p.variableDeclaration());
         }
 
-        [Theory]
-        [InlineData("Dim Abs As String")]
-        [InlineData("Dim AddressOf As String")]
-        [InlineData("Dim And As String")]
-        [InlineData("Dim Any As String")]
-        [InlineData("Dim Array As String")]
-        [InlineData("Dim As As String")]
-        [InlineData("Dim Attribute As String")]
-        [InlineData("Dim Boolean As String")]
-        [InlineData("Dim ByRef As String")]
-        [InlineData("Dim Byte As String")]
-        [InlineData("Dim ByVal As String")]
-        [InlineData("Dim Call As String")]
-        [InlineData("Dim Case As String")]
-        [InlineData("Dim CBool As String")]
-        [InlineData("Dim CByte As String")]
-        [InlineData("Dim CCur As String")]
-        [InlineData("Dim CDate As String")]
-        [InlineData("Dim CDbl As String")]
-        [InlineData("Dim CDec As String")]
-        [InlineData("Dim CDecl As String")]
-        [InlineData("Dim CInt As String")]
-        [InlineData("Dim Circle As String")]
-        [InlineData("Dim CLng As String")]
-        [InlineData("Dim CLngPtr As String")]
-        [InlineData("Dim Close As String")]
-        [InlineData("Dim Const As String")]
-        [InlineData("Dim CSng As String")]
-        [InlineData("Dim CStr As String")]
-        [InlineData("Dim Currency As String")]
-        [InlineData("Dim CVar As String")]
-        [InlineData("Dim CVErr As String")]
-        [InlineData("Dim Date As String")]
-        [InlineData("Dim Debug As String")]
-        [InlineData("Dim Decimal As String")]
-        [InlineData("Dim Declare As String")]
-        [InlineData("Dim DefBool As String")]
-        [InlineData("Dim DefByte As String")]
-        [InlineData("Dim DefCur As String")]
-        [InlineData("Dim DefDate As String")]
-        [InlineData("Dim DefDbl As String")]
-        [InlineData("Dim DefDec As String")]
-        [InlineData("Dim DefInt As String")]
-        [InlineData("Dim DefLng As String")]
-        [InlineData("Dim DefLngPtr As String")]
-        [InlineData("Dim DefObj As String")]
-        [InlineData("Dim DefSng As String")]
-        [InlineData("Dim DefStr As String")]
-        [InlineData("Dim DefVar As String")]
-        [InlineData("Dim Dim As String")]
-        [InlineData("Dim Do As String")]
-        [InlineData("Dim DoEvents As String")]
-        [InlineData("Dim Double As String")]
-        [InlineData("Dim Each As String")]
-        [InlineData("Dim Else As String")]
-        [InlineData("Dim ElseIf As String")]
-        [InlineData("Dim Empty As String")]
-        [InlineData("Dim End As String")]
-        [InlineData("Dim EndIf As String")]
-        [InlineData("Dim Enum As String")]
-        [InlineData("Dim Eqv As String")]
-        [InlineData("Dim Erase As String")]
-        [InlineData("Dim Event As String")]
-        [InlineData("Dim Exit As String")]
-        [InlineData("Dim Fix As String")]
-        [InlineData("Dim For As String")]
-        [InlineData("Dim Friend As String")]
-        [InlineData("Dim Function As String")]
-        [InlineData("Dim Get As String")]
-        [InlineData("Dim Global As String")]
-        [InlineData("Dim GoSub As String")]
-        [InlineData("Dim GoTo As String")]
-        [InlineData("Dim If As String")]
-        [InlineData("Dim Imp As String")]
-        [InlineData("Dim Implements As String")]
-        [InlineData("Dim In As String")]
-        [InlineData("Dim Input As String")]
-        [InlineData("Dim InputB As String")]
-        [InlineData("Dim Int As String")]
-        [InlineData("Dim Integer As String")]
-        [InlineData("Dim Is As String")]
-        [InlineData("Dim LBound As String")]
-        [InlineData("Dim Len As String")]
-        [InlineData("Dim LenB As String")]
-        [InlineData("Dim Let As String")]
-        [InlineData("Dim Like As String")]
-        [InlineData("Dim LINEINPUT As String")]
-        [InlineData("Dim Lock As String")]
-        [InlineData("Dim Long As String")]
-        [InlineData("Dim LongPtr As String")]
-        [InlineData("Dim Loop As String")]
-        [InlineData("Dim LSet As String")]
-        [InlineData("Dim Me As String")]
-        [InlineData("Dim Mod As String")]
-        [InlineData("Dim New As String")]
-        [InlineData("Dim Next As String")]
-        [InlineData("Dim Not As String")]
-        [InlineData("Dim Nothing As String")]
-        [InlineData("Dim Null As String")]
-        [InlineData("Dim On As String")]
-        [InlineData("Dim Open As String")]
-        [InlineData("Dim Option As String")]
-        [InlineData("Dim Optional As String")]
-        [InlineData("Dim Or As String")]
-        [InlineData("Dim ParamArray As String")]
-        [InlineData("Dim Preserve As String")]
-        [InlineData("Dim Print As String")]
-        [InlineData("Dim Private As String")]
-        [InlineData("Dim PSet As String")]
-        [InlineData("Dim Public As String")]
-        [InlineData("Dim Put As String")]
-        [InlineData("Dim RaiseEvent As String")]
-        [InlineData("Dim ReDim As String")]
-        [InlineData("Dim Rem As String")]
-        [InlineData("Dim Resume As String")]
-        [InlineData("Dim Return As String")]
-        [InlineData("Dim RSet As String")]
-        [InlineData("Dim Scale As String")]
-        [InlineData("Dim Seek As String")]
-        [InlineData("Dim Select As String")]
-        [InlineData("Dim Set As String")]
-        [InlineData("Dim Sgn As String")]
-        [InlineData("Dim Shared As String")]
-        [InlineData("Dim Single As String")]
-        [InlineData("Dim Spc As String")]
-        [InlineData("Dim Static As String")]
-        [InlineData("Dim Stop As String")]
-        [InlineData("Dim String As String")]
-        [InlineData("Dim Sub As String")]
-        [InlineData("Dim Tab As String")]
-        [InlineData("Dim Then As String")]
-        [InlineData("Dim To As String")]
-        [InlineData("Dim Type As String")]
-        [InlineData("Dim TypeOf As String")]
-        [InlineData("Dim UBound As String")]
-        [InlineData("Dim Unlock As String")]
-        [InlineData("Dim Until As String")]
-        [InlineData("Dim Variant As String")]
-        [InlineData("Dim VB_Base As String")]
-        [InlineData("Dim VB_Control As String")]
-        [InlineData("Dim VB_Creatable As String")]
-        [InlineData("Dim VB_Customizable As String")]
-        [InlineData("Dim VB_Description As String")]
-        [InlineData("Dim VB_Exposed As String")]
-        [InlineData("Dim VB_Ext_KEY As String")]
-        [InlineData("Dim VB_GlobalNameSpace As String")]
-        [InlineData("Dim VB_HelpID As String")]
-        [InlineData("Dim VB_Invoke_Func As String")]
-        [InlineData("Dim VB_Invoke_Property As String")]
-        [InlineData("Dim VB_Invoke_PropertyPut As String")]
-        [InlineData("Dim VB_Name As String")]
-        [InlineData("Dim VB_PredeclaredId As String")]
-        [InlineData("Dim VB_ProcData As String")]
-        [InlineData("Dim VB_TemplateDerived As String")]
-        [InlineData("Dim VB_UserMemId As String")]
-        [InlineData("Dim VB_VarDescription As String")]
-        [InlineData("Dim VB_VarHelpID As String")]
-        [InlineData("Dim VB_VarMemberFlags As String")]
-        [InlineData("Dim VB_VarProcData As String")]
-        [InlineData("Dim VB_VarUserMemId As String")]
-        [InlineData("Dim Wend As String")]
-        [InlineData("Dim While As String")]
-        [InlineData("Dim With As String")]
-        [InlineData("Dim WithEvents As String")]
-        [InlineData("Dim Write As String")]
-        [InlineData("Dim Xor As String")]
-        [InlineData("Private WithEvents Abs As Application")]
-        [InlineData("Private WithEvents AddressOf As Application")]
-        [InlineData("Private WithEvents And As Application")]
-        [InlineData("Private WithEvents Any As Application")]
-        [InlineData("Private WithEvents Array As Application")]
-        [InlineData("Private WithEvents As As Application")]
-        [InlineData("Private WithEvents Attribute As Application")]
-        [InlineData("Private WithEvents Boolean As Application")]
-        [InlineData("Private WithEvents ByRef As Application")]
-        [InlineData("Private WithEvents Byte As Application")]
-        [InlineData("Private WithEvents ByVal As Application")]
-        [InlineData("Private WithEvents Call As Application")]
-        [InlineData("Private WithEvents Case As Application")]
-        [InlineData("Private WithEvents CBool As Application")]
-        [InlineData("Private WithEvents CByte As Application")]
-        [InlineData("Private WithEvents CCur As Application")]
-        [InlineData("Private WithEvents CDate As Application")]
-        [InlineData("Private WithEvents CDbl As Application")]
-        [InlineData("Private WithEvents CDec As Application")]
-        [InlineData("Private WithEvents CDecl As Application")]
-        [InlineData("Private WithEvents CInt As Application")]
-        [InlineData("Private WithEvents Circle As Application")]
-        [InlineData("Private WithEvents CLng As Application")]
-        [InlineData("Private WithEvents CLngPtr As Application")]
-        [InlineData("Private WithEvents Close As Application")]
-        [InlineData("Private WithEvents Const As Application")]
-        [InlineData("Private WithEvents CSng As Application")]
-        [InlineData("Private WithEvents CStr As Application")]
-        [InlineData("Private WithEvents Currency As Application")]
-        [InlineData("Private WithEvents CVar As Application")]
-        [InlineData("Private WithEvents CVErr As Application")]
-        [InlineData("Private WithEvents Date As Application")]
-        [InlineData("Private WithEvents Debug As Application")]
-        [InlineData("Private WithEvents Decimal As Application")]
-        [InlineData("Private WithEvents Declare As Application")]
-        [InlineData("Private WithEvents DefBool As Application")]
-        [InlineData("Private WithEvents DefByte As Application")]
-        [InlineData("Private WithEvents DefCur As Application")]
-        [InlineData("Private WithEvents DefDate As Application")]
-        [InlineData("Private WithEvents DefDbl As Application")]
-        [InlineData("Private WithEvents DefDec As Application")]
-        [InlineData("Private WithEvents DefInt As Application")]
-        [InlineData("Private WithEvents DefLng As Application")]
-        [InlineData("Private WithEvents DefLngPtr As Application")]
-        [InlineData("Private WithEvents DefObj As Application")]
-        [InlineData("Private WithEvents DefSng As Application")]
-        [InlineData("Private WithEvents DefStr As Application")]
-        [InlineData("Private WithEvents DefVar As Application")]
-        [InlineData("Private WithEvents Dim As Application")]
-        [InlineData("Private WithEvents Do As Application")]
-        [InlineData("Private WithEvents DoEvents As Application")]
-        [InlineData("Private WithEvents Double As Application")]
-        [InlineData("Private WithEvents Each As Application")]
-        [InlineData("Private WithEvents Else As Application")]
-        [InlineData("Private WithEvents ElseIf As Application")]
-        [InlineData("Private WithEvents Empty As Application")]
-        [InlineData("Private WithEvents End As Application")]
-        [InlineData("Private WithEvents EndIf As Application")]
-        [InlineData("Private WithEvents Enum As Application")]
-        [InlineData("Private WithEvents Eqv As Application")]
-        [InlineData("Private WithEvents Erase As Application")]
-        [InlineData("Private WithEvents Event As Application")]
-        [InlineData("Private WithEvents Exit As Application")]
-        [InlineData("Private WithEvents Fix As Application")]
-        [InlineData("Private WithEvents For As Application")]
-        [InlineData("Private WithEvents Friend As Application")]
-        [InlineData("Private WithEvents Function As Application")]
-        [InlineData("Private WithEvents Get As Application")]
-        [InlineData("Private WithEvents Global As Application")]
-        [InlineData("Private WithEvents GoSub As Application")]
-        [InlineData("Private WithEvents GoTo As Application")]
-        [InlineData("Private WithEvents If As Application")]
-        [InlineData("Private WithEvents Imp As Application")]
-        [InlineData("Private WithEvents Implements As Application")]
-        [InlineData("Private WithEvents In As Application")]
-        [InlineData("Private WithEvents Input As Application")]
-        [InlineData("Private WithEvents InputB As Application")]
-        [InlineData("Private WithEvents Int As Application")]
-        [InlineData("Private WithEvents Integer As Application")]
-        [InlineData("Private WithEvents Is As Application")]
-        [InlineData("Private WithEvents LBound As Application")]
-        [InlineData("Private WithEvents Len As Application")]
-        [InlineData("Private WithEvents LenB As Application")]
-        [InlineData("Private WithEvents Let As Application")]
-        [InlineData("Private WithEvents Like As Application")]
-        [InlineData("Private WithEvents LINEINPUT As Application")]
-        [InlineData("Private WithEvents Lock As Application")]
-        [InlineData("Private WithEvents Long As Application")]
-        [InlineData("Private WithEvents LongPtr As Application")]
-        [InlineData("Private WithEvents Loop As Application")]
-        [InlineData("Private WithEvents LSet As Application")]
-        [InlineData("Private WithEvents Me As Application")]
-        [InlineData("Private WithEvents Mod As Application")]
-        [InlineData("Private WithEvents New As Application")]
-        [InlineData("Private WithEvents Next As Application")]
-        [InlineData("Private WithEvents Not As Application")]
-        [InlineData("Private WithEvents Nothing As Application")]
-        [InlineData("Private WithEvents Null As Application")]
-        [InlineData("Private WithEvents On As Application")]
-        [InlineData("Private WithEvents Open As Application")]
-        [InlineData("Private WithEvents Option As Application")]
-        [InlineData("Private WithEvents Optional As Application")]
-        [InlineData("Private WithEvents Or As Application")]
-        [InlineData("Private WithEvents ParamArray As Application")]
-        [InlineData("Private WithEvents Preserve As Application")]
-        [InlineData("Private WithEvents Print As Application")]
-        [InlineData("Private WithEvents Private As Application")]
-        [InlineData("Private WithEvents PSet As Application")]
-        [InlineData("Private WithEvents Public As Application")]
-        [InlineData("Private WithEvents Put As Application")]
-        [InlineData("Private WithEvents RaiseEvent As Application")]
-        [InlineData("Private WithEvents ReDim As Application")]
-        [InlineData("Private WithEvents Rem As Application")]
-        [InlineData("Private WithEvents Resume As Application")]
-        [InlineData("Private WithEvents Return As Application")]
-        [InlineData("Private WithEvents RSet As Application")]
-        [InlineData("Private WithEvents Scale As Application")]
-        [InlineData("Private WithEvents Seek As Application")]
-        [InlineData("Private WithEvents Select As Application")]
-        [InlineData("Private WithEvents Set As Application")]
-        [InlineData("Private WithEvents Sgn As Application")]
-        [InlineData("Private WithEvents Shared As Application")]
-        [InlineData("Private WithEvents Single As Application")]
-        [InlineData("Private WithEvents Spc As Application")]
-        [InlineData("Private WithEvents Static As Application")]
-        [InlineData("Private WithEvents Stop As Application")]
-        [InlineData("Private WithEvents String As Application")]
-        [InlineData("Private WithEvents Sub As Application")]
-        [InlineData("Private WithEvents Tab As Application")]
-        [InlineData("Private WithEvents Then As Application")]
-        [InlineData("Private WithEvents To As Application")]
-        [InlineData("Private WithEvents Type As Application")]
-        [InlineData("Private WithEvents TypeOf As Application")]
-        [InlineData("Private WithEvents UBound As Application")]
-        [InlineData("Private WithEvents Unlock As Application")]
-        [InlineData("Private WithEvents Until As Application")]
-        [InlineData("Private WithEvents Variant As Application")]
-        [InlineData("Private WithEvents VB_Base As Application")]
-        [InlineData("Private WithEvents VB_Control As Application")]
-        [InlineData("Private WithEvents VB_Creatable As Application")]
-        [InlineData("Private WithEvents VB_Customizable As Application")]
-        [InlineData("Private WithEvents VB_Description As Application")]
-        [InlineData("Private WithEvents VB_Exposed As Application")]
-        [InlineData("Private WithEvents VB_Ext_KEY As Application")]
-        [InlineData("Private WithEvents VB_GlobalNameSpace As Application")]
-        [InlineData("Private WithEvents VB_HelpID As Application")]
-        [InlineData("Private WithEvents VB_Invoke_Func As Application")]
-        [InlineData("Private WithEvents VB_Invoke_Property As Application")]
-        [InlineData("Private WithEvents VB_Invoke_PropertyPut As Application")]
-        [InlineData("Private WithEvents VB_Name As Application")]
-        [InlineData("Private WithEvents VB_PredeclaredId As Application")]
-        [InlineData("Private WithEvents VB_ProcData As Application")]
-        [InlineData("Private WithEvents VB_TemplateDerived As Application")]
-        [InlineData("Private WithEvents VB_UserMemId As Application")]
-        [InlineData("Private WithEvents VB_VarDescription As Application")]
-        [InlineData("Private WithEvents VB_VarHelpID As Application")]
-        [InlineData("Private WithEvents VB_VarMemberFlags As Application")]
-        [InlineData("Private WithEvents VB_VarProcData As Application")]
-        [InlineData("Private WithEvents VB_VarUserMemId As Application")]
-        [InlineData("Private WithEvents Wend As Application")]
-        [InlineData("Private WithEvents While As Application")]
-        [InlineData("Private WithEvents With As Application")]
-        [InlineData("Private WithEvents WithEvents As Application")]
-        [InlineData("Private WithEvents Write As Application")]
-        [InlineData("Private WithEvents Xor As Application")]
-        public void CannotParseInvalidIdentifierInVariableDeclaration(string source)
+        [Fact]
+        public void CannotParseInvalidIdentifierInVariableDeclaration()
         {
-            var parser = VbaCompilerHelper.BuildVbaParser(source);
+            const string variableDeclarationTemplate = "Dim {0} As String";
+            
+            CannotParseAnyTrueKeywords(variableDeclarationTemplate, p => p.variableDeclaration());
+        }
 
-            Assert.Throws<ParseCanceledException>(() => parser.variableDeclaration());
+        [Fact]
+        public void CannotParseInvalidIdentifierInWithEventsVariableDeclaration()
+        {
+            const string variableDeclarationTemplate = "Dim {0} As String";
+            
+            CannotParseAnyTrueKeywords(variableDeclarationTemplate, p => p.variableDeclaration());
         }
 
         [Fact]
@@ -420,177 +267,12 @@ namespace Vba.Language.Tests.Compiler
             CanParseAllAmbiguousIdentifiers(subDefinitionTemplate, expectedOutputSubDefinitionTemplate, p => p.subroutineDeclaration());
         }
 
-        [Theory]
-        [InlineData("Sub Abs \r\nEnd Sub\r\n")]
-        [InlineData("Sub AddressOf \r\nEnd Sub\r\n")]
-        [InlineData("Sub And \r\nEnd Sub\r\n")]
-        [InlineData("Sub Any \r\nEnd Sub\r\n")]
-        [InlineData("Sub Array \r\nEnd Sub\r\n")]
-        [InlineData("Sub As \r\nEnd Sub\r\n")]
-        [InlineData("Sub Attribute \r\nEnd Sub\r\n")]
-        [InlineData("Sub Boolean \r\nEnd Sub\r\n")]
-        [InlineData("Sub ByRef \r\nEnd Sub\r\n")]
-        [InlineData("Sub Byte \r\nEnd Sub\r\n")]
-        [InlineData("Sub ByVal \r\nEnd Sub\r\n")]
-        [InlineData("Sub Call \r\nEnd Sub\r\n")]
-        [InlineData("Sub Case \r\nEnd Sub\r\n")]
-        [InlineData("Sub CBool \r\nEnd Sub\r\n")]
-        [InlineData("Sub CByte \r\nEnd Sub\r\n")]
-        [InlineData("Sub CCur \r\nEnd Sub\r\n")]
-        [InlineData("Sub CDate \r\nEnd Sub\r\n")]
-        [InlineData("Sub CDbl \r\nEnd Sub\r\n")]
-        [InlineData("Sub CDec \r\nEnd Sub\r\n")]
-        [InlineData("Sub CDecl \r\nEnd Sub\r\n")]
-        [InlineData("Sub CInt \r\nEnd Sub\r\n")]
-        [InlineData("Sub Circle \r\nEnd Sub\r\n")]
-        [InlineData("Sub CLng \r\nEnd Sub\r\n")]
-        [InlineData("Sub CLngPtr \r\nEnd Sub\r\n")]
-        [InlineData("Sub Close \r\nEnd Sub\r\n")]
-        [InlineData("Sub Const \r\nEnd Sub\r\n")]
-        [InlineData("Sub CSng \r\nEnd Sub\r\n")]
-        [InlineData("Sub CStr \r\nEnd Sub\r\n")]
-        [InlineData("Sub Currency \r\nEnd Sub\r\n")]
-        [InlineData("Sub CVar \r\nEnd Sub\r\n")]
-        [InlineData("Sub CVErr \r\nEnd Sub\r\n")]
-        [InlineData("Sub Date \r\nEnd Sub\r\n")]
-        [InlineData("Sub Debug \r\nEnd Sub\r\n")]
-        [InlineData("Sub Decimal \r\nEnd Sub\r\n")]
-        [InlineData("Sub Declare \r\nEnd Sub\r\n")]
-        [InlineData("Sub DefBool \r\nEnd Sub\r\n")]
-        [InlineData("Sub DefByte \r\nEnd Sub\r\n")]
-        [InlineData("Sub DefCur \r\nEnd Sub\r\n")]
-        [InlineData("Sub DefDate \r\nEnd Sub\r\n")]
-        [InlineData("Sub DefDbl \r\nEnd Sub\r\n")]
-        [InlineData("Sub DefDec \r\nEnd Sub\r\n")]
-        [InlineData("Sub DefInt \r\nEnd Sub\r\n")]
-        [InlineData("Sub DefLng \r\nEnd Sub\r\n")]
-        [InlineData("Sub DefLngPtr \r\nEnd Sub\r\n")]
-        [InlineData("Sub DefObj \r\nEnd Sub\r\n")]
-        [InlineData("Sub DefSng \r\nEnd Sub\r\n")]
-        [InlineData("Sub DefStr \r\nEnd Sub\r\n")]
-        [InlineData("Sub DefVar \r\nEnd Sub\r\n")]
-        [InlineData("Sub Dim \r\nEnd Sub\r\n")]
-        [InlineData("Sub Do \r\nEnd Sub\r\n")]
-        [InlineData("Sub DoEvents \r\nEnd Sub\r\n")]
-        [InlineData("Sub Double \r\nEnd Sub\r\n")]
-        [InlineData("Sub Each \r\nEnd Sub\r\n")]
-        [InlineData("Sub Else \r\nEnd Sub\r\n")]
-        [InlineData("Sub ElseIf \r\nEnd Sub\r\n")]
-        [InlineData("Sub Empty \r\nEnd Sub\r\n")]
-        [InlineData("Sub End \r\nEnd Sub\r\n")]
-        [InlineData("Sub EndIf \r\nEnd Sub\r\n")]
-        [InlineData("Sub Enum \r\nEnd Sub\r\n")]
-        [InlineData("Sub Eqv \r\nEnd Sub\r\n")]
-        [InlineData("Sub Erase \r\nEnd Sub\r\n")]
-        [InlineData("Sub Event \r\nEnd Sub\r\n")]
-        [InlineData("Sub Exit \r\nEnd Sub\r\n")]
-        [InlineData("Sub Fix \r\nEnd Sub\r\n")]
-        [InlineData("Sub For \r\nEnd Sub\r\n")]
-        [InlineData("Sub Friend \r\nEnd Sub\r\n")]
-        [InlineData("Sub Function \r\nEnd Sub\r\n")]
-        [InlineData("Sub Get \r\nEnd Sub\r\n")]
-        [InlineData("Sub Global \r\nEnd Sub\r\n")]
-        [InlineData("Sub GoSub \r\nEnd Sub\r\n")]
-        [InlineData("Sub GoTo \r\nEnd Sub\r\n")]
-        [InlineData("Sub If \r\nEnd Sub\r\n")]
-        [InlineData("Sub Imp \r\nEnd Sub\r\n")]
-        [InlineData("Sub Implements \r\nEnd Sub\r\n")]
-        [InlineData("Sub In \r\nEnd Sub\r\n")]
-        [InlineData("Sub Input \r\nEnd Sub\r\n")]
-        [InlineData("Sub InputB \r\nEnd Sub\r\n")]
-        [InlineData("Sub Int \r\nEnd Sub\r\n")]
-        [InlineData("Sub Integer \r\nEnd Sub\r\n")]
-        [InlineData("Sub Is \r\nEnd Sub\r\n")]
-        [InlineData("Sub LBound \r\nEnd Sub\r\n")]
-        [InlineData("Sub Len \r\nEnd Sub\r\n")]
-        [InlineData("Sub LenB \r\nEnd Sub\r\n")]
-        [InlineData("Sub Let \r\nEnd Sub\r\n")]
-        [InlineData("Sub Like \r\nEnd Sub\r\n")]
-        [InlineData("Sub LINEINPUT \r\nEnd Sub\r\n")]
-        [InlineData("Sub Lock \r\nEnd Sub\r\n")]
-        [InlineData("Sub Long \r\nEnd Sub\r\n")]
-        [InlineData("Sub LongPtr \r\nEnd Sub\r\n")]
-        [InlineData("Sub Loop \r\nEnd Sub\r\n")]
-        [InlineData("Sub LSet \r\nEnd Sub\r\n")]
-        [InlineData("Sub Me \r\nEnd Sub\r\n")]
-        [InlineData("Sub Mod \r\nEnd Sub\r\n")]
-        [InlineData("Sub New \r\nEnd Sub\r\n")]
-        [InlineData("Sub Next \r\nEnd Sub\r\n")]
-        [InlineData("Sub Not \r\nEnd Sub\r\n")]
-        [InlineData("Sub Nothing \r\nEnd Sub\r\n")]
-        [InlineData("Sub Null \r\nEnd Sub\r\n")]
-        [InlineData("Sub On \r\nEnd Sub\r\n")]
-        [InlineData("Sub Open \r\nEnd Sub\r\n")]
-        [InlineData("Sub Option \r\nEnd Sub\r\n")]
-        [InlineData("Sub Optional \r\nEnd Sub\r\n")]
-        [InlineData("Sub Or \r\nEnd Sub\r\n")]
-        [InlineData("Sub ParamArray \r\nEnd Sub\r\n")]
-        [InlineData("Sub Preserve \r\nEnd Sub\r\n")]
-        [InlineData("Sub Print \r\nEnd Sub\r\n")]
-        [InlineData("Sub Private \r\nEnd Sub\r\n")]
-        [InlineData("Sub PSet \r\nEnd Sub\r\n")]
-        [InlineData("Sub Public \r\nEnd Sub\r\n")]
-        [InlineData("Sub Put \r\nEnd Sub\r\n")]
-        [InlineData("Sub RaiseEvent \r\nEnd Sub\r\n")]
-        [InlineData("Sub ReDim \r\nEnd Sub\r\n")]
-        [InlineData("Sub Rem \r\nEnd Sub\r\n")]
-        [InlineData("Sub Resume \r\nEnd Sub\r\n")]
-        [InlineData("Sub Return \r\nEnd Sub\r\n")]
-        [InlineData("Sub RSet \r\nEnd Sub\r\n")]
-        [InlineData("Sub Scale \r\nEnd Sub\r\n")]
-        [InlineData("Sub Seek \r\nEnd Sub\r\n")]
-        [InlineData("Sub Select \r\nEnd Sub\r\n")]
-        [InlineData("Sub Set \r\nEnd Sub\r\n")]
-        [InlineData("Sub Sgn \r\nEnd Sub\r\n")]
-        [InlineData("Sub Shared \r\nEnd Sub\r\n")]
-        [InlineData("Sub Single \r\nEnd Sub\r\n")]
-        [InlineData("Sub Spc \r\nEnd Sub\r\n")]
-        [InlineData("Sub Static \r\nEnd Sub\r\n")]
-        [InlineData("Sub Stop \r\nEnd Sub\r\n")]
-        [InlineData("Sub String \r\nEnd Sub\r\n")]
-        [InlineData("Sub Sub \r\nEnd Sub\r\n")]
-        [InlineData("Sub Tab \r\nEnd Sub\r\n")]
-        [InlineData("Sub Then \r\nEnd Sub\r\n")]
-        [InlineData("Sub To \r\nEnd Sub\r\n")]
-        [InlineData("Sub Type \r\nEnd Sub\r\n")]
-        [InlineData("Sub TypeOf \r\nEnd Sub\r\n")]
-        [InlineData("Sub UBound \r\nEnd Sub\r\n")]
-        [InlineData("Sub Unlock \r\nEnd Sub\r\n")]
-        [InlineData("Sub Until \r\nEnd Sub\r\n")]
-        [InlineData("Sub Variant \r\nEnd Sub\r\n")]
-        [InlineData("Sub VB_Base \r\nEnd Sub\r\n")]
-        [InlineData("Sub VB_Control \r\nEnd Sub\r\n")]
-        [InlineData("Sub VB_Creatable \r\nEnd Sub\r\n")]
-        [InlineData("Sub VB_Customizable \r\nEnd Sub\r\n")]
-        [InlineData("Sub VB_Description \r\nEnd Sub\r\n")]
-        [InlineData("Sub VB_Exposed \r\nEnd Sub\r\n")]
-        [InlineData("Sub VB_Ext_KEY \r\nEnd Sub\r\n")]
-        [InlineData("Sub VB_GlobalNameSpace \r\nEnd Sub\r\n")]
-        [InlineData("Sub VB_HelpID \r\nEnd Sub\r\n")]
-        [InlineData("Sub VB_Invoke_Func \r\nEnd Sub\r\n")]
-        [InlineData("Sub VB_Invoke_Property \r\nEnd Sub\r\n")]
-        [InlineData("Sub VB_Invoke_PropertyPut \r\nEnd Sub\r\n")]
-        [InlineData("Sub VB_Name \r\nEnd Sub\r\n")]
-        [InlineData("Sub VB_PredeclaredId \r\nEnd Sub\r\n")]
-        [InlineData("Sub VB_ProcData \r\nEnd Sub\r\n")]
-        [InlineData("Sub VB_TemplateDerived \r\nEnd Sub\r\n")]
-        [InlineData("Sub VB_UserMemId \r\nEnd Sub\r\n")]
-        [InlineData("Sub VB_VarDescription \r\nEnd Sub\r\n")]
-        [InlineData("Sub VB_VarHelpID \r\nEnd Sub\r\n")]
-        [InlineData("Sub VB_VarMemberFlags \r\nEnd Sub\r\n")]
-        [InlineData("Sub VB_VarProcData \r\nEnd Sub\r\n")]
-        [InlineData("Sub VB_VarUserMemId \r\nEnd Sub\r\n")]
-        [InlineData("Sub Wend \r\nEnd Sub\r\n")]
-        [InlineData("Sub While \r\nEnd Sub\r\n")]
-        [InlineData("Sub With \r\nEnd Sub\r\n")]
-        [InlineData("Sub WithEvents \r\nEnd Sub\r\n")]
-        [InlineData("Sub Write \r\nEnd Sub\r\n")]
-        [InlineData("Sub Xor \r\nEnd Sub\r\n")]
-        public void CannotParseInvalidIdentifierInSubDefinition(string source)
+        [Fact]
+        public void CannotParseInvalidIdentifierInSubDefinition()
         {
-            var parser = VbaCompilerHelper.BuildVbaParser(source);
+            const string subDeclarationTemplate = "Sub {0} \r\nEnd Sub\r\n";
 
-            Assert.Throws<ParseCanceledException>(() => parser.subroutineDeclaration());
+            CannotParseAnyTrueKeywords(subDeclarationTemplate, p => p.subroutineDeclaration());
         }
 
         [Fact]
@@ -602,177 +284,23 @@ namespace Vba.Language.Tests.Compiler
             CanParseAllAmbiguousIdentifiers(constDeclarationTemplate, expectedOutputConstDeclarationTemplate, p => p.constDeclaration());
         }
 
-        [Theory]
-        [InlineData("Private Const Abs As String = \"\"")]
-        [InlineData("Private Const AddressOf As String = \"\"")]
-        [InlineData("Private Const And As String = \"\"")]
-        [InlineData("Private Const Any As String = \"\"")]
-        [InlineData("Private Const Array As String = \"\"")]
-        [InlineData("Private Const As As String = \"\"")]
-        [InlineData("Private Const Attribute As String = \"\"")]
-        [InlineData("Private Const Boolean As String = \"\"")]
-        [InlineData("Private Const ByRef As String = \"\"")]
-        [InlineData("Private Const Byte As String = \"\"")]
-        [InlineData("Private Const ByVal As String = \"\"")]
-        [InlineData("Private Const Call As String = \"\"")]
-        [InlineData("Private Const Case As String = \"\"")]
-        [InlineData("Private Const CBool As String = \"\"")]
-        [InlineData("Private Const CByte As String = \"\"")]
-        [InlineData("Private Const CCur As String = \"\"")]
-        [InlineData("Private Const CDate As String = \"\"")]
-        [InlineData("Private Const CDbl As String = \"\"")]
-        [InlineData("Private Const CDec As String = \"\"")]
-        [InlineData("Private Const CDecl As String = \"\"")]
-        [InlineData("Private Const CInt As String = \"\"")]
-        [InlineData("Private Const Circle As String = \"\"")]
-        [InlineData("Private Const CLng As String = \"\"")]
-        [InlineData("Private Const CLngPtr As String = \"\"")]
-        [InlineData("Private Const Close As String = \"\"")]
-        [InlineData("Private Const Const As String = \"\"")]
-        [InlineData("Private Const CSng As String = \"\"")]
-        [InlineData("Private Const CStr As String = \"\"")]
-        [InlineData("Private Const Currency As String = \"\"")]
-        [InlineData("Private Const CVar As String = \"\"")]
-        [InlineData("Private Const CVErr As String = \"\"")]
-        [InlineData("Private Const Date As String = \"\"")]
-        [InlineData("Private Const Debug As String = \"\"")]
-        [InlineData("Private Const Decimal As String = \"\"")]
-        [InlineData("Private Const Declare As String = \"\"")]
-        [InlineData("Private Const DefBool As String = \"\"")]
-        [InlineData("Private Const DefByte As String = \"\"")]
-        [InlineData("Private Const DefCur As String = \"\"")]
-        [InlineData("Private Const DefDate As String = \"\"")]
-        [InlineData("Private Const DefDbl As String = \"\"")]
-        [InlineData("Private Const DefDec As String = \"\"")]
-        [InlineData("Private Const DefInt As String = \"\"")]
-        [InlineData("Private Const DefLng As String = \"\"")]
-        [InlineData("Private Const DefLngPtr As String = \"\"")]
-        [InlineData("Private Const DefObj As String = \"\"")]
-        [InlineData("Private Const DefSng As String = \"\"")]
-        [InlineData("Private Const DefStr As String = \"\"")]
-        [InlineData("Private Const DefVar As String = \"\"")]
-        [InlineData("Private Const Dim As String = \"\"")]
-        [InlineData("Private Const Do As String = \"\"")]
-        [InlineData("Private Const DoEvents As String = \"\"")]
-        [InlineData("Private Const Double As String = \"\"")]
-        [InlineData("Private Const Each As String = \"\"")]
-        [InlineData("Private Const Else As String = \"\"")]
-        [InlineData("Private Const ElseIf As String = \"\"")]
-        [InlineData("Private Const Empty As String = \"\"")]
-        [InlineData("Private Const End As String = \"\"")]
-        [InlineData("Private Const EndIf As String = \"\"")]
-        [InlineData("Private Const Enum As String = \"\"")]
-        [InlineData("Private Const Eqv As String = \"\"")]
-        [InlineData("Private Const Erase As String = \"\"")]
-        [InlineData("Private Const Event As String = \"\"")]
-        [InlineData("Private Const Exit As String = \"\"")]
-        [InlineData("Private Const Fix As String = \"\"")]
-        [InlineData("Private Const For As String = \"\"")]
-        [InlineData("Private Const Friend As String = \"\"")]
-        [InlineData("Private Const Function As String = \"\"")]
-        [InlineData("Private Const Get As String = \"\"")]
-        [InlineData("Private Const Global As String = \"\"")]
-        [InlineData("Private Const GoSub As String = \"\"")]
-        [InlineData("Private Const GoTo As String = \"\"")]
-        [InlineData("Private Const If As String = \"\"")]
-        [InlineData("Private Const Imp As String = \"\"")]
-        [InlineData("Private Const Implements As String = \"\"")]
-        [InlineData("Private Const In As String = \"\"")]
-        [InlineData("Private Const Input As String = \"\"")]
-        [InlineData("Private Const InputB As String = \"\"")]
-        [InlineData("Private Const Int As String = \"\"")]
-        [InlineData("Private Const Integer As String = \"\"")]
-        [InlineData("Private Const Is As String = \"\"")]
-        [InlineData("Private Const LBound As String = \"\"")]
-        [InlineData("Private Const Len As String = \"\"")]
-        [InlineData("Private Const LenB As String = \"\"")]
-        [InlineData("Private Const Let As String = \"\"")]
-        [InlineData("Private Const Like As String = \"\"")]
-        [InlineData("Private Const LINEINPUT As String = \"\"")]
-        [InlineData("Private Const Lock As String = \"\"")]
-        [InlineData("Private Const Long As String = \"\"")]
-        [InlineData("Private Const LongPtr As String = \"\"")]
-        [InlineData("Private Const Loop As String = \"\"")]
-        [InlineData("Private Const LSet As String = \"\"")]
-        [InlineData("Private Const Me As String = \"\"")]
-        [InlineData("Private Const Mod As String = \"\"")]
-        [InlineData("Private Const New As String = \"\"")]
-        [InlineData("Private Const Next As String = \"\"")]
-        [InlineData("Private Const Not As String = \"\"")]
-        [InlineData("Private Const Nothing As String = \"\"")]
-        [InlineData("Private Const Null As String = \"\"")]
-        [InlineData("Private Const On As String = \"\"")]
-        [InlineData("Private Const Open As String = \"\"")]
-        [InlineData("Private Const Option As String = \"\"")]
-        [InlineData("Private Const Optional As String = \"\"")]
-        [InlineData("Private Const Or As String = \"\"")]
-        [InlineData("Private Const ParamArray As String = \"\"")]
-        [InlineData("Private Const Preserve As String = \"\"")]
-        [InlineData("Private Const Print As String = \"\"")]
-        [InlineData("Private Const Private As String = \"\"")]
-        [InlineData("Private Const PSet As String = \"\"")]
-        [InlineData("Private Const Public As String = \"\"")]
-        [InlineData("Private Const Put As String = \"\"")]
-        [InlineData("Private Const RaiseEvent As String = \"\"")]
-        [InlineData("Private Const ReDim As String = \"\"")]
-        [InlineData("Private Const Rem As String = \"\"")]
-        [InlineData("Private Const Resume As String = \"\"")]
-        [InlineData("Private Const Return As String = \"\"")]
-        [InlineData("Private Const RSet As String = \"\"")]
-        [InlineData("Private Const Scale As String = \"\"")]
-        [InlineData("Private Const Seek As String = \"\"")]
-        [InlineData("Private Const Select As String = \"\"")]
-        [InlineData("Private Const Set As String = \"\"")]
-        [InlineData("Private Const Sgn As String = \"\"")]
-        [InlineData("Private Const Shared As String = \"\"")]
-        [InlineData("Private Const Single As String = \"\"")]
-        [InlineData("Private Const Spc As String = \"\"")]
-        [InlineData("Private Const Static As String = \"\"")]
-        [InlineData("Private Const Stop As String = \"\"")]
-        [InlineData("Private Const String As String = \"\"")]
-        [InlineData("Private Const Sub As String = \"\"")]
-        [InlineData("Private Const Tab As String = \"\"")]
-        [InlineData("Private Const Then As String = \"\"")]
-        [InlineData("Private Const To As String = \"\"")]
-        [InlineData("Private Const Type As String = \"\"")]
-        [InlineData("Private Const TypeOf As String = \"\"")]
-        [InlineData("Private Const UBound As String = \"\"")]
-        [InlineData("Private Const Unlock As String = \"\"")]
-        [InlineData("Private Const Until As String = \"\"")]
-        [InlineData("Private Const Variant As String = \"\"")]
-        [InlineData("Private Const VB_Base As String = \"\"")]
-        [InlineData("Private Const VB_Control As String = \"\"")]
-        [InlineData("Private Const VB_Creatable As String = \"\"")]
-        [InlineData("Private Const VB_Customizable As String = \"\"")]
-        [InlineData("Private Const VB_Description As String = \"\"")]
-        [InlineData("Private Const VB_Exposed As String = \"\"")]
-        [InlineData("Private Const VB_Ext_KEY As String = \"\"")]
-        [InlineData("Private Const VB_GlobalNameSpace As String = \"\"")]
-        [InlineData("Private Const VB_HelpID As String = \"\"")]
-        [InlineData("Private Const VB_Invoke_Func As String = \"\"")]
-        [InlineData("Private Const VB_Invoke_Property As String = \"\"")]
-        [InlineData("Private Const VB_Invoke_PropertyPut As String = \"\"")]
-        [InlineData("Private Const VB_Name As String = \"\"")]
-        [InlineData("Private Const VB_PredeclaredId As String = \"\"")]
-        [InlineData("Private Const VB_ProcData As String = \"\"")]
-        [InlineData("Private Const VB_TemplateDerived As String = \"\"")]
-        [InlineData("Private Const VB_UserMemId As String = \"\"")]
-        [InlineData("Private Const VB_VarDescription As String = \"\"")]
-        [InlineData("Private Const VB_VarHelpID As String = \"\"")]
-        [InlineData("Private Const VB_VarMemberFlags As String = \"\"")]
-        [InlineData("Private Const VB_VarProcData As String = \"\"")]
-        [InlineData("Private Const VB_VarUserMemId As String = \"\"")]
-        [InlineData("Private Const Wend As String = \"\"")]
-        [InlineData("Private Const While As String = \"\"")]
-        [InlineData("Private Const With As String = \"\"")]
-        [InlineData("Private Const WithEvents As String = \"\"")]
-        [InlineData("Private Const Write As String = \"\"")]
-        [InlineData("Private Const Xor As String = \"\"")]
-        public void CannotParseInvalidIdentifierInConstItem(string source)
+        [Fact]
+        public void CannotParseInvalidIdentifierInConstItem()
         {
-            var parser = VbaCompilerHelper.BuildVbaParser(source);
+            const string constDeclarationTemplate = "Private Const {0} As String = \"\"";
 
-            Assert.Throws<ParseCanceledException>(() => parser.constDeclaration());
+            CannotParseAnyTrueKeywords(constDeclarationTemplate, p => p.constDeclaration());
+        }
+
+        private void CannotParseAnyTrueKeywords(string sourceTemplate, Func<VbaParser, ParserRuleContext> rule)
+        {
+            foreach (var id in trueKeywords)
+            {
+                var source = string.Format(sourceTemplate, id);
+                var parser = VbaCompilerHelper.BuildVbaParser(source);
+
+                Assert.Throws<ParseCanceledException>(() => rule(parser));
+            }
         }
 
         private void CanParseAllAmbiguousIdentifiers(string sourceTemplate, string expectedOutputTemplate, Func<VbaParser, ParserRuleContext> rule)
