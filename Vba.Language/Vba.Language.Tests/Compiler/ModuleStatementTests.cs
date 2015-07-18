@@ -1,12 +1,38 @@
-﻿using Antlr4.Runtime;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
+using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
-
+using Antlr4.Runtime.Tree;
+using Vba.Grammars;
 using Xunit;
 
 namespace Vba.Language.Tests.Compiler
 {
     public class ModuleStatementTests
     {
+        private readonly List<string> ambiguousIdentifiers = new List<string>()
+        {
+            "Alias",
+            "Base",
+            "Binary",
+            "ClassInit",
+            "ClassTerm",
+            "CLngLng",
+            "Compare",
+            "Database",
+            "DefLngLng",
+            "Explicit",
+            "Lib",
+            "LongLong",
+            "Module",
+            "Object",
+            "Property",
+            "Text",
+            "VB_Invoke_PropertyPutRefVB_MemberFlags",
+            "PtrSafe",
+        };
+
         [Theory]
         [InlineData("Option Compare Text", "(directiveElement (optionCompareDirective Option Compare Text))")]
         [InlineData("Option Compare Binary", "(directiveElement (optionCompareDirective Option Compare Binary))")]
@@ -28,51 +54,23 @@ namespace Vba.Language.Tests.Compiler
             ParseTreeHelper.TreesAreEqual(expectedTree, result.ToStringTree(parser));
         }
 
-        [Theory]
-        [InlineData("Dim Alias As String", "(variableDeclaration Dim (variableDclList (variableDcl (untypedVariableDcl (identifier Alias) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String))))))))))")]
-        [InlineData("Dim Base As String", "(variableDeclaration Dim (variableDclList (variableDcl (untypedVariableDcl (identifier Base) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String))))))))))")]
-        [InlineData("Dim Binary As String", "(variableDeclaration Dim (variableDclList (variableDcl (untypedVariableDcl (identifier Binary) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String))))))))))")]
-        [InlineData("Dim ClassInit As String", "(variableDeclaration Dim (variableDclList (variableDcl (untypedVariableDcl (identifier ClassInit) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String))))))))))")]
-        [InlineData("Dim ClassTerm As String", "(variableDeclaration Dim (variableDclList (variableDcl (untypedVariableDcl (identifier ClassTerm) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String))))))))))")]
-        [InlineData("Dim CLngLng As String", "(variableDeclaration Dim (variableDclList (variableDcl (untypedVariableDcl (identifier CLngLng) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String))))))))))")]
-        [InlineData("Dim Compare As String", "(variableDeclaration Dim (variableDclList (variableDcl (untypedVariableDcl (identifier Compare) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String))))))))))")]
-        [InlineData("Dim Database As String", "(variableDeclaration Dim (variableDclList (variableDcl (untypedVariableDcl (identifier Database) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String))))))))))")]
-        [InlineData("Dim DefLngLng As String", "(variableDeclaration Dim (variableDclList (variableDcl (untypedVariableDcl (identifier DefLngLng) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String))))))))))")]
-        [InlineData("Dim Explicit As String", "(variableDeclaration Dim (variableDclList (variableDcl (untypedVariableDcl (identifier Explicit) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String))))))))))")]
-        [InlineData("Dim Lib As String", "(variableDeclaration Dim (variableDclList (variableDcl (untypedVariableDcl (identifier Lib) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String))))))))))")]
-        [InlineData("Dim LongLong As String", "(variableDeclaration Dim (variableDclList (variableDcl (untypedVariableDcl (identifier LongLong) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String))))))))))")]
-        [InlineData("Dim Module As String", "(variableDeclaration Dim (variableDclList (variableDcl (untypedVariableDcl (identifier Module) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String))))))))))")]
-        [InlineData("Dim Object As String", "(variableDeclaration Dim (variableDclList (variableDcl (untypedVariableDcl (identifier Object) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String))))))))))")]
-        [InlineData("Dim Property As String", "(variableDeclaration Dim (variableDclList (variableDcl (untypedVariableDcl (identifier Property) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String))))))))))")]
-        [InlineData("Dim Text As String", "(variableDeclaration Dim (variableDclList (variableDcl (untypedVariableDcl (identifier Text) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String))))))))))")]
-        [InlineData("Dim VB_Invoke_PropertyPutRefVB_MemberFlags As String", "(variableDeclaration Dim (variableDclList (variableDcl (untypedVariableDcl (identifier VB_Invoke_PropertyPutRefVB_MemberFlags) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String))))))))))")]
-        [InlineData("Dim PtrSafe As String", "(variableDeclaration Dim (variableDclList (variableDcl (untypedVariableDcl (identifier PtrSafe) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String))))))))))")]
-        [InlineData("Private WithEvents Alias As Application", "(variableDeclaration Private (variableDclList (witheventsVariableDcl WithEvents (identifier Alias) As (classTypeName (definedTypeExpression (simpleNameExpression (name (untypedName (identifier Application)))))))))")]
-        [InlineData("Private WithEvents Base As Application", "(variableDeclaration Private (variableDclList (witheventsVariableDcl WithEvents (identifier Base) As (classTypeName (definedTypeExpression (simpleNameExpression (name (untypedName (identifier Application)))))))))")]
-        [InlineData("Private WithEvents Binary As Application", "(variableDeclaration Private (variableDclList (witheventsVariableDcl WithEvents (identifier Binary) As (classTypeName (definedTypeExpression (simpleNameExpression (name (untypedName (identifier Application)))))))))")]
-        [InlineData("Private WithEvents ClassInit As Application", "(variableDeclaration Private (variableDclList (witheventsVariableDcl WithEvents (identifier ClassInit) As (classTypeName (definedTypeExpression (simpleNameExpression (name (untypedName (identifier Application)))))))))")]
-        [InlineData("Private WithEvents ClassTerm As Application", "(variableDeclaration Private (variableDclList (witheventsVariableDcl WithEvents (identifier ClassTerm) As (classTypeName (definedTypeExpression (simpleNameExpression (name (untypedName (identifier Application)))))))))")]
-        [InlineData("Private WithEvents CLngLng As Application", "(variableDeclaration Private (variableDclList (witheventsVariableDcl WithEvents (identifier CLngLng) As (classTypeName (definedTypeExpression (simpleNameExpression (name (untypedName (identifier Application)))))))))")]
-        [InlineData("Private WithEvents Compare As Application", "(variableDeclaration Private (variableDclList (witheventsVariableDcl WithEvents (identifier Compare) As (classTypeName (definedTypeExpression (simpleNameExpression (name (untypedName (identifier Application)))))))))")]
-        [InlineData("Private WithEvents Database As Application", "(variableDeclaration Private (variableDclList (witheventsVariableDcl WithEvents (identifier Database) As (classTypeName (definedTypeExpression (simpleNameExpression (name (untypedName (identifier Application)))))))))")]
-        [InlineData("Private WithEvents DefLngLng As Application", "(variableDeclaration Private (variableDclList (witheventsVariableDcl WithEvents (identifier DefLngLng) As (classTypeName (definedTypeExpression (simpleNameExpression (name (untypedName (identifier Application)))))))))")]
-        [InlineData("Private WithEvents Explicit As Application", "(variableDeclaration Private (variableDclList (witheventsVariableDcl WithEvents (identifier Explicit) As (classTypeName (definedTypeExpression (simpleNameExpression (name (untypedName (identifier Application)))))))))")]
-        [InlineData("Private WithEvents Lib As Application", "(variableDeclaration Private (variableDclList (witheventsVariableDcl WithEvents (identifier Lib) As (classTypeName (definedTypeExpression (simpleNameExpression (name (untypedName (identifier Application)))))))))")]
-        [InlineData("Private WithEvents LongLong As Application", "(variableDeclaration Private (variableDclList (witheventsVariableDcl WithEvents (identifier LongLong) As (classTypeName (definedTypeExpression (simpleNameExpression (name (untypedName (identifier Application)))))))))")]
-        [InlineData("Private WithEvents Module As Application", "(variableDeclaration Private (variableDclList (witheventsVariableDcl WithEvents (identifier Module) As (classTypeName (definedTypeExpression (simpleNameExpression (name (untypedName (identifier Application)))))))))")]
-        [InlineData("Private WithEvents Object As Application", "(variableDeclaration Private (variableDclList (witheventsVariableDcl WithEvents (identifier Object) As (classTypeName (definedTypeExpression (simpleNameExpression (name (untypedName (identifier Application)))))))))")]
-        [InlineData("Private WithEvents Property As Application", "(variableDeclaration Private (variableDclList (witheventsVariableDcl WithEvents (identifier Property) As (classTypeName (definedTypeExpression (simpleNameExpression (name (untypedName (identifier Application)))))))))")]
-        [InlineData("Private WithEvents Text As Application", "(variableDeclaration Private (variableDclList (witheventsVariableDcl WithEvents (identifier Text) As (classTypeName (definedTypeExpression (simpleNameExpression (name (untypedName (identifier Application)))))))))")]
-        [InlineData("Private WithEvents VB_Invoke_PropertyPutRefVB_MemberFlags As Application", "(variableDeclaration Private (variableDclList (witheventsVariableDcl WithEvents (identifier VB_Invoke_PropertyPutRefVB_MemberFlags) As (classTypeName (definedTypeExpression (simpleNameExpression (name (untypedName (identifier Application)))))))))")]
-        [InlineData("Private WithEvents PtrSafe As Application", "(variableDeclaration Private (variableDclList (witheventsVariableDcl WithEvents (identifier PtrSafe) As (classTypeName (definedTypeExpression (simpleNameExpression (name (untypedName (identifier Application)))))))))")]
-        public void CanParseIdentifier(string source, string expectedTree)
+        [Fact]
+        public void CanParseAmbiguousIdentifierInVariableDeclaration()
         {
-            var parser = VbaCompilerHelper.BuildVbaParser(source);
+            const string variableDeclarationTemplate = "Dim {0} As String";
+            const string expectedVariableDeclaration =
+                            "(variableDeclaration Dim (variableDclList (variableDcl (untypedVariableDcl (identifier {0}) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String))))))))))";
 
-            var result = parser.variableDeclaration();
+            CanParseAllAmbiguousIdentifiers(variableDeclarationTemplate, expectedVariableDeclaration, p => p.variableDeclaration());
+        }
 
-            Assert.Null(result.exception);
-            ParseTreeHelper.TreesAreEqual(expectedTree, result.ToStringTree(parser));
+        [Fact]
+        public void CanParseAmbiguousIdentifierInWithEventsDeclaration()
+        {
+            const string withEventsTemplate = "Private WithEvents {0} As Application";
+            const string expectedWithEventsTemplate = "(variableDeclaration Private (variableDclList (witheventsVariableDcl WithEvents (identifier {0}) As (classTypeName (definedTypeExpression (simpleNameExpression (name (untypedName (identifier Application)))))))))";
+
+            CanParseAllAmbiguousIdentifiers(withEventsTemplate, expectedWithEventsTemplate, p => p.variableDeclaration());
         }
 
         [Theory]
@@ -413,33 +411,13 @@ namespace Vba.Language.Tests.Compiler
             Assert.Throws<ParseCanceledException>(() => parser.variableDeclaration());
         }
 
-        [Theory]
-        [InlineData("Sub Alias \r\nEnd Sub\r\n", "(subroutineDeclaration Sub (subroutineName (identifier Alias)) \\r\\n (procedureBody statementBlock) End Sub \\r\\n)")]
-        [InlineData("Sub Base \r\nEnd Sub\r\n", "(subroutineDeclaration Sub (subroutineName (identifier Base)) \\r\\n (procedureBody statementBlock) End Sub \\r\\n)")]
-        [InlineData("Sub Binary \r\nEnd Sub\r\n", "(subroutineDeclaration Sub (subroutineName (identifier Binary)) \\r\\n (procedureBody statementBlock) End Sub \\r\\n)")]
-        [InlineData("Sub ClassInit \r\nEnd Sub\r\n", "(subroutineDeclaration Sub (subroutineName (identifier ClassInit)) \\r\\n (procedureBody statementBlock) End Sub \\r\\n)")]
-        [InlineData("Sub ClassTerm \r\nEnd Sub\r\n", "(subroutineDeclaration Sub (subroutineName (identifier ClassTerm)) \\r\\n (procedureBody statementBlock) End Sub \\r\\n)")]
-        [InlineData("Sub CLngLng \r\nEnd Sub\r\n", "(subroutineDeclaration Sub (subroutineName (identifier CLngLng)) \\r\\n (procedureBody statementBlock) End Sub \\r\\n)")]
-        [InlineData("Sub Compare \r\nEnd Sub\r\n", "(subroutineDeclaration Sub (subroutineName (identifier Compare)) \\r\\n (procedureBody statementBlock) End Sub \\r\\n)")]
-        [InlineData("Sub Database \r\nEnd Sub\r\n", "(subroutineDeclaration Sub (subroutineName (identifier Database)) \\r\\n (procedureBody statementBlock) End Sub \\r\\n)")]
-        [InlineData("Sub DefLngLng \r\nEnd Sub\r\n", "(subroutineDeclaration Sub (subroutineName (identifier DefLngLng)) \\r\\n (procedureBody statementBlock) End Sub \\r\\n)")]
-        [InlineData("Sub Explicit \r\nEnd Sub\r\n", "(subroutineDeclaration Sub (subroutineName (identifier Explicit)) \\r\\n (procedureBody statementBlock) End Sub \\r\\n)")]
-        [InlineData("Sub Lib \r\nEnd Sub\r\n", "(subroutineDeclaration Sub (subroutineName (identifier Lib)) \\r\\n (procedureBody statementBlock) End Sub \\r\\n)")]
-        [InlineData("Sub LongLong \r\nEnd Sub\r\n", "(subroutineDeclaration Sub (subroutineName (identifier LongLong)) \\r\\n (procedureBody statementBlock) End Sub \\r\\n)")]
-        [InlineData("Sub Module \r\nEnd Sub\r\n", "(subroutineDeclaration Sub (subroutineName (identifier Module)) \\r\\n (procedureBody statementBlock) End Sub \\r\\n)")]
-        [InlineData("Sub Object \r\nEnd Sub\r\n", "(subroutineDeclaration Sub (subroutineName (identifier Object)) \\r\\n (procedureBody statementBlock) End Sub \\r\\n)")]
-        [InlineData("Sub Property \r\nEnd Sub\r\n", "(subroutineDeclaration Sub (subroutineName (identifier Property)) \\r\\n (procedureBody statementBlock) End Sub \\r\\n)")]
-        [InlineData("Sub Text \r\nEnd Sub\r\n", "(subroutineDeclaration Sub (subroutineName (identifier Text)) \\r\\n (procedureBody statementBlock) End Sub \\r\\n)")]
-        [InlineData("Sub VB_Invoke_PropertyPutRefVB_MemberFlags \r\nEnd Sub\r\n", "(subroutineDeclaration Sub (subroutineName (identifier VB_Invoke_PropertyPutRefVB_MemberFlags)) \\r\\n (procedureBody statementBlock) End Sub \\r\\n)")]
-        [InlineData("Sub PtrSafe \r\nEnd Sub\r\n", "(subroutineDeclaration Sub (subroutineName (identifier PtrSafe)) \\r\\n (procedureBody statementBlock) End Sub \\r\\n)")]
-        public void CanParseIdentifierInSubDefinition(string source, string expectedTree)
+        [Fact]
+        public void CanParseIdentifierInSubDefinition()
         {
-            var parser = VbaCompilerHelper.BuildVbaParser(source);
+            const string subDefinitionTemplate = "Sub {0} \r\nEnd Sub\r\n";
+            const string expectedOutputSubDefinitionTemplate = "(subroutineDeclaration Sub (subroutineName (identifier {0})) \\r\\n (procedureBody statementBlock) End Sub \\r\\n)";
 
-            var result = parser.subroutineDeclaration();
-
-            Assert.Null(result.exception);
-            ParseTreeHelper.TreesAreEqual(expectedTree, result.ToStringTree(parser));
+            CanParseAllAmbiguousIdentifiers(subDefinitionTemplate, expectedOutputSubDefinitionTemplate, p => p.subroutineDeclaration());
         }
 
         [Theory]
@@ -615,33 +593,13 @@ namespace Vba.Language.Tests.Compiler
             Assert.Throws<ParseCanceledException>(() => parser.subroutineDeclaration());
         }
 
-        [Theory]
-        [InlineData("Private Const Alias As String = \"\"", "(constDeclaration Private Const (constItemList (constItem (identifier Alias) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String)))))) = (constantExpression (expression (literalExpression \"\"))))))")]
-        [InlineData("Private Const Base As String = \"\"", "(constDeclaration Private Const (constItemList (constItem (identifier Base) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String)))))) = (constantExpression (expression (literalExpression \"\"))))))")]
-        [InlineData("Private Const Binary As String = \"\"", "(constDeclaration Private Const (constItemList (constItem (identifier Binary) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String)))))) = (constantExpression (expression (literalExpression \"\"))))))")]
-        [InlineData("Private Const ClassInit As String = \"\"", "(constDeclaration Private Const (constItemList (constItem (identifier ClassInit) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String)))))) = (constantExpression (expression (literalExpression \"\"))))))")]
-        [InlineData("Private Const ClassTerm As String = \"\"", "(constDeclaration Private Const (constItemList (constItem (identifier ClassTerm) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String)))))) = (constantExpression (expression (literalExpression \"\"))))))")]
-        [InlineData("Private Const CLngLng As String = \"\"", "(constDeclaration Private Const (constItemList (constItem (identifier CLngLng) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String)))))) = (constantExpression (expression (literalExpression \"\"))))))")]
-        [InlineData("Private Const Compare As String = \"\"", "(constDeclaration Private Const (constItemList (constItem (identifier Compare) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String)))))) = (constantExpression (expression (literalExpression \"\"))))))")]
-        [InlineData("Private Const Database As String = \"\"", "(constDeclaration Private Const (constItemList (constItem (identifier Database) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String)))))) = (constantExpression (expression (literalExpression \"\"))))))")]
-        [InlineData("Private Const DefLngLng As String = \"\"", "(constDeclaration Private Const (constItemList (constItem (identifier DefLngLng) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String)))))) = (constantExpression (expression (literalExpression \"\"))))))")]
-        [InlineData("Private Const Explicit As String = \"\"", "(constDeclaration Private Const (constItemList (constItem (identifier Explicit) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String)))))) = (constantExpression (expression (literalExpression \"\"))))))")]
-        [InlineData("Private Const Lib As String = \"\"", "(constDeclaration Private Const (constItemList (constItem (identifier Lib) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String)))))) = (constantExpression (expression (literalExpression \"\"))))))")]
-        [InlineData("Private Const LongLong As String = \"\"", "(constDeclaration Private Const (constItemList (constItem (identifier LongLong) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String)))))) = (constantExpression (expression (literalExpression \"\"))))))")]
-        [InlineData("Private Const Module As String = \"\"", "(constDeclaration Private Const (constItemList (constItem (identifier Module) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String)))))) = (constantExpression (expression (literalExpression \"\"))))))")]
-        [InlineData("Private Const Object As String = \"\"", "(constDeclaration Private Const (constItemList (constItem (identifier Object) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String)))))) = (constantExpression (expression (literalExpression \"\"))))))")]
-        [InlineData("Private Const Property As String = \"\"", "(constDeclaration Private Const (constItemList (constItem (identifier Property) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String)))))) = (constantExpression (expression (literalExpression \"\"))))))")]
-        [InlineData("Private Const Text As String = \"\"", "(constDeclaration Private Const (constItemList (constItem (identifier Text) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String)))))) = (constantExpression (expression (literalExpression \"\"))))))")]
-        [InlineData("Private Const VB_Invoke_PropertyPutRefVB_MemberFlags As String = \"\"", "(constDeclaration Private Const (constItemList (constItem (identifier VB_Invoke_PropertyPutRefVB_MemberFlags) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String)))))) = (constantExpression (expression (literalExpression \"\"))))))")]
-        [InlineData("Private Const PtrSafe As String = \"\"", "(constDeclaration Private Const (constItemList (constItem (identifier PtrSafe) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String)))))) = (constantExpression (expression (literalExpression \"\"))))))")]
-        public void CanParseIdentifierInConstItem(string source, string expectedTree)
+        [Fact]
+        public void CanParseIdentifierInConstItem()
         {
-            var parser = VbaCompilerHelper.BuildVbaParser(source);
+            const string constDeclarationTemplate = "Private Const {0} As String = \"\"";
+            const string expectedOutputConstDeclarationTemplate = "(constDeclaration Private Const (constItemList (constItem (identifier {0}) (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String)))))) = (constantExpression (expression (literalExpression \"\"))))))";
 
-            var result = parser.constDeclaration();
-
-            Assert.Null(result.exception);
-            ParseTreeHelper.TreesAreEqual(expectedTree, result.ToStringTree(parser));
+            CanParseAllAmbiguousIdentifiers(constDeclarationTemplate, expectedOutputConstDeclarationTemplate, p => p.constDeclaration());
         }
 
         [Theory]
@@ -815,6 +773,27 @@ namespace Vba.Language.Tests.Compiler
             var parser = VbaCompilerHelper.BuildVbaParser(source);
 
             Assert.Throws<ParseCanceledException>(() => parser.constDeclaration());
+        }
+
+        private void CanParseAllAmbiguousIdentifiers(string sourceTemplate, string expectedOutputTemplate, Func<VbaParser, ParserRuleContext> rule)
+        {
+            foreach (var id in ambiguousIdentifiers)
+            {
+                var source = string.Format(sourceTemplate, id);
+                var expectedTree = string.Format(expectedOutputTemplate, id);
+
+                CanParseSource(source, expectedTree, rule);
+            }
+        }
+
+        private static void CanParseSource(string source, string expectedTree, Func<VbaParser, ParserRuleContext> rule)
+        {
+            var parser = VbaCompilerHelper.BuildVbaParser(source);
+
+            var result = rule(parser);
+
+            Assert.Null(result.exception);
+            ParseTreeHelper.TreesAreEqual(expectedTree, result.ToStringTree(parser));
         }
     }
 }
