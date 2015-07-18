@@ -287,6 +287,23 @@ namespace Vba.Language.Tests.Compiler
         }
 
         [Fact]
+        public void CanParseIdentifierInFunctionDefinition()
+        {
+            const string functionDefinitionTemplate = "Function {0} \r\nEnd Function\r\n";
+            const string expectedOutputFunctionDefinitionTemplate = "(functionDeclaration Function (functionName (identifier {0})) \\r\\n (procedureBody statementBlock) End Function \\r\\n)";
+
+            CanParseAllAmbiguousIdentifiers(functionDefinitionTemplate, expectedOutputFunctionDefinitionTemplate, p => p.functionDeclaration());
+        }
+
+        [Fact]
+        public void CannotParseInvalidIdentifierInFunctionDefinition()
+        {
+            const string functionDefinitionTemplate = "Function {0} \r\nEnd Function\r\n";
+
+            CannotParseAnyTrueKeywords(functionDefinitionTemplate, p => p.functionDeclaration());
+        }
+
+        [Fact]
         public void CanParseIdentifierInConstItem()
         {
             const string constDeclarationTemplate = "Private Const {0} As String = \"\"";
