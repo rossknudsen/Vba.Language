@@ -1,6 +1,6 @@
 grammar Vba;
 
-import Common;
+//import Common;
 
 // Specification: [MS-VBAL] VBA Language Specification
 
@@ -128,10 +128,14 @@ reservedTypeIdentifier
     |   Variant
     ;
 literalIdentifier
-    :   boolLiteral
+    :   booleanLiteralIdentifier
     |   Nothing
     |   Empty
     |   Null
+    ;
+booleanLiteralIdentifier
+    :   True
+    |   False
     ;
 reservedForImplementationUse
     :    Attribute
@@ -452,7 +456,7 @@ callStatement
     :   Call? (simpleNameExpression | memberAccessExpression | indexExpression | withExpression);
 
 // 5.4.2.2 While Statement
-whileStatement              :   While boolExpression EOS
+whileStatement              :   While booleanExpression EOS
                                 statementBlock Wend;
 
 // 5.4.2.3 For Statement
@@ -480,26 +484,26 @@ exitForStatement            :   Exit For;
 doStatement                 :   Do conditionClause? EOS 
                                 statementBlock
                                 Loop conditionClause?;
-conditionClause             :   (While | Until) boolExpression;
+conditionClause             :   (While | Until) booleanExpression;
 
 // 5.4.2.7 Exit Do Statement
 exitDoStatement             :   Exit Do;
 
 // 5.4.2.8 If Statement
-ifStatement                 :   If boolExpression Then EOS
+ifStatement                 :   If booleanExpression Then EOS
                                 statementBlock
                                 elseIfBlock*
                                 elseBlock?
                                 End If;
-elseIfBlock                 :   ElseIf boolExpression Then EOS
+elseIfBlock                 :   ElseIf booleanExpression Then EOS
                                 statementBlock;
 elseBlock                   :   Else
                                 statementBlock;
 
 // 5.4.2.9 Single-line If Statement
 singleLineIfStatement       :   ifWithNonEmptyThen | ifWithEmptyThen;
-ifWithNonEmptyThen          :   If boolExpression Then listOrLabel singleLineElseClause?;
-ifWithEmptyThen             :   If boolExpression Then singleLineElseClause;
+ifWithNonEmptyThen          :   If booleanExpression Then listOrLabel singleLineElseClause?;
+ifWithEmptyThen             :   If booleanExpression Then singleLineElseClause;
 singleLineElseClause        :   Else listOrLabel?;
 listOrLabel                 :   statementLabel (':' sameLineStatement?)?
                             |   ':'? sameLineStatement (':' sameLineStatement?)*;
@@ -695,10 +699,17 @@ expression
     |   parenthesizedExpression
     |   typeOfIsExpression
     |   newExpression
-    |   arithmeticExpression
+    |   '-' expression
+    |   expression '^'<assoc=right> expression
+    |   expression '/' expression
+    |   expression '\\' expression
+    |   expression Mod expression
+    |   expression '*' expression
+    |   expression '+' expression
+    |   expression '-' expression
     |   expression comparisonOperator expression
-    |   eqvExpression
-    |   impExpression
+    |   expression Eqv expression
+    |   expression Imp expression
     ;
 lExpression
     :   simpleNameExpression
@@ -758,6 +769,9 @@ withExpression
 // TODO enforce semantics on this.
 constantExpression          :   expression;
 
+// 5.6.16.3 Boolean Expressions
+booleanExpression           :   expression;
+
 // 5.6.16.4 Integer Expressions
 integerExpression           :   expression;
 
@@ -777,7 +791,72 @@ definedTypeExpression       : simpleNameExpression | memberAccessExpression;
 
 // 5.6.16.8 AddressOf Expressions
 addressOfExpression         :   AddressOf (simpleNameExpression | memberAccessExpression);
-                                
+
+IntegerLiteral  
+    :   DecimalLiteral
+    |   HexIntegerLiteral
+    |   OctalIntegerLiteral
+    ;
+
+fragment
+DecimalLiteral
+    :   NegativeSymbol? DecimalDigits IntegerSuffix?
+    ;
+
+fragment
+HexIntegerLiteral
+    :   NegativeSymbol? '&' [Hh] [1-9A-Fa-f] [0-9A-Fa-f]* IntegerSuffix?
+    ;
+
+fragment
+OctalIntegerLiteral
+    :   NegativeSymbol? '&' [Oo] [1-7] [0-7]* IntegerSuffix?
+    ;
+
+fragment
+NegativeSymbol
+    :   '-'
+    ;
+
+fragment
+IntegerSuffix
+    :   '%'  // Integer 16 bit signed (default)
+    |   '&'  // Long 32 bit signed
+    |   '^'  // LongLong 64bit signed
+    ;
+
+FloatLiteral
+    :   '-'? [0-9]+ '.' [0-9]* Exponent FloatSign? DecimalDigits+ FloatSuffix?
+    |   '-'? DecimalDigits Exponent FloatSign? DecimalDigits+ FloatSuffix?
+    |   '-'? [0-9]+ '.' [0-9]* FloatSuffix?
+    |   '-'? DecimalDigits FloatSuffix  // No decimal or exponent.  Suffix required.
+    ;
+
+fragment
+DecimalDigits
+    :   [0-9]+
+    ;
+
+fragment 
+Exponent   
+    :   [DdEe]
+    ;
+
+fragment
+FloatSign
+    :   '+'
+    |   '-'
+    ;
+
+fragment
+FloatSuffix
+    :   '!'  // Single
+    |   '#'  // Double (default)
+    |   '@'  // Currency
+    ;
+
+StringLiteral   :   '"' (~["\r\n] | '""')*  '"';
+
 Abs                     :    'Abs';
 Access                  :    'Access';
 AddressOf               :    'AddressOf';
@@ -854,6 +933,7 @@ Error                   :    'Error';
 Event                   :    'Event';
 Exit                    :    'Exit';
 Explicit                :    'Explicit';
+False                   :    'False';      // TODO add to unit tests.
 Fix                     :    'Fix';
 For                     :    'For';
 Friend                  :    'Friend';
@@ -937,6 +1017,7 @@ Tab                     :    'Tab';
 Text                    :    'Text';
 Then                    :    'Then';
 To                      :    'To';
+True                    :    'True';    // TODO add to unit tests.
 Type                    :    'Type';
 TypeOf                  :    'TypeOf';
 UBound                  :    'UBound';
@@ -980,8 +1061,9 @@ LETTER                  :    [A-Za-z];
 ForeignName             :    '[' (~('\u000D' | '\u000A' | '\u2028' | '\u2029'))+ ']';
 
 // End of statement.
+ID                      :   [A-Za-z] [A-Za-z0-9_]*;
 EOS                     :   (NL | ':')+;
-
+NL                      :   '\r'? '\n';
 LC                      :   WS+ '_' WS* NL              -> channel(HIDDEN);
 WS                      :   [ \t]                       -> channel(HIDDEN);
-COMMENT                 :	'\'' (LC | ~('\r' | '\n')*) -> channel(HIDDEN);
+COMMENT                 :   '\'' (LC | ~('\r' | '\n')*) -> channel(HIDDEN);
