@@ -933,7 +933,7 @@ Error                   :    'Error';
 Event                   :    'Event';
 Exit                    :    'Exit';
 Explicit                :    'Explicit';
-False                   :    'False';      // TODO add to unit tests.
+False                   :    'False';
 Fix                     :    'Fix';
 For                     :    'For';
 Friend                  :    'Friend';
@@ -1017,7 +1017,7 @@ Tab                     :    'Tab';
 Text                    :    'Text';
 Then                    :    'Then';
 To                      :    'To';
-True                    :    'True';    // TODO add to unit tests.
+True                    :    'True';
 Type                    :    'Type';
 TypeOf                  :    'TypeOf';
 UBound                  :    'UBound';
