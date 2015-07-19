@@ -340,6 +340,23 @@ namespace Vba.Language.Tests.Compiler
             CannotParseAnyTrueKeywords(eventDeclarationTemplate, p => p.eventDeclaration());
         }
 
+        [Fact]
+        public void CanParseIdentifierInTypeDeclaration()
+        {
+            const string typeDeclarationTemplate = "Type {0}\r\nValue As String\r\nEnd Type";
+            const string expectedOutputTypeDeclarationTemplate = "(typeDeclaration (udtDeclaration Type (untypedName (identifier {0})) \\r\\n (udtMemberList (udtElement (udtMember (untypedNameMemberDcl (identifier Value) (optionalArrayClause (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String))))))))))) \\r\\n End Type))";
+
+            CanParseAllAmbiguousIdentifiers(typeDeclarationTemplate, expectedOutputTypeDeclarationTemplate, p => p.typeDeclaration());
+        }
+
+        [Fact]
+        public void CannotParseInvalidIdentifierInTypeDeclaration()
+        {
+            const string typeDeclarationTemplate = "Type {0}\r\nValue As String\r\nEnd Type";
+
+            CannotParseAnyTrueKeywords(typeDeclarationTemplate, p => p.typeDeclaration());
+        }
+
         private void CannotParseAnyTrueKeywords(string sourceTemplate, Func<VbaParser, ParserRuleContext> rule)
         {
             foreach (var id in trueKeywords)
