@@ -205,6 +205,7 @@ directiveElement
     |   optionBaseDirective
     |   optionExplicitDirective
     |   optionPrivateDirective 
+    |   RemStatement
     |   implementsDirective
     |   defDirective
     |   variableDeclaration
@@ -280,7 +281,7 @@ udtDeclaration          :   Type untypedName EOS
                             udtMemberList EOS
                             End Type;
 udtMemberList           :   udtElement (EOS udtElement)*;
-udtElement              :   udtMember;  //| remStatement;
+udtElement              :   udtMember | RemStatement;
 udtMember               :   reservedNameMemberDcl | untypedNameMemberDcl;
 untypedNameMemberDcl    :   identifier optionalArrayClause;
 reservedNameMemberDcl   :   reservedMemberName asClause;
@@ -301,7 +302,8 @@ enumDeclaration         :   (Global | Public | Private)? Enum untypedName EOS
                             memberList EOS
                             End Enum;
 memberList              :   enumElement (EOS enumElement)*;  
-enumElement             :   untypedName ('=' constantExpression)?; // TODO remStatement.
+enumElement             :   enumMember | RemStatement;
+enumMember              :   untypedName ('=' constantExpression)?;
 
 // 5.2.3.5 External Procedure Declaration
 extProcDeclaration      :   (Public | Private)? externalProcDcl;
@@ -325,6 +327,7 @@ moduleCodeElement
     |   functionDeclaration
     |   propGetDeclaration
     |   propLhsDeclaration
+    |   RemStatement
     |   implementsDirective
     ;
 
@@ -409,7 +412,9 @@ procedureBody           :   statementBlock;
 statementBlock          :   (blockStatement EOS)*;
 blockStatement          
     :   statementLabelDefinition 
-    |   statement;  //|   remStatement 
+    |   statement
+    |   RemStatement 
+    ;
 statement               
     :   controlStatement
     |   dataManipulationStatement
@@ -422,6 +427,9 @@ statementLabelDefinition    :   identifier ':' | lineNumberLabel ':'?;
 statementLabel              :   identifier | lineNumberLabel;
 statementLabelList          :   statementLabel (',' statementLabel);
 lineNumberLabel             :   IntegerLiteral;  // actually can only be a decimal literal.
+
+// 5.4.1.2 Rem Statement
+// converted to lexer rule.
 
 // 5.4.2 Control Statements
 controlStatement            
@@ -1066,4 +1074,5 @@ EOS                     :   (NL | ':')+;
 NL                      :   '\r'? '\n';
 LC                      :   WS+ '_' WS* NL              -> channel(HIDDEN);
 WS                      :   [ \t]                       -> channel(HIDDEN);
+RemStatement            :   Rem (LC | ~('\r' | '\n')*);
 COMMENT                 :   '\'' (LC | ~('\r' | '\n')*) -> channel(HIDDEN);
