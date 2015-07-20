@@ -23,5 +23,17 @@ namespace Vba.Language.Tests.Compiler
             parser.ErrorHandler = new BailErrorStrategy();
             return parser;
         }
+
+        internal static VbaLexer BuildVbaLexer(string source)
+        {
+            var errorHandler = new TestErrorListener();
+
+            var input = new AntlrInputStream(source);
+
+            var lexer = new VbaLexer(input);
+            lexer.AddErrorListener(errorHandler);
+
+            return lexer;
+        }
     }
 }

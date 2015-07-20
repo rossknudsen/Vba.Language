@@ -41,7 +41,7 @@ fragment DateOrTime
 fragment DateValue      :   DateComponent DateSeparator DateComponent (DateSeparator DateComponent)?;
 fragment DateComponent  :   DecimalLiteral | MonthName;
 fragment DateSeparator 
-    :   '|' 
+    :   '/' 
     |   '-' 
     |   ','
     ;
