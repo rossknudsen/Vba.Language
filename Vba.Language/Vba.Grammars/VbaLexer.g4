@@ -32,19 +32,17 @@ fragment FloatSuffix
     ;
 
 // 3.3.3 Date Tokens
+// The specification allows for a wider range of date expressions than what the VBE
+// supports.  At this stage we are limiting the options to what is supported by the VBE.
 DateLiteral             :   '#' DateOrTime '#';
 fragment DateOrTime 
     :   (DateValue TimeValue)
     |   DateValue 
     |   TimeValue
     ;
-fragment DateValue      :   DateComponent DateSeparator DateComponent (DateSeparator DateComponent)?;
-fragment DateComponent  :   DecimalLiteral | MonthName;
-fragment DateSeparator 
-    :   '/' 
-    |   '-' 
-    |   ','
-    ;
+fragment DateValue      :   DateComponent DateSeparator DateComponent DateSeparator DateComponent;
+fragment DateComponent  :   DecimalLiteral;// | MonthName;
+fragment DateSeparator  :   '/';// | '-' | ',';
 fragment MonthName       
     :   EnglishMonthName 
     |   EnglishMonthAbbreviation
@@ -76,19 +74,17 @@ fragment EnglishMonthAbbreviation
     |   'dec'
     ;
 fragment TimeValue 
-    :   (DecimalLiteral AmPm) 
-    |   (DecimalLiteral TimeSeparator DecimalLiteral (TimeSeparator DecimalLiteral)? AmPm?)
-    ;
+    :   (DecimalLiteral TimeSeparator DecimalLiteral TimeSeparator DecimalLiteral AmPm);
+    /*|   (DecimalLiteral AmPm)
+    ;*/
 fragment TimeSeparator   
-    :   ':' 
-    |   '.'
-    ;
+    :   ':';// | '.';
 fragment AmPm 
     :   'am' 
-    |   'pm' 
+    |   'pm';/* 
     |   'a' 
     |   'p'
-    ;
+    ;*/
 
 // 3.3.4 String Tokens
 StringLiteral           :   '"' (~["\r\n] | '""')*  '"';
