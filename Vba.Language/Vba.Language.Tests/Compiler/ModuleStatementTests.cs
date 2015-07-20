@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using Vba.Grammars;
@@ -303,6 +304,57 @@ namespace Vba.Language.Tests.Compiler
             const string functionDefinitionTemplate = "Function {0} \r\nEnd Function\r\n";
 
             CannotParseAnyTrueKeywords(functionDefinitionTemplate, p => p.functionDeclaration());
+        }
+
+        [Fact]
+        public void CanParseIdentifierInPropertyGetDefinition()
+        {
+            const string propertyGetDefinitionTemplate = "Property Get {0} \r\nEnd Property\r\n";
+            const string expectedOutputPropertyGetDefinitionTemplate = "(propGetDeclaration Property Get (functionName (identifier {0})) \\r\\n (procedureBody statementBlock) End Property \\r\\n)";
+
+            CanParseAllAmbiguousIdentifiers(propertyGetDefinitionTemplate, expectedOutputPropertyGetDefinitionTemplate, p => p.propGetDeclaration());
+        }
+
+        [Fact]
+        public void CannotParseInvalidIdentifierInPropertyGetDefinition()
+        {
+            const string propertyGetDefinitionTemplate = "Property Get {0} \r\nEnd Property\r\n";
+
+            CannotParseAnyTrueKeywords(propertyGetDefinitionTemplate, p => p.propGetDeclaration());
+        }
+
+        [Fact]
+        public void CanParseIdentifierInPropertySetDefinition()
+        {
+            const string propertySetDefinitionTemplate = "Property Set {0}(value As Object) \r\nEnd Property\r\n";
+            const string expectedOutputPropertySetDefinitionTemplate = "(propLhsDeclaration Property Set (subroutineName (identifier {0})) \\r\\n (procedureBody statementBlock) End Property \\r\\n)";
+
+            CanParseAllAmbiguousIdentifiers(propertySetDefinitionTemplate, expectedOutputPropertySetDefinitionTemplate, p => p.propLhsDeclaration());
+        }
+
+        [Fact]
+        public void CannotParseInvalidIdentifierInPropertySetDefinition()
+        {
+            const string propertySetDefinitionTemplate = "Property Set {0}(value As Object) \r\nEnd Property\r\n";
+
+            CannotParseAnyTrueKeywords(propertySetDefinitionTemplate, p => p.propLhsDeclaration());
+        }
+
+        [Fact]
+        public void CanParseIdentifierInPropertyLetDefinition()
+        {
+            const string propertyLetDefinitionTemplate = "Property Let {0}(value As String) \r\nEnd Property\r\n";
+            const string expectedOutputPropertySetDefinitionTemplate = "(propLhsDeclaration Property Let (subroutineName (identifier {0})) \\r\\n (procedureBody statementBlock) End Property \\r\\n)";
+
+            CanParseAllAmbiguousIdentifiers(propertyLetDefinitionTemplate, expectedOutputPropertySetDefinitionTemplate, p => p.propLhsDeclaration());
+        }
+
+        [Fact]
+        public void CannotParseInvalidIdentifierInPropertyLetDefinition()
+        {
+            const string propertyLetDefinitionTemplate = "Property Let {0}(value As String) \r\nEnd Property\r\n";
+
+            CannotParseAnyTrueKeywords(propertyLetDefinitionTemplate, p => p.propLhsDeclaration());
         }
 
         [Fact]

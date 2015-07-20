@@ -345,12 +345,12 @@ functionDeclaration
 propGetDeclaration
     :   procedureScope? Static? Property Get functionName procedureParameters? functionType? Static? EOS
         procedureBody
-        endLabel? End Property;
+        endLabel? End Property EOS;
 
 propLhsDeclaration
     :   procedureScope? Static? Property (Set | Let) subroutineName procedureParameters? functionType? Static? EOS
         procedureBody
-        endLabel? End Property;
+        endLabel? End Property EOS;
 
 endLabel            :   statementLabelDefinition;
 //procedureTail       :   TODO
