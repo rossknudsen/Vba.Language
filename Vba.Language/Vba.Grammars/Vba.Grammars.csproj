@@ -66,10 +66,10 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Vba.g4.lexer.cs">
-      <DependentUpon>Vba.g4</DependentUpon>
+      <DependentUpon>VbaLexer.g4</DependentUpon>
     </Compile>
     <Compile Include="Vba.g4.parser.cs">
-      <DependentUpon>Vba.g4</DependentUpon>
+      <DependentUpon>VbaParser.g4</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -82,7 +82,11 @@
       <Generator>MSBuild:Compile</Generator>
       <CustomToolNamespace>Vba.Grammars</CustomToolNamespace>
     </Antlr4>
-    <Antlr4 Include="Vba.g4">
+    <Antlr4 Include="VbaLexer.g4">
+      <Generator>MSBuild:Compile</Generator>
+      <CustomToolNamespace>Vba.Grammars</CustomToolNamespace>
+    </Antlr4>
+    <Antlr4 Include="VbaParser.g4">
       <Generator>MSBuild:Compile</Generator>
       <CustomToolNamespace>Vba.Grammars</CustomToolNamespace>
     </Antlr4>
