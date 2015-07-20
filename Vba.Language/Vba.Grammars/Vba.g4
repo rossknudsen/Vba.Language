@@ -295,6 +295,7 @@ reservedMemberName
     |   literalIdentifier
     |   reservedForImplementationUse
     |   futureReserved
+    |   reservedTypeIdentifier   // This is not in the specification but appears to be required for UDT member names.
     ;
 
 // 5.2.3.4 Enum Declarations

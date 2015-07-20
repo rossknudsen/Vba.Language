@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using Vba.Grammars;
@@ -327,9 +328,10 @@ namespace Vba.Language.Tests.Compiler
         public void CanParseIdentifierInPropertySetDefinition()
         {
             const string propertySetDefinitionTemplate = "Property Set {0}(value As Object) \r\nEnd Property\r\n";
-            const string expectedOutputPropertySetDefinitionTemplate = "(propLhsDeclaration Property Set (subroutineName (identifier {0})) \\r\\n (procedureBody statementBlock) End Property \\r\\n)";
+            const string regexTemplate = @"(\(propLhsDeclaration.*\(identifier {0}\).*\))";
 
-            CanParseAllAmbiguousIdentifiers(propertySetDefinitionTemplate, expectedOutputPropertySetDefinitionTemplate, p => p.propLhsDeclaration());
+            CanParseAllAmbiguousIdentifiersRegex(propertySetDefinitionTemplate, regexTemplate,
+                p => p.propLhsDeclaration());
         }
 
         [Fact]
@@ -344,9 +346,10 @@ namespace Vba.Language.Tests.Compiler
         public void CanParseIdentifierInPropertyLetDefinition()
         {
             const string propertyLetDefinitionTemplate = "Property Let {0}(value As String) \r\nEnd Property\r\n";
-            const string expectedOutputPropertySetDefinitionTemplate = "(propLhsDeclaration Property Let (subroutineName (identifier {0})) \\r\\n (procedureBody statementBlock) End Property \\r\\n)";
+            const string regexTemplate = @"(\(propLhsDeclaration.*\(identifier {0}\).*\))";
 
-            CanParseAllAmbiguousIdentifiers(propertyLetDefinitionTemplate, expectedOutputPropertySetDefinitionTemplate, p => p.propLhsDeclaration());
+            CanParseAllAmbiguousIdentifiersRegex(propertyLetDefinitionTemplate, regexTemplate,
+                p => p.propLhsDeclaration());
         }
 
         [Fact]
@@ -413,16 +416,16 @@ namespace Vba.Language.Tests.Compiler
         public void CanParseIdentifierInTypeMemberDeclaration()
         {
             const string typeDeclarationTemplate = "Type MyType\r\n{0} As String\r\nEnd Type";
-            const string expectedOutputTypeDeclarationTemplate = "(typeDeclaration (udtDeclaration Type (untypedName (identifier MyType)) \\r\\n (udtMemberList (udtElement (udtMember (untypedNameMemberDcl (identifier {0}) (optionalArrayClause (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String))))))))))) \\r\\n End Type))";
+            const string regexTemplate = @"(\(typeDeclaration.*\(udtMember.*{0}\).*\))";
 
-            // Type member names can include most keywords.  The notable exception is 'Me'.
-            var validMemberNames = ambiguousIdentifiers.Concat(trueKeywords).Where(k => k != "Me");
+            // Type member names can include most keywords.  The notable exceptions are 'Me' and 'Rem'.
+            var validMemberNames = ambiguousIdentifiers.Concat(trueKeywords).Where(k => k != "Me" && k != "Rem");
             foreach (var name in validMemberNames)
             {
                 var source = string.Format(typeDeclarationTemplate, name);
-                var expectedTree = string.Format(expectedOutputTypeDeclarationTemplate, name);
+                var regex = string.Format(regexTemplate, name);
 
-                CanParseSource(source, expectedTree, p => p.typeDeclaration());
+                CanParseSourceRegex(source, regex, p => p.typeDeclaration());
             }
         }
 
@@ -448,6 +451,7 @@ namespace Vba.Language.Tests.Compiler
             }
         }
 
+        [Obsolete("Use CanParseAllAmbiguousIdentifiersRegex instead.")]
         private void CanParseAllAmbiguousIdentifiers(string sourceTemplate, string expectedOutputTemplate, Func<VbaParser, ParserRuleContext> rule)
         {
             foreach (var id in ambiguousIdentifiers)
@@ -459,6 +463,18 @@ namespace Vba.Language.Tests.Compiler
             }
         }
 
+        private void CanParseAllAmbiguousIdentifiersRegex(string sourceTemplate, string regexTemplate, Func<VbaParser, ParserRuleContext> rule)
+        {
+            foreach (var id in ambiguousIdentifiers)
+            {
+                var source = string.Format(sourceTemplate, id);
+                var regex = string.Format(regexTemplate, id);
+
+                CanParseSourceRegex(source, regex, rule);
+            }
+        }
+
+        [Obsolete("Use CanParseSourceRegex instead.")]
         private static void CanParseSource(string source, string expectedTree, Func<VbaParser, ParserRuleContext> rule)
         {
             var parser = VbaCompilerHelper.BuildVbaParser(source);
@@ -467,6 +483,16 @@ namespace Vba.Language.Tests.Compiler
 
             Assert.Null(result.exception);
             ParseTreeHelper.TreesAreEqual(expectedTree, result.ToStringTree(parser));
+        }
+
+        private static void CanParseSourceRegex(string source, string regex, Func<VbaParser, ParserRuleContext> rule)
+        {
+            var parser = VbaCompilerHelper.BuildVbaParser(source);
+
+            var result = rule(parser);
+
+            Assert.Null(result.exception);
+            Assert.True(Regex.IsMatch(result.ToStringTree(parser), regex));
         }
     }
 }
