@@ -105,7 +105,7 @@ reservedName
     |    Fix
     |    Int
     |    Len | LenB
-    |    Me
+    //|    Me   The spec says this should be included but UDT Members do not permit this.
     |    PSet
     |    Scale | Sgn | String
     ;

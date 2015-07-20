@@ -357,6 +357,34 @@ namespace Vba.Language.Tests.Compiler
             CannotParseAnyTrueKeywords(typeDeclarationTemplate, p => p.typeDeclaration());
         }
 
+        [Fact]
+        public void CanParseIdentifierInTypeMemberDeclaration()
+        {
+            const string typeDeclarationTemplate = "Type MyType\r\n{0} As String\r\nEnd Type";
+            const string expectedOutputTypeDeclarationTemplate = "(typeDeclaration (udtDeclaration Type (untypedName (identifier MyType)) \\r\\n (udtMemberList (udtElement (udtMember (untypedNameMemberDcl (identifier {0}) (optionalArrayClause (asClause (asType As (typeSpec (typeExpression (builtInType (reservedTypeIdentifier String))))))))))) \\r\\n End Type))";
+
+            // Type member names can include most keywords.  The notable exception is 'Me'.
+            var validMemberNames = ambiguousIdentifiers.Concat(trueKeywords).Where(k => k != "Me");
+            foreach (var name in validMemberNames)
+            {
+                var source = string.Format(typeDeclarationTemplate, name);
+                var expectedTree = string.Format(expectedOutputTypeDeclarationTemplate, name);
+
+                CanParseSource(source, expectedTree, p => p.typeDeclaration());
+            }
+        }
+
+        [Fact]
+        public void CannotParseInvalidIdentifierInTypeMemberDeclaration()
+        {
+            const string typeDeclarationTemplate = "Type MyType\r\n{0} As String\r\nEnd Type";
+            // the only invalid keyword is 'Me'.
+            var source = string.Format(typeDeclarationTemplate, "Me");
+            var parser = VbaCompilerHelper.BuildVbaParser(source);
+
+            Assert.Throws<ParseCanceledException>(() => parser.typeDeclaration());
+        }
+
         private void CannotParseAnyTrueKeywords(string sourceTemplate, Func<VbaParser, ParserRuleContext> rule)
         {
             foreach (var id in trueKeywords)
