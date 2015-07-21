@@ -8,7 +8,7 @@ We are using [AppVeyor](http://www.appveyor.com/) as an integration build servic
 |------------|--------------|
 | **next**   | [![next branch build status][nextBuildStatus]][nextBuild] |
 
-[nextBuild]:https://ci.appveyor.com/project/rossknudsen/vba.language/branch/next
+[nextBuild]:https://ci.appveyor.com/project/rossknudsen/vba-language/branch/next
 [nextBuildStatus]:https://ci.appveyor.com/api/projects/status/xcqyvo5q3267fwsl/branch/next?svg=true
 
 ## Architecture
