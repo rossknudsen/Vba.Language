@@ -18,10 +18,11 @@ namespace Vba.Language
 
         public object CompileSource(TextReader source)
         {
-            var preprocessor = new SourceTextReader(source);
+            var headerReader = new ModuleHeaderTextReader(source);
+            var preprocessor = new SourceTextReader(headerReader);
             var input = new AntlrInputStream(preprocessor);
             var lexer = new VbaLexer(input);
-            var proxy = new LineAdjustProxy(lexer, () => preprocessor.Line);
+            var proxy = new LineAdjustProxy(lexer, () => headerReader.Line);
             var tokens = new CommonTokenStream(proxy);
             var parser = new VbaParser(tokens);
 

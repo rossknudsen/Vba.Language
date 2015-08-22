@@ -16,7 +16,7 @@ namespace Vba.Language.Tests.Preprocessor
         [InlineData("#If False Then\r\nDeactivated Text\r\n#Else\r\nActive Text\r\n#End If", "Active Text\r\n")]
         public void CanPreprocessModule(string source, string expected)
         {
-            var preprocessor = new SourceTextReader(ModuleHeader + source);
+            var preprocessor = new SourceTextReader(source);
 
             var output = preprocessor.ReadToEnd();
 
