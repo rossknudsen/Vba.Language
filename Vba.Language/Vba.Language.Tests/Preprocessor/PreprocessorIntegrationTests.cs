@@ -6,8 +6,6 @@ namespace Vba.Language.Tests.Preprocessor
 {
     public class PreprocessorIntegrationTests
     {
-        private const string ModuleHeader = "Attribute VB_Name = \"Test\"\r\n";
-
         [Theory]
         [InlineData("", "")]
         [InlineData("#If True Then\r\n#End If", "")]
