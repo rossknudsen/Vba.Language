@@ -425,7 +425,7 @@ namespace Vba.Language.Tests.Compiler
                 var source = string.Format(typeDeclarationTemplate, name);
                 var regex = string.Format(regexTemplate, name);
 
-                CanParseSourceRegex(source, regex, p => p.typeDeclaration());
+                ParserHelper.CanParseSourceRegex(source, regex, p => p.typeDeclaration());
             }
         }
 
@@ -459,7 +459,7 @@ namespace Vba.Language.Tests.Compiler
                 var source = string.Format(sourceTemplate, id);
                 var expectedTree = string.Format(expectedOutputTemplate, id);
 
-                CanParseSource(source, expectedTree, rule);
+                ParserHelper.CanParseSource(source, expectedTree, rule);
             }
         }
 
@@ -470,29 +470,8 @@ namespace Vba.Language.Tests.Compiler
                 var source = string.Format(sourceTemplate, id);
                 var regex = string.Format(regexTemplate, id);
 
-                CanParseSourceRegex(source, regex, rule);
+                ParserHelper.CanParseSourceRegex(source, regex, rule);
             }
-        }
-
-        [Obsolete("Use CanParseSourceRegex instead.")]
-        private static void CanParseSource(string source, string expectedTree, Func<VbaParser, ParserRuleContext> rule)
-        {
-            var parser = VbaCompilerHelper.BuildVbaParser(source);
-
-            var result = rule(parser);
-
-            Assert.Null(result.exception);
-            ParseTreeHelper.TreesAreEqual(expectedTree, result.ToStringTree(parser));
-        }
-
-        private static void CanParseSourceRegex(string source, string regex, Func<VbaParser, ParserRuleContext> rule)
-        {
-            var parser = VbaCompilerHelper.BuildVbaParser(source);
-
-            var result = rule(parser);
-
-            Assert.Null(result.exception);
-            Assert.True(Regex.IsMatch(result.ToStringTree(parser), regex));
         }
     }
 }

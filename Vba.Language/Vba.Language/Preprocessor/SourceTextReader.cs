@@ -6,7 +6,6 @@ namespace Vba.Language.Preprocessor
     {
         private TextReader reader;
         private PreprocessorStateManager manager;
-        private VbaHeader header;
 
         public SourceTextReader(string source) : this(new StringReader(source)) { }
 
@@ -14,7 +13,6 @@ namespace Vba.Language.Preprocessor
         {
             this.reader = reader;
             manager = new PreprocessorStateManager();
-            header = new VbaHeader();
             Line = 0;
         }
 
@@ -24,12 +22,6 @@ namespace Vba.Language.Preprocessor
         {
             // when ReadLine returns null we are at the end of the file.
             var line = NextLine();
-
-            // first parse the header.
-            while (line != null && header.ProcessHeaderStatement(line))
-            {
-                line = NextLine();
-            }
 
             // after we exit the top loop, line will be the first non-header line.
             while (line != null) 
