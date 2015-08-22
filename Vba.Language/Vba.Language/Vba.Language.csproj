@@ -73,6 +73,7 @@
     <Compile Include="Preprocessor\SourceTextReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadLineTextReader.cs" />
+    <Compile Include="VbaParseResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

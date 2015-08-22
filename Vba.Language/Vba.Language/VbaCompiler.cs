@@ -11,12 +11,24 @@ namespace Vba.Language
 {
     public class VbaCompiler
     {
-        public object CompileSource(string source)
+        private static Func<VbaParser, RuleContext> defaultRule = p => p.module();
+
+        public VbaParseResult CompileSource(string source)
         {
             return CompileSource(new StringReader(source));
         }
 
-        public object CompileSource(TextReader source)
+        public VbaParseResult CompileSource(string source, Func<VbaParser, RuleContext> rule)
+        {
+            return CompileSource(new StringReader(source), rule);
+        }
+
+        public VbaParseResult CompileSource(TextReader source)
+        {
+            return CompileSource(source, defaultRule);
+        }
+
+        public VbaParseResult CompileSource(TextReader source, Func<VbaParser, RuleContext> rule)
         {
             var headerReader = new ModuleHeaderTextReader(source);
             var preprocessor = new SourceTextReader(headerReader);
@@ -26,8 +38,7 @@ namespace Vba.Language
             var tokens = new CommonTokenStream(proxy);
             var parser = new VbaParser(tokens);
 
-            // TODO this method should return something.
-            throw new NotImplementedException();
+            return new VbaParseResult(rule(parser), parser);
         }
     }
 }
