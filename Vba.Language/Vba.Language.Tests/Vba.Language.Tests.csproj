@@ -66,12 +66,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Compiler\CaseSensitivityTests.cs" />
     <Compile Include="Compiler\IfStatementTests.cs" />
     <Compile Include="Compiler\LexerTests.cs" />
     <Compile Include="Compiler\FunctionDeclarationTests.cs" />
     <Compile Include="Compiler\ModuleStatementTests.cs" />
     <Compile Include="Compiler\ParserHelper.cs" />
     <Compile Include="Compiler\VbaCompilerHelper.cs" />
+    <Compile Include="Compiler\VbaKeywords.cs" />
     <Compile Include="ExpressionEvaluatorTests.cs" />
     <Compile Include="Preprocessor\PreprocessorIntegrationTests.cs" />
     <Compile Include="Preprocessor\ConditionalTests.cs" />

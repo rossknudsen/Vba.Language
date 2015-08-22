@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using Vba.Grammars;
@@ -11,212 +8,6 @@ namespace Vba.Language.Tests.Compiler
 {
     public class ModuleStatementTests
     {
-        private readonly List<string> ambiguousIdentifiers = new List<string>()
-        {
-            "Access",
-            "Alias",
-            "Append",
-            "Base",
-            "Binary",
-            "Class_Initialize",
-            "Class_Terminate",
-            "CLngLng",
-            "Compare",
-            "Database",
-            "DefLngLng",
-            "Error",
-            "Explicit",
-            "Lib",
-            "Line",
-            "LongLong",
-            "Mid",
-            "MidB",
-            "Module",
-            "Object",
-            "Output",
-            "Property",
-            "PtrSafe",
-            "Random",
-            "Read",
-            "Reset",
-            "Step",
-            "Text",
-            "Width"
-        };
-
-        private readonly List<string> trueKeywords = new List<string>()
-        {
-            "Abs",
-            "AddressOf",
-            "And",
-            "Any",
-            "Array",
-            "As",
-            "Attribute",
-            "Boolean",
-            "ByRef",
-            "Byte",
-            "ByVal",
-            "Call",
-            "Case",
-            "CBool",
-            "CByte",
-            "CCur",
-            "CDate",
-            "CDbl",
-            "CDec",
-            "CDecl",
-            "CInt",
-            "Circle",
-            "CLng",
-            "CLngPtr",
-            "Close",
-            "Const",
-            "CSng",
-            "CStr",
-            "Currency",
-            "CVar",
-            "CVErr",
-            "Date",
-            "Debug",
-            "Decimal",
-            "Declare",
-            "DefBool",
-            "DefByte",
-            "DefCur",
-            "DefDate",
-            "DefDbl",
-            "DefDec",
-            "DefInt",
-            "DefLng",
-            "DefLngPtr",
-            "DefObj",
-            "DefSng",
-            "DefStr",
-            "DefVar",
-            "Dim",
-            "Do",
-            "DoEvents",
-            "Double",
-            "Each",
-            "Else",
-            "ElseIf",
-            "Empty",
-            "End",
-            "EndIf",
-            "Enum",
-            "Eqv",
-            "Erase",
-            "Event",
-            "Exit",
-            "False",
-            "Fix",
-            "For",
-            "Friend",
-            "Function",
-            "Get",
-            "Global",
-            "GoSub",
-            "GoTo",
-            "If",
-            "Imp",
-            "Implements",
-            "In",
-            "Input",
-            "InputB",
-            "Int",
-            "Integer",
-            "Is",
-            "LBound",
-            "Len",
-            "LenB",
-            "Let",
-            "Like",
-            "LINEINPUT",
-            "Lock",
-            "Long",
-            "LongPtr",
-            "Loop",
-            "LSet",
-            "Me",
-            "Mod",
-            "New",
-            "Next",
-            "Not",
-            "Nothing",
-            "Null",
-            "On",
-            "Open",
-            "Option",
-            "Optional",
-            "Or",
-            "ParamArray",
-            "Preserve",
-            "Print",
-            "Private",
-            "PSet",
-            "Public",
-            "Put",
-            "RaiseEvent",
-            "ReDim",
-            "Rem",
-            "Resume",
-            "Return",
-            "RSet",
-            "Scale",
-            "Seek",
-            "Select",
-            "Set",
-            "Sgn",
-            "Shared",
-            "Single",
-            "Spc",
-            "Static",
-            "Stop",
-            "String",
-            "Sub",
-            "Tab",
-            "Then",
-            "To",
-            "True",
-            "Type",
-            "TypeOf",
-            "UBound",
-            "Unlock",
-            "Until",
-            "Variant",
-            "VB_Base",
-            "VB_Control",
-            "VB_Creatable",
-            "VB_Customizable",
-            "VB_Description",
-            "VB_Exposed",
-            "VB_Ext_KEY",
-            "VB_GlobalNameSpace",
-            "VB_HelpID",
-            "VB_Invoke_Func",
-            "VB_Invoke_Property",
-            "VB_Invoke_PropertyPut",
-            "VB_Invoke_PropertyPutRef",
-            "VB_MemberFlags",
-            "VB_Name",
-            "VB_PredeclaredId",
-            "VB_ProcData",
-            "VB_TemplateDerived",
-            "VB_UserMemId",
-            "VB_VarDescription",
-            "VB_VarHelpID",
-            "VB_VarMemberFlags",
-            "VB_VarProcData",
-            "VB_VarUserMemId",
-            "Wend",
-            "While",
-            "With",
-            "WithEvents",
-            "Write",
-            "Xor"
-        };
-            
         [Theory]
         [InlineData("Option Compare Text", "(directiveElement (optionCompareDirective Option Compare Text))")]
         [InlineData("Option Compare Binary", "(directiveElement (optionCompareDirective Option Compare Binary))")]
@@ -417,10 +208,8 @@ namespace Vba.Language.Tests.Compiler
         {
             const string typeDeclarationTemplate = "Type MyType\r\n{0} As String\r\nEnd Type";
             const string regexTemplate = @"(\(typeDeclaration.*\(udtMember.*{0}\).*\))";
-
-            // Type member names can include most keywords.  The notable exceptions are 'Me' and 'Rem'.
-            var validMemberNames = ambiguousIdentifiers.Concat(trueKeywords).Where(k => k != "Me" && k != "Rem");
-            foreach (var name in validMemberNames)
+            
+            foreach (var name in VbaKeywords.TypeMemberIdentifiers)
             {
                 var source = string.Format(typeDeclarationTemplate, name);
                 var regex = string.Format(regexTemplate, name);
@@ -442,7 +231,7 @@ namespace Vba.Language.Tests.Compiler
 
         private void CannotParseAnyTrueKeywords(string sourceTemplate, Func<VbaParser, ParserRuleContext> rule)
         {
-            foreach (var id in trueKeywords)
+            foreach (var id in VbaKeywords.TrueKeywords)
             {
                 var source = string.Format(sourceTemplate, id);
                 var parser = VbaCompilerHelper.BuildVbaParser(source);
@@ -454,7 +243,7 @@ namespace Vba.Language.Tests.Compiler
         [Obsolete("Use CanParseAllAmbiguousIdentifiersRegex instead.")]
         private void CanParseAllAmbiguousIdentifiers(string sourceTemplate, string expectedOutputTemplate, Func<VbaParser, ParserRuleContext> rule)
         {
-            foreach (var id in ambiguousIdentifiers)
+            foreach (var id in VbaKeywords.AmbiguousIdentifiers)
             {
                 var source = string.Format(sourceTemplate, id);
                 var expectedTree = string.Format(expectedOutputTemplate, id);
@@ -465,7 +254,7 @@ namespace Vba.Language.Tests.Compiler
 
         private void CanParseAllAmbiguousIdentifiersRegex(string sourceTemplate, string regexTemplate, Func<VbaParser, ParserRuleContext> rule)
         {
-            foreach (var id in ambiguousIdentifiers)
+            foreach (var id in VbaKeywords.AmbiguousIdentifiers)
             {
                 var source = string.Format(sourceTemplate, id);
                 var regex = string.Format(regexTemplate, id);
