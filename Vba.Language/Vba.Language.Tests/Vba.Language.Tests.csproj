@@ -66,6 +66,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Compiler\CaseSensitivityTests.cs" />
     <Compile Include="Compiler\IfStatementTests.cs" />
     <Compile Include="Compiler\LexerTests.cs" />
     <Compile Include="Compiler\FunctionDeclarationTests.cs" />

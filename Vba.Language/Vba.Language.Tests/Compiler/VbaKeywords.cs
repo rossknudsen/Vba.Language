@@ -211,14 +211,19 @@ namespace Vba.Language.Tests.Compiler
             "Xor"
         };
 
-        internal static IReadOnlyCollection<string> AmbiguousIdentifiers => ambiguousIdentifiers.AsReadOnly();
+        internal static IEnumerable<string> AmbiguousIdentifiers => ambiguousIdentifiers;
 
-        internal static IReadOnlyCollection<string> TrueKeywords => trueKeywords.AsReadOnly();
+        internal static IEnumerable<string> TrueKeywords => trueKeywords;
 
         // Type member names can include most keywords.  The notable exceptions are 'Me' and 'Rem'.
-        internal static IReadOnlyCollection<string> TypeMemberIdentifiers => ambiguousIdentifiers
-            .Concat(trueKeywords)
+        internal static IEnumerable<string> TypeMemberIdentifiers => 
+            AllKeywords
             .Where(k => k != "Me" && k != "Rem")
+            .ToList();
+
+        public static IEnumerable<string> AllKeywords => 
+            ambiguousIdentifiers
+            .Concat(trueKeywords)
             .ToList();
     }
 }

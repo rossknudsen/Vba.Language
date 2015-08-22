@@ -8,8 +8,6 @@ namespace Vba.Language.Tests.Compiler
 {
     public class ModuleStatementTests
     {
-        
-            
         [Theory]
         [InlineData("Option Compare Text", "(directiveElement (optionCompareDirective Option Compare Text))")]
         [InlineData("Option Compare Binary", "(directiveElement (optionCompareDirective Option Compare Binary))")]
