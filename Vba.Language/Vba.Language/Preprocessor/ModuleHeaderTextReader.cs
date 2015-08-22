@@ -28,6 +28,7 @@ namespace Vba.Language.Preprocessor
                 {
                     line = NextLine();
                 }
+                hasReadHeader = true;
                 return line;  // note that we must return here because this is not a header line.
             }
             return NextLine();
