@@ -209,7 +209,7 @@ namespace Vba.Language.Tests.Compiler
             const string typeDeclarationTemplate = "Type MyType\r\n{0} As String\r\nEnd Type";
             const string regexTemplate = @"(\(typeDeclaration.*\(udtMember.*{0}\).*\))";
             
-            foreach (var name in VbaKeywords.TypeMemberIdentifiers)
+            foreach (var name in VbaLexer.TypeMemberIdentifiers)
             {
                 var source = string.Format(typeDeclarationTemplate, name);
                 var regex = string.Format(regexTemplate, name);
@@ -231,7 +231,7 @@ namespace Vba.Language.Tests.Compiler
 
         private void CannotParseAnyTrueKeywords(string sourceTemplate, Func<VbaParser, ParserRuleContext> rule)
         {
-            foreach (var id in VbaKeywords.TrueKeywords)
+            foreach (var id in VbaLexer.TrueKeywords)
             {
                 var source = string.Format(sourceTemplate, id);
                 var parser = VbaCompilerHelper.BuildVbaParser(source);
@@ -243,7 +243,7 @@ namespace Vba.Language.Tests.Compiler
         [Obsolete("Use CanParseAllAmbiguousIdentifiersRegex instead.")]
         private void CanParseAllAmbiguousIdentifiers(string sourceTemplate, string expectedOutputTemplate, Func<VbaParser, ParserRuleContext> rule)
         {
-            foreach (var id in VbaKeywords.AmbiguousIdentifiers)
+            foreach (var id in VbaLexer.AmbiguousIdentifiers)
             {
                 var source = string.Format(sourceTemplate, id);
                 var expectedTree = string.Format(expectedOutputTemplate, id);
@@ -254,7 +254,7 @@ namespace Vba.Language.Tests.Compiler
 
         private void CanParseAllAmbiguousIdentifiersRegex(string sourceTemplate, string regexTemplate, Func<VbaParser, ParserRuleContext> rule)
         {
-            foreach (var id in VbaKeywords.AmbiguousIdentifiers)
+            foreach (var id in VbaLexer.AmbiguousIdentifiers)
             {
                 var source = string.Format(sourceTemplate, id);
                 var regex = string.Format(regexTemplate, id);

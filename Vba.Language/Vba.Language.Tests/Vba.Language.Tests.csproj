@@ -73,7 +73,6 @@
     <Compile Include="Compiler\ModuleStatementTests.cs" />
     <Compile Include="Compiler\ParserHelper.cs" />
     <Compile Include="Compiler\VbaCompilerHelper.cs" />
-    <Compile Include="Compiler\VbaKeywords.cs" />
     <Compile Include="ExpressionEvaluatorTests.cs" />
     <Compile Include="Preprocessor\PreprocessorIntegrationTests.cs" />
     <Compile Include="Preprocessor\ConditionalTests.cs" />
