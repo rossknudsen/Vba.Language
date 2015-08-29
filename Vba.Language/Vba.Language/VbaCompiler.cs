@@ -11,14 +11,14 @@ namespace Vba.Language
 {
     public class VbaCompiler
     {
-        private static Func<VbaParser, RuleContext> defaultRule = p => p.module();
+        private static Func<VbaParser, ParserRuleContext> defaultRule = p => p.module();
 
         public VbaParseResult CompileSource(string source)
         {
             return CompileSource(new StringReader(source));
         }
 
-        public VbaParseResult CompileSource(string source, Func<VbaParser, RuleContext> rule)
+        public VbaParseResult CompileSource(string source, Func<VbaParser, ParserRuleContext> rule)
         {
             return CompileSource(new StringReader(source), rule);
         }
@@ -28,7 +28,7 @@ namespace Vba.Language
             return CompileSource(source, defaultRule);
         }
 
-        public VbaParseResult CompileSource(TextReader source, Func<VbaParser, RuleContext> rule)
+        public VbaParseResult CompileSource(TextReader source, Func<VbaParser, ParserRuleContext> rule)
         {
             var headerReader = new ModuleHeaderTextReader(source);
             var preprocessor = new SourceTextReader(headerReader);

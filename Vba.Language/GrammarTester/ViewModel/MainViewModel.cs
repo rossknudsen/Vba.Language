@@ -1,4 +1,7 @@
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using Antlr4.Runtime;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Vba.Language;
@@ -21,6 +24,7 @@ namespace GrammarTester.ViewModel
     {
         private string _source = "";
         private string _output = "";
+        private IEnumerable<ParseTreeNodeViewModel> _parseTree;
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -59,13 +63,24 @@ namespace GrammarTester.ViewModel
             }
         }
 
-        public ICommand ParseCommand { get; private set; } 
+        public ICommand ParseCommand { get; private set; }
+
+        public IEnumerable<ParseTreeNodeViewModel> ParseTree
+        {
+            get { return _parseTree; }
+            private set
+            {
+                _parseTree = value;
+                RaisePropertyChanged();
+            }
+        }
 
         private void ParseInput()
         {
             var compiler = new VbaCompiler();
             var result = compiler.CompileSource(Source);
             Output = result.ToString();
+            ParseTree = new List<ParseTreeNodeViewModel>() { new ParseTreeNodeViewModel(result.ParserRuleContext) };
         }
     }
 }

@@ -4,9 +4,24 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GrammarTester"
+        xmlns:vm="clr-namespace:GrammarTester.ViewModel"
         mc:Ignorable="d"
-        Title="VbaCompiler Tester" Height="350" Width="525"
+        Title="VbaCompiler Tester" Height="350" Width="791"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
+
+    <Window.Resources>
+        <HierarchicalDataTemplate x:Key="NameTemplate"
+                                  DataType="{x:Type vm:ParseTreeNodeViewModel}"
+                                  ItemsSource="{Binding Children}">
+            <TextBlock Text="{Binding Name}" 
+                       Foreground="{Binding TextColor}"/>
+        </HierarchicalDataTemplate>
+
+        <Style TargetType="{x:Type TreeViewItem}">
+            <Setter Property="IsExpanded" Value="True"/>
+        </Style>
+    </Window.Resources>
+    
     <Grid>
         <TextBox x:Name="txtVbaSource" 
                  HorizontalAlignment="Left" 
@@ -34,5 +49,13 @@
                  Width="497" 
                  IsReadOnly="True"
                  Text="{Binding Output, Mode=OneWay}"/>
+        <TreeView x:Name="tvParseTree" 
+                  HorizontalAlignment="Left" 
+                  Height="299" 
+                  Margin="512,10,0,0" 
+                  VerticalAlignment="Top" 
+                  Width="261"
+                  ItemsSource="{Binding ParseTree, Mode=OneWay}"
+                  ItemTemplate="{StaticResource NameTemplate}"/>
     </Grid>
 </Window>
