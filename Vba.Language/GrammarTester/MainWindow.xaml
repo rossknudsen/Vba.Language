@@ -5,10 +5,34 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GrammarTester"
         mc:Ignorable="d"
-        Title="VbaCompiler Tester" Height="350" Width="525">
+        Title="VbaCompiler Tester" Height="350" Width="525"
+        DataContext="{Binding Main, Source={StaticResource Locator}}">
     <Grid>
-        <TextBox x:Name="txtVbaSource" HorizontalAlignment="Left" Height="149" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="497" AcceptsReturn="True"/>
-        <Button x:Name="button" Content="Parse Code" HorizontalAlignment="Left" Margin="10,164,0,0" VerticalAlignment="Top" Width="75" Click="button_Click" Height="22"/>
-        <TextBox x:Name="txtOutput" HorizontalAlignment="Left" Height="118" Margin="10,191,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="497" IsReadOnly="True"/>
+        <TextBox x:Name="txtVbaSource" 
+                 HorizontalAlignment="Left" 
+                 Height="149" 
+                 Margin="10,10,0,0" 
+                 TextWrapping="Wrap" 
+                 VerticalAlignment="Top" 
+                 Width="497" 
+                 AcceptsReturn="True"
+                 Text="{Binding Source}"/>
+        <Button x:Name="button" 
+                Content="Parse Code" 
+                HorizontalAlignment="Left" 
+                Margin="10,164,0,0" 
+                VerticalAlignment="Top" 
+                Width="75" 
+                Height="22"
+                Command="{Binding ParseCommand}"/>
+        <TextBox x:Name="txtOutput" 
+                 HorizontalAlignment="Left" 
+                 Height="118" 
+                 Margin="10,191,0,0" 
+                 TextWrapping="Wrap" 
+                 VerticalAlignment="Top" 
+                 Width="497" 
+                 IsReadOnly="True"
+                 Text="{Binding Output, Mode=OneWay}"/>
     </Grid>
 </Window>
